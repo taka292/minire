@@ -1,0 +1,62 @@
+<!-- app/views/home/index.html.erb -->
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>MiniRe - Welcome</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+  </head>
+
+  <body>
+    <!-- ナビゲーションバー -->
+    <nav class="navbar bg-base-100">
+      <div class="flex-1">
+        <a class="btn btn-ghost normal-case text-xl">MiniRe</a>
+      </div>
+      <div class="flex-none">
+        <button class="btn bg-customBlue text-white border-0 hover:bg-blue-500">Sign Up</button>
+      </div>
+    </nav>
+
+    <!-- メインコンテンツ -->
+    <div class="hero min-h-screen bg-base-200">
+      <div class="hero-content text-center">
+        <div class="max-w-md">
+          <h1 class="text-5xl font-bold">MiniReとは?</h1>
+          <p class="py-6">MiniRe － 無理なく、無駄なく、ミニマリズムを楽しむ
+「MiniRe」は、「少ないモノで豊かに暮らす」を目指すミニマリストのためのレビューサイトです。名前に込めた以下の想いとともに、ミニマリズムの第一歩を応援します。
+
+このサイトでできること
+1. 厳選されたアイテムを探す
+実際のミニマリストたちが愛用するアイテムやその活用法を知ることで、
+あなたにとって本当に必要なものを見つけられます。
+
+2. 投稿を通じて共有・交流する
+自分が愛用するアイテムを投稿し、他のミニマリストと知識や感動を共有できます。さらに、コメントやいいねで交流を深める場としても活用できます。
+3. 無理なくミニマリズムを始める
+初心者の方も、必要最低限のアイテムを迷わず選べるガイドやおすすめレビューが充実。無駄を減らしながら、心豊かな生活をサポートします。
+
+MiniReの名前に込めた想い
+「MiniRe（ミニレ）」は、「ミニマリスト（Minimalist）」のミニと、「レビュー（Review）」のReを掛け合わせた名前です。シンプルで洗練されたアイデアを提供する場として、誰でも使いやすいプラットフォームを目指しています。</p>
+          <button class="btn bg-customBlue text-white border-0 hover:bg-blue-500">Get Started</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- フッター -->
+    <footer class="footer p-10 bg-base-300 text-base-content">
+      <div class="items-center grid-flow-col">
+        <svg width="50" height="50" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="inline-block w-8 h-8 stroke-current">
+          <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+          <path d="M2 17l10 5 10-5"></path>
+          <path d="M2 12l10 5 10-5"></path>
+        </svg>
+        <p>MiniRe © 2024 - All rights reserved</p>
+      </div>
+    </footer>
+  </body>
+</html>
