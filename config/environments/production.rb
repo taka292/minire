@@ -35,7 +35,7 @@ Rails.application.configure do
 
   # Log to STDOUT with the current request id as a default log tag.
   config.log_tags = [ :request_id ]
-  # デプロイ時に失敗
+  # デプロイ時に失敗した
   # config.logger   = ActiveSupport::TaggedLogging.logger(STDOUT)
   config.logger = ActiveSupport::TaggedLogging.new(Logger.new(STDOUT))
 
