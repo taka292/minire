@@ -6,9 +6,9 @@ databases:
 
 services:
   - type: web
-    name: rails7-sample-staging
+    name: MiniRe
     env: ruby
-    region: singapore
+    region: si  
     plan: free
     buildCommand: "./bin/render-build.sh"
     startCommand: "bundle exec puma -C config/puma.rb"
