@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
-gem 'rails', '~> 7.0'
+gem "rails", "~> 7.0"
 # The modern asset pipeline for Rails [https://github.com/rails/propshaft]
 gem "propshaft"
 # Use postgresql as the database for Active Record
@@ -43,29 +43,29 @@ gem "thruster", require: false
 # gem "image_processing", "~> 1.2"
 
 # 認証機能
-gem 'devise'
+gem "devise"
 
 # パンくずリスト
-gem 'gretel'
+gem "gretel"
 
 # ページネーション
-gem 'kaminari'
+gem "kaminari"
 
 # 検索機能
-gem 'ransack'
+gem "ransack"
 
 # コードチェック
-gem 'rubocop', require: false
-gem 'rubocop-rails', require: false
+gem "rubocop", require: false
+gem "rubocop-rails", require: false
 
 # N+1 問題チェック
-gem 'bullet'
+gem "bullet"
 
 # RSpec (テストフレームワーク)
-gem 'rspec-rails', group: [:development, :test]
+gem "rspec-rails", group: [ :development, :test ]
 
 # デバッグツール
-gem 'pry-rails'
+gem "pry-rails"
 
 # webアイコン(awesome)
 gem "font-awesome-sass"
