@@ -18,13 +18,16 @@ default: &default
   # For details on connection pooling, see Rails configuration guide
   # https://guides.rubyonrails.org/configuring.html#database-pooling
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  # host: db
-  # username: postgres
-  # password: password
+  host: db
+  username: postgres
+  password: password
 
 
 development:
   <<: *default
+  # host: db
+  # username: postgres
+  # password: password
   database: minire_development
 
   # The specified database role being used to connect to PostgreSQL.
@@ -88,15 +91,15 @@ production:
     # database: minire_production
     # username: minire
     # password: <%= ENV["MINIRE_DATABASE_PASSWORD"] %>
-  # cache:
-  #   <<: *primary_production
-  #   database: minire_production_cache
-  #   migrations_paths: db/cache_migrate
-  # queue:
-  #   <<: *primary_production
-  #   database: minire_production_queue
-  #   migrations_paths: db/queue_migrate
-  # cable:
-  #   <<: *primary_production
-  #   database: minire_production_cable
-  #   migrations_paths: db/cable_migrate
+  cache:
+    <<: *primary_production
+    database: minire_production_cache
+    migrations_paths: db/cache_migrate
+  queue:
+    <<: *primary_production
+    database: minire_production_queue
+    migrations_paths: db/queue_migrate
+  cable:
+    <<: *primary_production
+    database: minire_production_cable
+    migrations_paths: db/cable_migrate
