@@ -26,58 +26,64 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
   </head>
   <header>
-    <% if user_signed_in? %>
-      <li>
-        <%= link_to "ログアウト", destroy_user_session_path, data: { turbo_method: :delete } %>
-      </li>
-    <% else %>
-      <li>
-        <%= link_to "新規登録", new_user_registration_path %>
-      </li>
-      <li>
-        <%= link_to "ログイン", new_user_session_path %>
-      </li>
-    <% end %>
+  
+
   </header>
 
   <body>
     <div class="bg-white border-b border-black">
       <header class="flex items-center justify-between px-4 py-2">
+        <!-- ロゴと検索フォーム -->
         <div class="flex items-center gap-8">
-      <!-- ロゴ -->
-      <div class="text-2xl font-bold text-gray-700">
-        MiniRe
-      </div>
-      <!-- 検索フォーム -->
-      <form class="flex items-center gap-2">
-        <input type="text" placeholder="商品名・キーワード"
-          class="input input-bordered input-sm w-64 placeholder-gray-400">
-        <button type="submit" class="btn btn-sm bg-blue-400 text-white border-none">検索</button>
-      </form>
-    </div>
+          <!-- ロゴ部分 -->
+          <div class="text-2xl font-bold text-gray-700">
+            MiniRe
+          </div>
 
-        <div class="relative flex items-center gap-4">
-          <!-- レビューアイコン -->
-          <span class="material-icons text-gray-600 text-3xl">
+          <!-- 検索フォーム -->
+          <form class="flex items-center gap-2">
+            <input type="text" placeholder="商品名・キーワード"
+              class="input input-bordered input-sm w-64 placeholder-gray-400">
+            <button type="submit" class="btn btn-sm bg-blue-400 text-white border-none">
+              検索
+            </button>
+          </form>
+        </div>
+
+        <!-- アイコン部分 -->
+        <div class="flex items-center gap-4">
+          <span class="material-icons text-gray-600 text-3xl" aria-label="レビュー">
             rate_review
           </span>
-          <!-- 検索アイコン -->
-          <span class="material-icons text-gray-600 text-3xl">
+          <span class="material-icons text-gray-600 text-3xl" aria-label="検索">
             manage_search
           </span>
-          <!-- ハートアイコン -->
-          <span class="material-icons text-gray-600 text-3xl">
+          <span class="material-icons text-gray-600 text-3xl" aria-label="お気に入り">
             favorite_border
           </span>
 
-          <!-- アバターアイコン -->
-          <a href="#" class="avatar">
-            <div class="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center">
-              <span class="text-gray-600">AAA</span>
-            </div>
-          </a>
+          <% if user_signed_in? %>
+            <!-- ログアウトアイコン -->
+            <%= link_to destroy_user_session_path, method: :delete, data: { turbo_method: :delete }, class: "flex items-center justify-center" do %>
+              <span class="material-icons text-gray-600 text-3xl" aria-label="ログアウト">
+                logout
+              </span>
+            <% end %>
+            <!-- アバターアイコン -->
+            <a href="#" class="avatar">
+              <div class="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center">
+                <span class="text-gray-600">AAA</span>
+              </div>
+            </a>
+          <% else %>
+            <!-- ログインアイコン -->
+            <%= link_to new_user_session_path, class: "flex items-center justify-center" do %>
+              <span class="material-icons text-gray-600 text-3xl" aria-label="ログイン">
+                login
+              </span>
+            <% end %>
+          <% end %>
         </div>
-
       </header>
     </div>
     <%= yield %>
