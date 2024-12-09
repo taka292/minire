@@ -52,9 +52,11 @@
 
         <!-- アイコン部分 -->
         <div class="flex items-center gap-4">
-          <span class="material-icons text-gray-600 text-3xl" aria-label="レビュー">
-            rate_review
-          </span>
+          <%= link_to new_review_path, class: "flex items-center justify-center" do %>
+            <span class="material-icons text-gray-600 text-3xl" aria-label="レビュー">
+              rate_review
+            </span>
+          <% end %>
           <span class="material-icons text-gray-600 text-3xl" aria-label="検索">
             manage_search
           </span>
