@@ -6,3 +6,6 @@ import { application } from "./application"
 
 import HelloController from "./hello_controller"
 application.register("hello", HelloController)
+
+import ReleasableItemsController from "./releasable_items_controller.js"
+application.register("releasable-items", ReleasableItemsController)

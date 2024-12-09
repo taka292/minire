@@ -71,10 +71,10 @@ gem "pry-rails"
 gem "font-awesome-sass"
 
 # バリデーションエラー日本語化
-gem 'rails-i18n'
+gem "rails-i18n"
 
-#deviseのエラーメッセージ日本語化
-gem 'devise-i18n'
+# deviseのエラーメッセージ日本語化
+gem "devise-i18n"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
