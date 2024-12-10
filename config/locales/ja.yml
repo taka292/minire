@@ -1,0 +1,14 @@
+ja:
+  activerecord:
+    attributes:
+      review:
+        title: タイトル
+        content: 内容
+      user:
+        name: ユーザー名
+        email: メールアドレス
+        password: パスワード
+        password_confirmation: パスワード（確認）
+    errors:
+      messages:
+        blank: "%{attribute}を入力してください"

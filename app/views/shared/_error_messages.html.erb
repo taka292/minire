@@ -1,0 +1,7 @@
+<% if object.errors.any? %>
+  <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded">
+    <h2 class="font-semibold mb-2">
+      <%= object.errors.attribute_names.map { |attribute| object.class.human_attribute_name(attribute) }.join("・") %>に誤りがあります
+    </h2>
+  </div>
+<% end %>
