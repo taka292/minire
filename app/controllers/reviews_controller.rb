@@ -21,7 +21,7 @@ class ReviewsController < ApplicationController
   end
 
   def index
-    @reviews = Review.includes(:user).all
+    @reviews = Review.includes(:user).all.page(params[:page])
   end
 
   private

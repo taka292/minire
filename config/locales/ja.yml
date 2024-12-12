@@ -12,3 +12,8 @@ ja:
     errors:
       messages:
         blank: "%{attribute}を入力してください"
+  views:
+    pagination:
+      previous: <i class="fas fa-angle-left"></i>
+      next: <i class="fas fa-angle-right"></i>
+      truncate: "..."
