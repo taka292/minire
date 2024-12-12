@@ -1,0 +1,61 @@
+<div class="container mx-auto px-10 py-10">
+  <h1 class="text-2xl font-bold mb-6">レビュー一覧</h1>
+
+  <!-- グリッドレイアウト -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+    <% @reviews.each do |review| %>
+      <div class="card bg-white shadow-lg rounded-lg p-6">
+        <!-- ユーザーアイコン・ユーザー名 -->
+        <div class="flex items-center mb-4">
+          <div class="w-12 h-12 rounded-full bg-gray-300 flex items-center justify-center text-xl font-bold">
+            U
+          </div>
+          <div class="ml-4 text-gray-800 font-medium">
+            <p class="text-sm">
+              <%= review.user.name %>
+            </p>
+          </div>
+        </div>
+
+        <!-- 投稿写真 -->
+        <div class="mb-4 grid grid-cols-3 gap-3">
+          <% 3.times do %>
+            <img src="https://via.placeholder.com/200" alt="投稿写真" class="aspect-square rounded-md col-span-1 object-cover">
+          <% end %>
+        </div>
+
+        <!-- 投稿タイトル -->
+        <div class="mb-2">
+          <h2 class="text-lg font-bold text-gray-900"><%= review.title %></h2>
+        </div>
+
+        <!-- 投稿本文 -->
+        <div class="mb-4 text-gray-700 text-sm">
+          <%= truncate(review.content, length: 100) %>
+        </div>
+
+        <!-- 区切り線 -->
+        <hr class="my-4 border-gray-300">
+
+        <!-- いいねボタン -->
+        <div class="flex justify-end mb-4">
+          <button class="flex items-center text-red-500 hover:text-red-600">
+            <span class="material-icons text-2xl">favorite_border</span>
+          </button>
+        </div>
+
+        <!-- 商品画像・ブランド名・商品名 -->
+        <div class="flex items-center">
+          <img src="https://via.placeholder.com/100" alt="商品画像" class="w-16 h-16 object-cover rounded-md">
+          <div class="ml-4">
+            <p class="text-gray-800 text-sm font-medium">ブランド: MockBrand</p>
+            <p class="text-gray-800 text-sm font-medium">商品名: MockItem</p>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+  <div class="mt-8">
+    <%= paginate @reviews %>
+  </div>
+</div>

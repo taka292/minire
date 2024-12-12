@@ -3,9 +3,7 @@ Rails.application.routes.draw do
     registrations: "users/registrations",
     sessions: "users/sessions"
   }
-  # devise_for :users
   get "home/index"
   root "home#index"
   resources :reviews
-  # get 'search', to: 'reviews#search'
 end
