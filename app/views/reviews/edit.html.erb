@@ -1,0 +1,47 @@
+<%= render "shared/error_messages", object: @review %>
+<div class="bg-gray-100 min-h-screen py-8 px-4">
+  <div class="max-w-4xl mx-auto">
+    <h2 class="text-2xl font-semibold text-gray-800 mb-6 text-center">
+      レビュー編集
+    </h2>
+    <%= form_with model: @review, local: true do |f| %>
+      <!-- タイトル -->
+      <div class="form-control mb-6">
+        <%= f.label :title, "タイトル", class: "block text-lg font-medium text-gray-700" %>
+        <%= f.text_field :title, class: "input input-bordered w-full h-12 text-lg placeholder:text-sm", placeholder: "レビュータイトルを入力してください" %>
+        <% if @review.errors[:title].any? %>
+          <p class="text-red-500 text-sm mt-1"><%= @review.errors[:title].first %></p>
+        <% end %>
+      </div>
+
+      <!-- 内容 -->
+      <div class="form-control mb-6">
+        <%= f.label :content, "内容", class: "block text-lg font-medium text-gray-700" %>
+        <%= f.text_area :content, rows: 8, class: "textarea textarea-bordered w-full text-lg placeholder:text-sm", placeholder: "レビュー内容を詳しく入力してください" %>
+        <% if @review.errors[:content].any? %>
+          <p class="text-red-500 text-sm mt-1"><%= @review.errors[:content].first %></p>
+        <% end %>
+      </div>
+
+      <!-- 手放せるもの -->
+      <div class="form-control mb-6">
+        <%= f.label :releasable_items_attributes, "手放せるもの", class: "block text-lg font-medium text-gray-700" %>
+        <div data-controller="releasable-items">
+          <div id="releasable-items-fields" class="space-y-2">
+            <%= f.fields_for :releasable_items do |item_fields| %>
+              <%= item_fields.text_field :name, class: "input input-bordered w-full text-lg placeholder:text-sm", placeholder: "手放せるものがあれば入力してください" %>
+            <% end %>
+          </div>
+        </div>
+        <button type="button" id="add-releasable-item" class="btn btn-secondary mt-4">
+          + 手放せるものを追加
+        </button>
+      </div>
+
+      <!-- 更新ボタン -->
+      <div class="form-control mt-6">
+        <%= f.submit "更新する", class: "btn bg-customBlue text-white border-0 hover:bg-blue-500 w-full py-3 text-lg" %>
+      </div>
+    <% end %>
+  </div>
+</div>

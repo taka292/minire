@@ -1,5 +1,6 @@
 class ReviewsController < ApplicationController
   before_action :authenticate_user!
+  before_action :set_review, only: %i[edit update destroy]
 
   def new
     @review = Review.new
@@ -27,6 +28,14 @@ class ReviewsController < ApplicationController
   def edit
   end
 
+  def update
+    if @review.update(review_params)
+      redirect_to @review, notice: "レビューを更新しました！"
+    else
+      render :edit, status: :unprocessable_entity
+    end
+  end
+
   def destroy
   end
 
@@ -37,5 +46,12 @@ class ReviewsController < ApplicationController
 
     # 手放せるものリストの削除機能時には下記に修正
     # params.require(:review).permit(:title, :content, releasable_items_attributes: [:id, :name, :_destroy])
+  end
+
+  def set_review
+    @review = current_user.reviews.find_by(id: params[:id])
+    unless @review
+      redirect_to review_path, alert: "他のユーザーのレビューは編集・削除できません。"
+    end
   end
 end

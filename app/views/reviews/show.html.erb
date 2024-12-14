@@ -40,15 +40,18 @@
     </div>
 
     <!-- 編集・削除ボタン -->
-    <div class="flex justify-end gap-4 mt-4">
-      <%= link_to edit_review_path(@review), class: "flex items-center gap-1 hover:text-blue-600" do %>
-        <span class="material-symbols-outlined">edit_document</span>
-      <% end %>
+    <% if current_user == @review.user %>
+      <div class="flex justify-end gap-4 mt-4">
+        <%= link_to edit_review_path(@review), class: "flex items-center gap-1 hover:text-blue-600" do %>
+          <span class="material-symbols-outlined">edit_document</span>
+        <% end %>
 
-      <%= link_to review_path(@review), method: :delete, data: { confirm: "本当に削除しますか？" }, class: "flex items-center gap-1 hover:text-red-600" do %>
-        <span class="material-symbols-outlined">delete</span>
-      <% end %>
-    </div>
+        <%= link_to review_path(@review), method: :delete, data: { confirm: "本当に削除しますか？" }, class: "flex items-center gap-1 hover:text-red-600" do %>
+          <span class="material-symbols-outlined">delete</span>
+        <% end %>
+      </div>
+    <% end %>
+
 
     <!-- 区切り線 -->
     <hr class="my-6 border-gray-300">
