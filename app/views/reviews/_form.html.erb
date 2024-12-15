@@ -1,0 +1,29 @@
+<%= render "shared/error_messages", object: form.object %>
+<div class="form-control mb-6">
+  <%= form.label :title, "タイトル", class: "block text-lg font-medium text-gray-700" %>
+  <%= form.text_field :title, class: "input input-bordered w-full h-12 text-lg placeholder:text-sm", placeholder: "レビュータイトルを入力してください" %>
+  <% if form.object.errors[:title].any? %>
+    <p class="text-red-500 text-sm mt-1"><%= form.object.errors[:title].first %></p>
+  <% end %>
+</div>
+
+<div class="form-control mb-6">
+  <%= form.label :content, "内容", class: "block text-lg font-medium text-gray-700" %>
+  <%= form.text_area :content, rows: 8, class: "textarea textarea-bordered w-full text-lg placeholder:text-sm", placeholder: "レビュー内容を詳しく入力してください" %>
+  <% if form.object.errors[:content].any? %>
+    <p class="text-red-500 text-sm mt-1"><%= form.object.errors[:content].first %></p>
+  <% end %>
+</div>
+
+<div class="form-control mb-6">
+  <h3 class="block text-lg font-medium text-gray-700">手放せるもの（未入力でも可）</h3>
+  <div data-controller="releasable-items">
+    <%= form.fields_for :releasable_items do |item_fields| %>
+      <%= render "releasable_items_form", item_fields: item_fields %>
+    <% end %>
+  </div>
+</div>
+
+<div class="form-control mt-6">
+  <%= form.submit button_label, class: "btn bg-customBlue text-white border-0 hover:bg-blue-500 w-full py-3 text-lg" %>
+</div>
