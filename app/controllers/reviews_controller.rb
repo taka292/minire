@@ -22,7 +22,7 @@ class ReviewsController < ApplicationController
   end
 
   def index
-    @reviews = Review.includes(:user).all.page(params[:page])
+    @reviews = Review.includes(:user).all.order(created_at: :desc).page(params[:page])
   end
 
   def edit

@@ -1,0 +1,14 @@
+<div class="flex items-center space-x-4 mb-4 releasable-item relative">
+  <!-- アイテム名 -->
+  <%= item_fields.text_field :name, 
+        class: "input input-bordered w-full text-lg placeholder:text-sm transition-opacity", 
+        placeholder: "手放せるものがあれば入力してください" %>
+
+  <!-- 削除ボタン -->
+  <%= item_fields.hidden_field :_destroy, value: false, class: "destroy-checkbox" %>
+  <button type="button" 
+          class="btn btn-error btn-sm" 
+          onclick="this.previousElementSibling.value = true; this.closest('.releasable-item').style.display = 'none';">
+    削除
+  </button>
+</div>

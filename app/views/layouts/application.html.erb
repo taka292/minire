@@ -25,102 +25,15 @@
 
   <body>
     <div class="bg-white border-b border-black">
-      <header class="flex items-center justify-between px-4 py-2">
-        <!-- ロゴと検索フォーム -->
-        <div class="flex items-center gap-8">
-          <!-- ロゴ部分 -->
-          <%= link_to "MiniRe",reviews_path, class: "text-2xl font-bold text-gray-700" %>
-
-          <!-- 検索フォーム -->
-          <form class="flex items-center gap-2">
-            <input type="text" placeholder="商品名・キーワード"
-              class="input input-bordered input-sm w-64 placeholder-gray-400">
-            <button type="submit" class="btn btn-sm bg-blue-400 text-white border-none">
-              検索
-            </button>
-          </form>
-        </div>
-
-        <!-- アイコン部分 -->
-        <div class="flex items-center gap-4">
-          <%= link_to new_review_path, class: "flex items-center justify-center" do %>
-            <span class="material-icons text-gray-600 text-3xl" aria-label="レビュー">
-              rate_review
-            </span>
-          <% end %>
-          <span class="material-icons text-gray-600 text-3xl" aria-label="検索">
-            manage_search
-          </span>
-          <span class="material-icons text-gray-600 text-3xl" aria-label="お気に入り">
-            favorite_border
-          </span>
-
-          <% if user_signed_in? %>
-            <!-- ログアウトアイコン -->
-            <%= link_to destroy_user_session_path, method: :delete, data: { turbo_method: :delete }, class: "flex items-center justify-center" do %>
-              <span class="material-icons text-gray-600 text-3xl" aria-label="ログアウト">
-                logout
-              </span>
-            <% end %>
-            <!-- アバターアイコン -->
-            <a href="#" class="avatar">
-              <div class="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center">
-                <span class="text-gray-600">AAA</span>
-              </div>
-            </a>
-          <% else %>
-            <!-- ログインアイコン -->
-            <%= link_to new_user_session_path, class: "flex items-center justify-center" do %>
-              <span class="material-icons text-gray-600 text-3xl" aria-label="ログイン">
-                login
-              </span>
-            <% end %>
-          <% end %>
-        </div>
-      </header>
+      <%= render 'layouts/header' %>
     </div>
+    
     <% flash.each do |key, value| %>
-      <% css_class = case key.to_sym
-        when :notice then "bg-blue-100 border-l-4 border-blue-500 text-blue-700 flex items-center p-4 rounded-md"
-        when :alert then "bg-red-100 border-l-4 border-red-500 text-red-700 flex items-center p-4 rounded-md"
-        else "bg-gray-100 border-l-4 border-gray-500 text-gray-700 flex items-center p-4 rounded-md"
-      end %>
-      <div class="<%= css_class %>">
-        <!-- アイコン -->
-        <div class="mr-3">
-          <% if key.to_sym == :notice %>
-            <span class="material-icons text-blue-500">info</span>
-          <% elsif key.to_sym == :alert %>
-            <span class="material-icons text-red-500">error</span>
-          <% else %>
-            <span class="material-icons text-gray-500">notifications</span>
-          <% end %>
-        </div>
-        <!-- メッセージ -->
-        <div>
-          <%= value %>
-        </div>
-      </div>
+      <%= render 'layouts/flash_message', key: key, value: value %>
     <% end %>
-    <%= yield %>
-    <!-- Footer -->
 
-    <footer class="bg-white border-t border-black py-4 mt-12">
-      <div class="w-full px-4 md:px-8 flex flex-col md:flex-row justify-between items-center text-sm text-gray-600">
-        <!-- Footer Links -->
-        <div class="flex flex-col md:flex-row items-center gap-4">
-          <a href="#" class="hover:underline">お問い合わせ</a>
-          <a href="#" class="hover:underline">利用規約</a>
-          <a href="#" class="hover:underline">プライバシーポリシー</a>
-        </div>
-        <!-- Footer Copy -->
-        <div class="flex items-center gap-4 mt-4 md:mt-0">
-          <i class="fa-brands fa-instagram text-2xl"></i>
-          <i class="fa-brands fa-twitter text-2xl"></i>
-          <i class="fa-brands fa-github text-2xl"></i>
-          <p class="text-gray-600">&copy; <%= Time.current.year %> MiniRe</p>
-        </div>
-      </div>
-    </footer>
+    <%= yield %>
+
+    <%= render 'layouts/footer' %>
   </body>
 </html>

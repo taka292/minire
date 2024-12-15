@@ -7,5 +7,6 @@ import { application } from "./application"
 import HelloController from "./hello_controller"
 application.register("hello", HelloController)
 
-import ReleasableItemsController from "./releasable_items_controller.js"
-application.register("releasable-items", ReleasableItemsController)
+// stimulusを用いた、手放せるものの非同期フォームは別途追加実装予定
+// import ReleasableItemsController from "./releasable_items_controller.js"
+// application.register("releasable-items", ReleasableItemsController)
