@@ -4,14 +4,14 @@ class ReviewsController < ApplicationController
 
   def new
     @review = Review.new
-    @review.releasable_items.build
+    # レビューの新規作成時に、手放せるものリストのフォームを3つ表示
+    3.times { @review.releasable_items.build }
   end
 
   def create
     @review = current_user.reviews.build(review_params)
     if @review.save
-      redirect_to home_index_path, notice: "レビューを投稿しました！"
-      # redirect_to @review, notice: "レビューを投稿しました！"
+      redirect_to reviews_path, notice: "レビューを投稿しました！"
     else
       render :new, status: :unprocessable_entity
     end
@@ -26,6 +26,10 @@ class ReviewsController < ApplicationController
   end
 
   def edit
+      @review = current_user.reviews.find(params[:id])
+      # 登録している手放せるものを差し引いた、空のフォームを追加
+      remaining_slots = [ 3 - @review.releasable_items.size, 0 ].max
+      remaining_slots.times { @review.releasable_items.build }
   end
 
   def update
@@ -40,12 +44,9 @@ class ReviewsController < ApplicationController
   end
 
   private
-
+  # accepts_nested_attributes_forで削除するものを_destroyを追加
   def review_params
-    params.require(:review).permit(:title, :content, releasable_items_attributes: [ :id, :name ])
-
-    # 手放せるものリストの削除機能時には下記に修正
-    # params.require(:review).permit(:title, :content, releasable_items_attributes: [:id, :name, :_destroy])
+    params.require(:review).permit(:title, :content, releasable_items_attributes: [ :id, :name, :_destroy ])
   end
 
   def set_review

@@ -25,18 +25,16 @@
 
       <!-- 手放せるもの -->
       <div class="form-control mb-6">
-        <%= f.label :releasable_items_attributes, "手放せるもの", class: "block text-lg font-medium text-gray-700" %>
-        <div data-controller="releasable-items">
-          <div id="releasable-items-fields" class="space-y-2">
-            <%= f.fields_for :releasable_items do |item_fields| %>
-              <%= item_fields.text_field :name, class: "input input-bordered w-full text-lg placeholder:text-sm", placeholder: "手放せるものがあれば入力してください" %>
-            <% end %>
+        <h3 class="block text-lg font-medium text-gray-700">手放せるもの（未入力でも可）</h3>
+        <%= f.fields_for :releasable_items do |item_fields| %>
+          <div class="mb-4">
+            <%= item_fields.text_field :name, 
+                  class: "input input-bordered w-full text-lg placeholder:text-sm", 
+                  placeholder: "手放せるものがあれば入力してください" %>
           </div>
-        </div>
-        <button type="button" id="add-releasable-item" class="btn btn-secondary mt-4">
-          + 手放せるものを追加
-        </button>
+        <% end %>
       </div>
+
 
       <!-- 送信ボタン -->
       <div class="form-control mt-6">
