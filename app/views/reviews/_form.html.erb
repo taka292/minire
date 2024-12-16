@@ -15,6 +15,15 @@
   <% end %>
 </div>
 
+<!-- レビュー画像アップロード -->
+<div class="form-control mb-6">
+  <%= form.label :images, "レビュー画像", class: "block text-lg font-medium text-gray-700" %>
+  <%= form.file_field :images, multiple: true, class: "input input-bordered w-full" %>
+  <% if @review.errors[:images].any? %>
+    <p class="text-red-500 text-sm mt-1"><%= @review.errors[:images].first %></p>
+  <% end %>
+</div>
+
 <div class="form-control mb-6">
   <h3 class="block text-lg font-medium text-gray-700">手放せるもの（未入力でも可）</h3>
   <div data-controller="releasable-items">

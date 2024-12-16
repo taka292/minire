@@ -51,7 +51,7 @@ class ReviewsController < ApplicationController
   private
   # accepts_nested_attributes_forで削除するものを_destroyを追加
   def review_params
-    params.require(:review).permit(:title, :content, releasable_items_attributes: [ :id, :name, :_destroy ])
+    params.require(:review).permit(:title, :content, images: [], releasable_items_attributes: [ :id, :name, :_destroy ])
   end
 
   def set_review
