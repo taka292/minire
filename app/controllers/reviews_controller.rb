@@ -41,6 +41,11 @@ class ReviewsController < ApplicationController
   end
 
   def destroy
+    if @review.destroy
+      redirect_to reviews_path, notice: "レビューを削除しました。"
+    else
+      redirect_to reviews_path, alert: "レビューの削除に失敗しました。"
+    end
   end
 
   private
