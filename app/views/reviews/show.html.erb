@@ -26,8 +26,9 @@
       <%= simple_format(@review.content) %>
     </div>
 
-    <!-- 手放せるもの -->
+    <!--手放せるものがある時に、編集フォームを表示-->
     <% if @review.releasable_items.present? %>
+      <!-- 手放せるもの -->
       <div class="mb-6 p-4 bg-gray-100 rounded-lg">
         <h2 class="text-lg font-bold mb-2 text-gray-800">手放せるもの</h2>
         <ul class="space-y-2">
@@ -39,9 +40,10 @@
           <% end %>
         </ul>
       </div>
-    <% end %>
-
+    <% end %
+    
     <!-- 編集ボタン -->
+
     <% if current_user == @review.user %>
       <div class="flex justify-end gap-4 mt-4">
         <%= link_to edit_review_path(@review), class: "flex items-center gap-1 hover:text-blue-600" do %>
