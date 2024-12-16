@@ -26,19 +26,21 @@
       <%= simple_format(@review.content) %>
     </div>
 
-    <!-- 手放せるもの -->
-    <div class="mb-6 p-4 bg-gray-100 rounded-lg">
-      <h2 class="text-lg font-bold mb-2 text-gray-800">手放せるもの</h2>
-      <ul class="space-y-2">
-        <% @review.releasable_items.each do |item| %>
-          <li class="flex items-center text-gray-700">
-            <span class="material-symbols-outlined text-blue-500 mr-2">check_circle</span>
-            <%= item.name %>
-          </li>
-        <% end %>
-      </ul>
-    </div>
-
+    <!--手放せるものがある時に、編集フォームを表示-->
+    <% if @review.releasable_items.present? %>
+      <!-- 手放せるもの -->
+      <div class="mb-6 p-4 bg-gray-100 rounded-lg">
+        <h2 class="text-lg font-bold mb-2 text-gray-800">手放せるもの</h2>
+        <ul class="space-y-2">
+          <% @review.releasable_items.each do |item| %>
+            <li class="flex items-center text-gray-700">
+              <span class="material-symbols-outlined text-blue-500 mr-2">check_circle</span>
+              <%= item.name %>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
     <!-- 編集・削除ボタン -->
     <% if current_user == @review.user %>
       <div class="flex justify-end gap-4 mt-4">
