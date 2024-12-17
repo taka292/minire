@@ -21,7 +21,7 @@ class Review < ApplicationRecord
 
     images.each do |image|
       unless image.content_type.in?(%w[image/jpeg image/png image/gif])
-        errors.add(:images, 'はJPEG, PNG, GIF形式のみアップロードできます')
+        errors.add(:images, "はJPEG, PNG, GIF形式のみアップロードできます")
       end
     end
   end
@@ -31,16 +31,16 @@ class Review < ApplicationRecord
     return unless images.attached?
 
     images.each do |image|
-      if image.blob.byte_size > 2.megabytes
-        errors.add(:images, 'は2MB以下のファイルをアップロードしてください')
+      if image.blob.byte_size > 5.megabytes
+        errors.add(:images, "は5MB以下のファイルをアップロードしてください")
       end
     end
   end
 
-  #レビュー画像のリサイズ処理
+  # レビュー画像のリサイズ処理
   def resized_images
     images.map do |image|
-      image.variant(resize_to_fill: [200, 200]).processed
+      image.variant(resize_to_fill: [ 200, 200 ]).processed
     end
   end
 
