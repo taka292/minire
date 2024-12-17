@@ -54,13 +54,23 @@
               <p class="text-red-500 text-sm mt-1"><%= resource.errors[:introduction].first %></p>
             <% end %>
           </div>
+          <!-- アバター画像 -->
+          <div class="form-control mb-4">
+            <label class="label">
+              <span class="label-text text-base font-medium">アバター画像</span>
+            </label>
+            <%= f.file_field :avatar, class: "file-input file-input-bordered w-full" %>
+            <% if resource.errors[:avatar].present? %>
+              <p class="text-red-500 text-sm mt-1"><%= resource.errors[:avatar].first %></p>
+            <% end %>
+          </div>
+
           <div class="form-control mt-4">
           <%= f.submit "登録する", class: "btn bg-customBlue text-white border-0 hover:bg-blue-500 w-full py-3 text-lg" %>
           </div>
         <% end %>
       </div>
     </div>
-
     <!-- サインインリンク -->
     <p class="text-center mt-6 text-sm">
       すでにアカウントをお持ちですか？
