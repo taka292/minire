@@ -6,11 +6,16 @@
     <% @reviews.each do |review| %>
       <div class="card bg-white shadow-lg rounded-lg p-6">
         <%= link_to review_path(review), class: "block hover:no-underline text-inherit" do %>
+          
           <!-- ユーザーアイコン・ユーザー名 -->
           <div class="flex items-center mb-4">
-            <div class="w-12 h-12 rounded-full bg-gray-300 flex items-center justify-center text-xl font-bold">
-              U
-            </div>
+            <% if review.user.avatar.attached? %>
+              <%= image_tag review.user.resized_avatar, 
+                            class: "w-12 h-12 rounded-full object-cover", 
+                            alt: "User Avatar" %>
+            <% else %>
+              <span class="material-symbols-outlined text-gray-600 items-center justify-center">account_circle</span>
+            <% end %>
             <div class="ml-4 text-gray-800 font-medium">
               <p class="text-sm">
                 <%= review.user.name %>
@@ -20,8 +25,14 @@
 
           <!-- 投稿写真 -->
           <div class="mb-4 grid grid-cols-3 gap-3">
-            <% 3.times do %>
-              <img src="https://via.placeholder.com/200" alt="投稿写真" class="aspect-square rounded-md col-span-1 object-cover">
+            <% if review.images.attached? %>
+              <% review.images.each do |image| %>
+                <%= image_tag image.variant(resize_to_fill: [200, 200]), alt: "投稿写真", class: "aspect-square rounded-md col-span-1 object-cover" %>
+              <% end %>
+            <% else %>
+              <% 3.times do %>
+                <img src="https://via.placeholder.com/200" alt="投稿写真" class="aspect-square rounded-md col-span-1 object-cover">
+              <% end %>
             <% end %>
           </div>
 
