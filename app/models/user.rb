@@ -14,18 +14,18 @@ class User < ApplicationRecord
   def avatar_content_type
     allowed_types = %w[image/jpeg image/png image/gif]
     if avatar.attached? && !avatar.content_type.in?(allowed_types)
-      errors.add(:avatar, 'ファイル形式はJPEG, PNG, GIFのみアップロード可能です。')
+      errors.add(:avatar, "ファイル形式はJPEG, PNG, GIFのみアップロード可能です。")
     end
   end
 
   def avatar_size
     if avatar.attached? && avatar.blob.byte_size > 5.megabytes
-      errors.add(:avatar, '：5MB以下のファイルをアップロードしてください。')
+      errors.add(:avatar, "：5MB以下のファイルをアップロードしてください。")
     end
   end
 
   # リサイズした画像を返すメソッド
   def resized_avatar
-    avatar.variant(resize_to_fill: [100, 100]).processed if avatar.attached?
+    avatar.variant(resize_to_fill: [ 100, 100 ]).processed
   end
 end
