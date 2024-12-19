@@ -17,7 +17,7 @@ RSpec.describe Review, type: :model do
   it "タイトルが101文字以上だと無効" do
     review = Review.new(title: "a" * 101, content: "内容", user: user)
     expect(review).not_to be_valid
-    expect(review.errors[:title]).to include("は100文字以内で入力してください")
+    expect(review.errors[:title]).to include("100文字以内で入力してください")
   end
 
   it "コンテンツが空だと無効" do
@@ -29,7 +29,7 @@ RSpec.describe Review, type: :model do
   it "コンテンツが1001文字以上だと無効" do
     review = Review.new(title: "タイトル", content: "a" * 1001, user: user)
     expect(review).not_to be_valid
-    expect(review.errors[:content]).to include("は1000文字以内で入力してください")
+    expect(review.errors[:content]).to include("1000文字以内で入力してください")
   end
 
   it "タイトルとコンテンツが適切な文字数以内なら有効" do
@@ -47,7 +47,7 @@ RSpec.describe Review, type: :model do
     review = Review.new(title: "タイトル", content: "内容", user: user)
     review.images.attach(invalid_image)
     expect(review).not_to be_valid
-    expect(review.errors[:images]).to include("はJPEG, PNG, GIF形式のみアップロードできます")
+    expect(review.errors[:images]).to include("JPEG, PNG, GIF形式のみアップロードできます")
   end
 
   it "ユーザーが関連付けられていない場合は無効" do
@@ -68,6 +68,6 @@ RSpec.describe Review, type: :model do
     end
 
     expect(review).not_to be_valid
-    expect(review.errors[:images]).to include("は5枚以下でアップロードしてください")
+    expect(review.errors[:images]).to include("5枚以下でアップロードしてください")
   end
 end
