@@ -61,9 +61,6 @@ gem "rubocop-rails", require: false
 # N+1 問題チェック
 gem "bullet"
 
-# RSpec (テストフレームワーク)
-gem "rspec-rails", group: [ :development, :test ]
-
 # デバッグツール
 gem "pry-rails"
 
@@ -85,6 +82,10 @@ group :development, :test do
 
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
+
+  gem "rspec-rails", "~> 6.1.0"
+  gem "factory_bot_rails"
+  gem "faker"
 end
 
 group :development do
