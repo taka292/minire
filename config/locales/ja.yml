@@ -12,6 +12,7 @@ ja:
     errors:
       messages:
         blank: "%{attribute}を入力してください"
+        too_long: "%{count}文字以内で入力してください"
   views:
     pagination:
       previous: <i class="fas fa-angle-left"></i>

@@ -6,8 +6,10 @@ class User < ApplicationRecord
   has_many :reviews, dependent: :destroy
   has_one_attached :avatar
 
-  # バリデーション
-  validates :name, presence: true
+  # 名前の長さは50文字以内
+  validates :name, presence: true, length: { maximum: 50 }
+  # 自己紹介文の長さは500文字以内
+  validates :introduction, length: { maximum: 500 }, allow_blank: true
   validate :avatar_content_type
   validate :avatar_size
 

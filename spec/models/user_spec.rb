@@ -106,13 +106,13 @@ RSpec.describe User, type: :model do
       it 'ユーザー名が50文字を超えると無効である' do
         @user.name = 'a' * 51
         expect(@user).not_to be_valid
-        expect(@user.errors[:name]).to include('は50文字以内で入力してください')
+        expect(@user.errors[:name]).to include('50文字以内で入力してください')
       end
 
       it '自己紹介文が500文字を超えると無効である' do
         @user.introduction = 'a' * 501
         expect(@user).not_to be_valid
-        expect(@user.errors[:introduction]).to include('は500文字以内で入力してください')
+        expect(@user.errors[:introduction]).to include('500文字以内で入力してください')
       end
     end
 
