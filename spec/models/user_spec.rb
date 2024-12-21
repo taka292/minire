@@ -1,13 +1,17 @@
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
-  before do
-    @user = User.new(
+  let(:valid_user) do
+    User.new(
       email: 'test@example.com',
       password: 'password',
       password_confirmation: 'password',
       name: 'テストユーザー'
     )
+  end
+
+  before do
+    @user = valid_user
   end
 
   describe 'ユーザー作成のバリデーション' do
@@ -70,37 +74,26 @@ RSpec.describe User, type: :model do
 
   describe 'アバター画像の添付' do
     it '有効な画像ファイルが添付されている場合に有効' do
-      user = User.new(
-        email: 'test@example.com',
-        password: 'password',
-        password_confirmation: 'password',
-        name: 'テストユーザー'
-      )
-      user.avatar.attach(
+      @user.avatar.attach(
         io: StringIO.new("dummy image data"),
         filename: 'dummy_image.png',
         content_type: 'image/png'
       )
-      expect(user.avatar).to be_attached
-      expect(user).to be_valid
+      expect(@user.avatar).to be_attached
+      expect(@user).to be_valid
     end
 
     it '無効な形式のファイルを添付した場合は無効' do
-      user = User.new(
-        email: 'test@example.com',
-        password: 'password',
-        password_confirmation: 'password',
-        name: 'テストユーザー'
-      )
-      user.avatar.attach(
+      @user.avatar.attach(
         io: StringIO.new("invalid data"),
         filename: 'invalid.txt',
         content_type: 'text/plain'
       )
-      expect(user).not_to be_valid
-      expect(user.errors[:avatar]).to include('ファイル形式はJPEG, PNG, GIFのみアップロード可能です。')
+      expect(@user).not_to be_valid
+      expect(@user.errors[:avatar]).to include('ファイル形式はJPEG, PNG, GIFのみアップロード可能です。')
     end
   end
+
   describe '自己紹介文と名前の長さチェック' do
     context '無効な場合' do
       it 'ユーザー名が50文字を超えると無効である' do
