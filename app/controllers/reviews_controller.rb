@@ -1,5 +1,5 @@
 class ReviewsController < ApplicationController
-  before_action :authenticate_user!
+  before_action :authenticate_user!, except: [ :index, :show ]
   before_action :set_review, only: %i[edit update destroy]
 
   def new
