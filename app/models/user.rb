@@ -5,6 +5,7 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable
   has_many :reviews, dependent: :destroy
   has_one_attached :avatar
+  has_many :comments, dependent: :destroy
 
   # 名前の長さは50文字以内
   validates :name, presence: true, length: { maximum: 50 }
