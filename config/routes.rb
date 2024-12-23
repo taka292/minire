@@ -5,5 +5,7 @@ Rails.application.routes.draw do
   }
   get "home/index"
   root "home#index"
-  resources :reviews
+  resources :reviews do
+    resources :comments, only: [:create]
+  end
 end

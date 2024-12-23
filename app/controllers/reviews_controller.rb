@@ -19,6 +19,7 @@ class ReviewsController < ApplicationController
 
   def show
     @review = Review.find(params[:id])
+    @comments = @review.comments.includes(:user)
   end
 
   def index
