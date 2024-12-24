@@ -7,5 +7,6 @@ Rails.application.routes.draw do
   root "home#index"
   resources :reviews do
     resources :comments, only: [:create]
+    resources :likes, only: [:create, :destroy]
   end
 end

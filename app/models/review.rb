@@ -14,6 +14,7 @@ class Review < ApplicationRecord
   before_save :mark_empty_items_for_destruction
 
   has_many_attached :images
+  has_many :likes, dependent: :destroy
   validate :image_content_type
   validate :image_size
   validate :image_count_within_limit
