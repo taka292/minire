@@ -6,6 +6,8 @@ class User < ApplicationRecord
   has_many :reviews, dependent: :destroy
   has_one_attached :avatar
   has_many :comments, dependent: :destroy
+  has_many :likes, dependent: :destroy
+  has_many :liked_reviews, through: :likes, source: :review
 
   # 名前の長さは50文字以内
   validates :name, presence: true, length: { maximum: 50 }
