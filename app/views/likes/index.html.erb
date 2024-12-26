@@ -1,0 +1,68 @@
+<div class="container mx-auto px-10 py-10">
+  <h1 class="text-2xl font-bold mb-6">いいねした投稿一覧</h1>
+
+  <!-- グリッドレイアウト -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+    <% @liked_reviews.each do |review| %>
+      <div class="card bg-white shadow-lg rounded-lg p-6">
+        
+        <!-- クリック可能な領域のラップ -->
+        <div class="clickable-area">
+          <%= link_to review_path(review), class: "block hover:no-underline text-inherit" do %>
+            
+            <!-- ユーザーアイコン・ユーザー名 -->
+            <div class="flex items-center mb-4">
+              <% if review.user.avatar.attached? %>
+                <%= image_tag review.user.resized_avatar, 
+                              class: "w-12 h-12 rounded-full object-cover", 
+                              alt: "User Avatar" %>
+              <% else %>
+                <span class="material-symbols-outlined text-gray-600 items-center justify-center">account_circle</span>
+              <% end %>
+              <div class="ml-4 text-gray-800 font-medium">
+                <p class="text-sm">
+                  <%= review.user.name %>
+                </p>
+              </div>
+            </div>
+
+            <!-- 投稿写真 -->
+            <div class="mb-4 grid grid-cols-3 gap-3">
+              <% if review.images.attached? %>
+                <% review.resized_images.each do |image| %>
+                  <%= image_tag image, alt: "投稿写真", class: "aspect-square rounded-md col-span-1 object-cover" %>
+                <% end %>
+              <% else %>
+                <% 3.times do %>
+                  <img src="https://via.placeholder.com/200" alt="投稿写真" class="aspect-square rounded-md col-span-1 object-cover">
+                <% end %>
+              <% end %>
+            </div>
+
+            <!-- 投稿タイトル -->
+            <div class="mb-2">
+              <h2 class="text-lg font-bold text-gray-900"><%= review.title %></h2>
+            </div>
+
+            <!-- 投稿本文 -->
+            <div class="mb-4 text-gray-700 text-sm">
+              <%= truncate(review.content, length: 100) %>
+            </div>
+          <% end %>
+        </div>
+
+        <!-- 区切り線 -->
+        <hr class="my-4 border-gray-300">
+
+        <!-- 商品画像・ブランド名・商品名 -->
+        <div class="flex items-center">
+          <img src="https://via.placeholder.com/100" alt="商品画像" class="w-16 h-16 object-cover rounded-md">
+          <div class="ml-4">
+            <p class="text-gray-800 text-sm font-medium">ブランド: MockBrand</p>
+            <p class="text-gray-800 text-sm font-medium">商品名: MockItem</p>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

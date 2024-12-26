@@ -1,6 +1,10 @@
 class LikesController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_review
+  before_action :set_review, only: [ :create, :destroy ]
+
+  def index
+    @liked_reviews = current_user.liked_reviews.includes(:user, images_attachments: :blob)
+  end
 
   def create
     like = @review.likes.new(user: current_user)

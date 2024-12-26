@@ -2,7 +2,7 @@ class Review < ApplicationRecord
   belongs_to :user
   has_many :releasable_items, dependent: :destroy
   has_many :comments, dependent: :destroy
-  
+
   # バリデーション
   validates :title, presence: true, length: { maximum: 100, message: "100文字以内で入力してください" }
   validates :content, presence: true, length: { maximum: 1000, message: "1000文字以内で入力してください" }

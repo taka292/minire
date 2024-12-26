@@ -13,11 +13,16 @@
 
   <!-- アイコン部分 -->
   <div class="flex items-center gap-4">
+    <!-- レビュー投稿 -->
     <%= link_to new_review_path, class: "flex items-center justify-center" do %>
       <span class="material-icons text-gray-600 text-3xl" aria-label="レビュー">rate_review</span>
     <% end %>
+    <!-- レビュー検索 -->
     <span class="material-icons text-gray-600 text-3xl" aria-label="検索">manage_search</span>
-    <span class="material-icons text-gray-600 text-3xl" aria-label="お気に入り">favorite_border</span>
+    <!-- いいね一覧 -->
+    <%= link_to liked_reviews_path, class: "flex items-center justify-center" do %>
+      <span class="material-icons text-gray-600 text-3xl" aria-label="いいね一覧">favorite_border</span>
+    <% end %>
 
     <% if user_signed_in? %>
       <%= link_to destroy_user_session_path, method: :delete, data: { turbo_method: :delete }, class: "flex items-center justify-center" do %>
