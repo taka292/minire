@@ -29,7 +29,7 @@
         <span class="material-icons text-gray-600 text-3xl" aria-label="ログアウト">logout</span>
       <% end %>
     <!-- アバター表示 -->
-    <%= link_to '#', class: "flex items-center justify-center" do %>
+    <%= link_to profile_path, class: "flex items-center justify-center" do %>
       <% if current_user.avatar.attached? %>
         <%= image_tag current_user.resized_avatar, 
                       class: "w-10 h-10 rounded-full object-cover", 

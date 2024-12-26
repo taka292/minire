@@ -11,4 +11,11 @@ Rails.application.routes.draw do
   end
 
   get "likes", to: "likes#index", as: "liked_reviews"
+
+  resource :profile, only: [:show, :edit, :update] do
+    member do
+      get :reviews
+      get :likes
+    end
+  end
 end
