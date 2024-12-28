@@ -1,41 +1,63 @@
 <div class="container mx-auto px-10 py-10">
-  <div class="card bg-white shadow-lg rounded-lg p-6">
-    <!-- プロフィール情報 -->
+  <!-- プロフィール情報 -->
+  <div class="card bg-white shadow-lg rounded-lg p-6 mb-8">
+    <!-- ユーザーアイコンと名前 -->
     <div class="flex items-center mb-6">
       <% if @user.avatar.attached? %>
-        <%= image_tag @user.avatar.variant(resize_to_fill: [100, 100]), class: "w-24 h-24 rounded-full object-cover" %>
+        <%= image_tag @user.avatar.variant(resize_to_fill: [100, 100]), 
+                      class: "w-24 h-24 rounded-full object-cover", 
+                      alt: "ユーザーアイコン" %>
       <% else %>
-        <span class="material-symbols-outlined text-gray-500 text-6xl">account_circle</span>
+        <span class="material-symbols-outlined text-gray-500 text-6xl" aria-hidden="true">account_circle</span>
+        <span class="sr-only">ユーザーアイコン</span>
       <% end %>
-      <div class="ml-6">
-        <h1 class="text-2xl font-bold text-gray-800"><%= @user.name %></h1>
-        <p class="text-gray-600"><%= @user.introduction.presence || "自己紹介文はまだありません。" %></p>
-      </div>
+      <p class="ml-4 text-lg font-medium text-gray-800"><%= @user.name %></p>
     </div>
 
-    <!-- 投稿数と編集ボタン -->
-    <div class="flex justify-between mb-4">
-      <p>投稿数: <%= @user.reviews.count %></p>
-      <%= link_to "プロフィール編集", edit_profile_path(@user), class: "btn bg-customBlue text-white" %>
+    <!-- 投稿数・フォロワー数・フォロー数 -->
+    <div class="flex space-x-6 mb-4">
+      <p>投稿数: <strong><%= @user.reviews.count %></strong></p>
+      <!-- フォロワー数・フォロー数はここに後で追加予定 -->
     </div>
 
-    <!-- タブ切り替えボタン -->
-    <div class="flex space-x-4 mb-6">
-      <%= link_to "過去のレビュー", reviews_profile_path(@user), class: "btn btn-outline" %>
-      <%= link_to "いいねしたレビュー", likes_profile_path(@user), class: "btn btn-outline" %>
+    <!-- 自己紹介文 -->
+    <div class="mb-4">
+      <p class="text-gray-700"><%= simple_format(@user.introduction.presence || "よろしくお願いします！") %></p>
     </div>
 
-    <!-- レビュー一覧 -->
+    <!-- プロフィール編集ボタン -->
+    <div class="flex justify-start">
+      <%= link_to "プロフィール編集", 
+                  edit_profile_path(@user), 
+                  class: "btn btn-outline border border-gray-400 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-200 hover:text-gray-900" %>
+    </div>
+  </div>
+
+  <!-- レビュー切り替え -->
+  <div class="card bg-white shadow-lg rounded-lg p-6">
+    <div class="flex space-x-4 mb-4">
+      <%= link_to "過去のレビュー", 
+                  reviews_profile_path(@user), 
+                  class: "btn btn-outline border px-4 py-2 rounded-md #{params[:action] == 'reviews' ? 'bg-customBlue text-white' : 'hover:bg-gray-200 hover:text-gray-900'}" %>
+
+      <%= link_to "いいねしたレビュー", 
+                  likes_profile_path(@user), 
+                  class: "btn btn-outline border px-4 py-2 rounded-md #{params[:action] == 'likes' ? 'bg-customBlue text-white' : 'hover:bg-gray-200 hover:text-gray-900'}" %>
+    </div>
+
+    <!-- 過去のレビュー or いいねしたレビュー -->
     <% if @reviews.present? %>
       <h2 class="text-lg font-bold mb-4">過去のレビュー</h2>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- レビューカードをここに表示 -->
       </div>
     <% elsif @liked_reviews.present? %>
       <h2 class="text-lg font-bold mb-4">いいねしたレビュー</h2>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- いいねしたレビューカードをここに表示 -->
       </div>
     <% else %>
-      <p>表示するレビューがありません。</p>
+      <p class="text-gray-600">表示するレビューがありません。</p>
     <% end %>
   </div>
 </div>
