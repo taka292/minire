@@ -5,27 +5,24 @@
   <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
     <% @reviews.each do |review| %>
       <div class="card bg-white shadow-lg rounded-lg p-6">
-        
-        <!-- クリック可能な領域のラップ -->
+
+        <!-- ユーザー情報 -->
+        <div class="flex items-center mb-4">
+          <%= link_to profile_path(review.user), class: "flex items-center" do %>
+            <% if review.user.avatar.attached? %>
+              <%= image_tag review.user.resized_avatar,
+                            class: "w-12 h-12 rounded-full object-cover",
+                            alt: "User Avatar" %>
+            <% else %>
+              <span class="material-symbols-outlined text-gray-600 items-center justify-center">account_circle</span>
+            <% end %>
+            <p class="ml-4 text-sm text-gray-800 font-medium"><%= review.user.name %></p>
+          <% end %>
+        </div>
+
+        <!-- レビュー内容 -->
         <div class="clickable-area">
           <%= link_to review_path(review), class: "block hover:no-underline text-inherit" do %>
-            
-            <!-- ユーザーアイコン・ユーザー名 -->
-            <div class="flex items-center mb-4">
-              <% if review.user.avatar.attached? %>
-                <%= image_tag review.user.resized_avatar, 
-                              class: "w-12 h-12 rounded-full object-cover", 
-                              alt: "User Avatar" %>
-              <% else %>
-                <span class="material-symbols-outlined text-gray-600 items-center justify-center">account_circle</span>
-              <% end %>
-              <div class="ml-4 text-gray-800 font-medium">
-                <p class="text-sm">
-                  <%= review.user.name %>
-                </p>
-              </div>
-            </div>
-
             <!-- 投稿写真 -->
             <div class="mb-4 grid grid-cols-3 gap-3">
               <% if review.images.attached? %>
@@ -40,14 +37,10 @@
             </div>
 
             <!-- 投稿タイトル -->
-            <div class="mb-2">
-              <h2 class="text-lg font-bold text-gray-900"><%= review.title %></h2>
-            </div>
+            <h2 class="text-lg font-bold text-gray-900 mb-2"><%= review.title %></h2>
 
             <!-- 投稿本文 -->
-            <div class="mb-4 text-gray-700 text-sm">
-              <%= truncate(review.content, length: 100) %>
-            </div>
+            <p class="text-sm text-gray-700 mb-4"><%= truncate(review.content, length: 100) %></p>
           <% end %>
         </div>
 
@@ -58,28 +51,34 @@
         <div class="flex justify-end mb-4">
           <% if user_signed_in? %>
             <% if review.likes.exists?(user: current_user) %>
-              <%= button_to review_like_path(review, current_user.likes.find_by(review: review)), method: :delete, class: "flex items-center text-red-500 hover:text-red-600" do %>
+              <%= button_to review_like_path(review, current_user.likes.find_by(review: review)),
+                            method: :delete,
+                            class: "flex items-center text-red-500 hover:text-red-600" do %>
                 <span class="material-icons text-2xl">favorite</span>
               <% end %>
             <% else %>
-              <%= button_to review_likes_path(review), method: :post, class: "flex items-center text-gray-500 hover:text-red-500" do %>
+              <%= button_to review_likes_path(review),
+                            method: :post,
+                            class: "flex items-center text-gray-500 hover:text-red-500" do %>
                 <span class="material-icons text-2xl">favorite_border</span>
               <% end %>
             <% end %>
           <% end %>
         </div>
 
-        <!-- 商品画像・ブランド名・商品名 -->
+        <!-- 商品情報 -->
         <div class="flex items-center">
           <img src="https://via.placeholder.com/100" alt="商品画像" class="w-16 h-16 object-cover rounded-md">
           <div class="ml-4">
-            <p class="text-gray-800 text-sm font-medium">ブランド: MockBrand</p>
-            <p class="text-gray-800 text-sm font-medium">商品名: MockItem</p>
+            <p class="text-sm font-medium text-gray-800">ブランド: MockBrand</p>
+            <p class="text-sm font-medium text-gray-800">商品名: MockItem</p>
           </div>
         </div>
       </div>
     <% end %>
   </div>
+
+  <!-- ページネーション -->
   <div class="mt-8">
     <%= paginate @reviews %>
   </div>

@@ -3,8 +3,8 @@ class ProfilesController < ApplicationController
   before_action :set_user
 
   def show
-    # @reviews = @user.reviews.order(created_at: :desc).page(params[:page])
-    # @liked_reviews = @user.likes.includes(:review).map(&:review)
+    @reviews = @user.reviews.includes(:likes) # デフォルトは過去のレビューを表示
+    @liked_reviews = nil
   end
 
   def edit
@@ -18,20 +18,22 @@ class ProfilesController < ApplicationController
     # end
   end
 
-#   def reviews
-#     @reviews = @user.reviews.order(created_at: :desc).page(params[:page])
-#     render :show
-#   end
-# 
-#   def likes
-#     @liked_reviews = @user.likes.includes(:review).map(&:review)
-#     render :show
-#   end
+  def reviews
+    @reviews = @user.reviews.includes(:user, :likes) # 過去のレビュー
+    @liked_reviews = nil
+    render :show
+  end
+
+  def likes
+    @liked_reviews = @user.liked_reviews.includes(:user, :likes) # いいねしたレビュー
+    @reviews = nil
+    render :show
+  end
 
   private
 
   def set_user
-    @user = current_user
+    @user = User.find(params[:id]) # 表示するユーザーを取得
   end
 
   def profile_params
