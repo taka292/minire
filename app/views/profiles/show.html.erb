@@ -30,7 +30,7 @@
       <div class="flex justify-start">
         <%= link_to "プロフィール編集", 
                     edit_profile_path(@user), 
-                    class: "btn btn-outline border border-gray-400 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-200 hover:text-gray-900" %>
+                    class: "btn btn-outline border px-4 py-2 rounded-md hover:bg-gray-200 hover:text-gray-900" %>
       </div>
     <% end %>
   </div>
@@ -39,27 +39,25 @@
   <div class="card bg-white shadow-lg rounded-lg p-6">
     <div class="flex space-x-4 mb-4">
       <%= link_to "過去のレビュー", 
-                  reviews_profile_path(@user), 
-                  class: "btn btn-outline border px-4 py-2 rounded-md #{params[:action] == 'reviews' ? 'bg-customBlue text-white' : 'hover:bg-gray-200 hover:text-gray-900'}" %>
+            profile_path(@user), 
+            class: "btn btn-outline border px-4 py-2 rounded-md #{'bg-customBlue text-white' if @active_tab == 'reviews'} hover:bg-gray-200 hover:text-gray-900" %>
 
       <%= link_to "いいねしたレビュー", 
                   likes_profile_path(@user), 
-                  class: "btn btn-outline border px-4 py-2 rounded-md #{params[:action] == 'likes' ? 'bg-customBlue text-white' : 'hover:bg-gray-200 hover:text-gray-900'}" %>
+                  class: "btn btn-outline border px-4 py-2 rounded-md #{'bg-customBlue text-white' if @active_tab == 'likes'} hover:bg-gray-200 hover:text-gray-900" %>
+
     </div>
 
-    <!-- 過去のレビュー or いいねしたレビュー -->
     <% if @reviews.present? %>
-      <h2 class="text-lg font-bold mb-4">過去のレビュー</h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <!-- レビューカードをここに表示 -->
-      </div>
+      <%= render "profiles/reviews", reviews: @reviews %>
     <% elsif @liked_reviews.present? %>
-      <h2 class="text-lg font-bold mb-4">いいねしたレビュー</h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <!-- いいねしたレビューカードをここに表示 -->
-      </div>
+      <%= render "profiles/likes", liked_reviews: @liked_reviews %>
     <% else %>
-      <p class="text-gray-600">表示するレビューがありません。</p>
+      <% if @active_tab == 'reviews' %>
+        <p class="text-gray-600">まだレビューを投稿していません。</p>
+      <% elsif @active_tab == 'likes' %>
+        <p class="text-gray-600">まだいいねしたレビューがありません。</p>
+      <% end %>
     <% end %>
   </div>
 </div>

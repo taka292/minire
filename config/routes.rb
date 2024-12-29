@@ -10,11 +10,9 @@ Rails.application.routes.draw do
     resources :likes, only: [ :create, :destroy ]
   end
 
-  get "likes", to: "likes#index", as: "liked_reviews"
-
-  resources :profiles, only: [:show, :edit, :update] do
+  resources :profiles, only: [ :show, :edit, :update ] do
     member do
-      get :reviews
+      # get :reviews
       get :likes
     end
   end

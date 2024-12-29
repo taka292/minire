@@ -3,8 +3,11 @@ class ProfilesController < ApplicationController
   before_action :set_user
 
   def show
-    @reviews = @user.reviews.includes(:likes) # デフォルトは過去のレビューを表示
-    @liked_reviews = nil
+    # @reviews = @user.reviews.includes(:user, images_attachments: :blob).order(created_at: :desc)
+    # # @liked_reviews はデフォルトではセットしない
+    # @liked_reviews = nil
+    @reviews = @user.reviews.includes(:user, images_attachments: :blob).order(created_at: :desc)
+    @active_tab = "reviews"
   end
 
   def edit
@@ -18,15 +21,18 @@ class ProfilesController < ApplicationController
     # end
   end
 
-  def reviews
-    @reviews = @user.reviews.includes(:user, :likes) # 過去のレビュー
-    @liked_reviews = nil
-    render :show
-  end
+  # def reviews
+  #   @reviews = @user.reviews.includes(:user, :likes, images_attachments: :blob).order(created_at: :desc).page(params[:page])
+  #   @liked_reviews = [] # 初期化
+  #   render :show
+  # end
 
   def likes
-    @liked_reviews = @user.liked_reviews.includes(:user, :likes) # いいねしたレビュー
-    @reviews = nil
+    # @liked_reviews = @user.liked_reviews.includes(:user, :likes, images_attachments: :blob).order(created_at: :desc).page(params[:page])
+    # @reviews = [] # 初期化
+    # render :show
+    @liked_reviews = @user.liked_reviews.includes(:user, images_attachments: :blob).order(created_at: :desc)
+    @active_tab = "likes"
     render :show
   end
 
