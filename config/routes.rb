@@ -12,7 +12,6 @@ Rails.application.routes.draw do
 
   resources :profiles, only: [ :show, :edit, :update ] do
     member do
-      # get :reviews
       get :likes
     end
   end
