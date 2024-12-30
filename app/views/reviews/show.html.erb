@@ -3,18 +3,20 @@
   <div class="card bg-white shadow-lg rounded-lg p-6">
     <!-- ユーザーアイコン・ユーザー名 -->
     <div class="flex items-center mb-4">
-      <% if @review.user.avatar.attached? %>
-        <%= image_tag @review.user.resized_avatar,
-                      class: "w-12 h-12 rounded-full object-cover",
-                      alt: "User Avatar" %>
-      <% else %>
-        <span class="material-symbols-outlined text-gray-600 text-3xl">account_circle</span>
+      <%= link_to profile_path(@review.user), class: "flex items-center" do %>
+        <% if @review.user.avatar.attached? %>
+          <%= image_tag @review.user.resized_avatar,
+                        class: "w-12 h-12 rounded-full object-cover",
+                        alt: "User Avatar" %>
+        <% else %>
+          <span class="material-symbols-outlined text-gray-600 text-3xl">account_circle</span>
+        <% end %>
+        <div class="ml-4 text-gray-800 font-medium">
+          <p class="text-sm">
+            <%= @review.user.name %>
+          </p>
+        </div>
       <% end %>
-      <div class="ml-4 text-gray-800 font-medium">
-        <p class="text-sm">
-          <%= @review.user.name %>
-        </p>
-      </div>
     </div>
 
     <!-- 投稿写真 -->

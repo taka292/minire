@@ -1,0 +1,63 @@
+<div class="container mx-auto px-10 py-10">
+  <!-- プロフィール情報 -->
+  <div class="card bg-white shadow-lg rounded-lg p-6 mb-8">
+    <!-- ユーザーアイコンと名前 -->
+    <div class="flex items-center mb-6">
+      <% if @user.avatar.attached? %>
+        <%= image_tag @user.avatar.variant(resize_to_fill: [100, 100]), 
+                      class: "w-24 h-24 rounded-full object-cover", 
+                      alt: "ユーザーアイコン" %>
+      <% else %>
+        <span class="material-symbols-outlined text-gray-500 text-6xl" aria-hidden="true">account_circle</span>
+        <span class="sr-only">ユーザーアイコン</span>
+      <% end %>
+      <p class="ml-4 text-lg font-medium text-gray-800"><%= @user.name %></p>
+    </div>
+
+    <!-- 投稿数・フォロワー数・フォロー数 -->
+    <div class="flex space-x-6 mb-4">
+      <p>投稿数: <strong><%= @user.reviews.count %></strong></p>
+      <!-- フォロワー数・フォロー数はここに後で追加予定 -->
+    </div>
+
+    <!-- 自己紹介文 -->
+    <div class="mb-4">
+      <p class="text-gray-700"><%= simple_format(@user.introduction.presence || "よろしくお願いします！") %></p>
+    </div>
+
+    <!-- プロフィール編集ボタン -->
+    <% if current_user == @user %>
+      <div class="flex justify-start">
+        <%= link_to "プロフィール編集", 
+                    edit_profile_path(@user), 
+                    class: "btn btn-outline border px-4 py-2 rounded-md hover:bg-gray-200 hover:text-gray-900" %>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- レビュー切り替え -->
+  <div class="card bg-white shadow-lg rounded-lg p-6">
+    <div class="flex space-x-4 mb-4">
+      <%= link_to "過去のレビュー", 
+            profile_path(@user), 
+            class: "btn btn-outline border px-4 py-2 rounded-md #{'bg-customBlue text-white' if @active_tab == 'reviews'} hover:bg-gray-200 hover:text-gray-900" %>
+
+      <%= link_to "いいねしたレビュー", 
+                  likes_profile_path(@user), 
+                  class: "btn btn-outline border px-4 py-2 rounded-md #{'bg-customBlue text-white' if @active_tab == 'likes'} hover:bg-gray-200 hover:text-gray-900" %>
+
+    </div>
+
+    <% if @reviews.present? %>
+      <%= render "profiles/reviews", reviews: @reviews %>
+    <% elsif @liked_reviews.present? %>
+      <%= render "profiles/likes", liked_reviews: @liked_reviews %>
+    <% else %>
+      <% if @active_tab == 'reviews' %>
+        <p class="text-gray-600">まだレビューを投稿していません。</p>
+      <% elsif @active_tab == 'likes' %>
+        <p class="text-gray-600">まだいいねしたレビューがありません。</p>
+      <% end %>
+    <% end %>
+  </div>
+</div>
