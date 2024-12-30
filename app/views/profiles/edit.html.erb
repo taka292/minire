@@ -1,0 +1,70 @@
+<div class="flex h-screen items-center justify-center bg-gray-100">
+  <div class="w-full max-w-lg px-2">
+    <!-- プロフィール編集カード -->
+    <h2 class="text-center mt-2 mb-4 text-xl font-semibold">
+      プロフィール編集
+    </h2>
+    <div class="card bg-white shadow-lg p-6 rounded-lg">
+      <div class="card-body">
+        <%= form_with model: @user, url: profile_path(@user), method: :patch, local: true do |f| %>
+          <!-- ユーザー名 -->
+          <div class="form-control mb-4">
+            <label class="label">
+              <span class="label-text text-base font-medium">ユーザー名</span>
+            </label>
+            <%= f.text_field :name, placeholder: "ユーザー名を入力してください", 
+                             class: "input input-bordered w-full h-14 text-base placeholder:text-sm #{'border-red-500' if @user.errors[:name].present?}" %>
+            <% if @user.errors[:name].present? %>
+              <p class="text-red-500 text-sm mt-1"><%= @user.errors[:name].first %></p>
+            <% end %>
+          </div>
+
+          <!-- 自己紹介文 -->
+          <div class="form-control mb-4">
+            <label class="label">
+              <span class="label-text text-base font-medium">自己紹介文</span>
+            </label>
+            <%= f.text_area :introduction, rows: 5, placeholder: "自己紹介文を入力してください", 
+                             class: "textarea textarea-bordered w-full text-base placeholder:text-sm #{'border-red-500' if @user.errors[:introduction].present?}" %>
+            <% if @user.errors[:introduction].present? %>
+              <p class="text-red-500 text-sm mt-1"><%= @user.errors[:introduction].first %></p>
+            <% end %>
+          </div>
+
+          <!-- アバター画像 -->
+          <div class="form-control mb-4">
+            <label class="label">
+              <span class="label-text text-base font-medium">アバター画像</span>
+            </label>
+            <%= f.file_field :avatar, accept: "image/*", 
+                             class: "file-input file-input-bordered w-full text-base #{'border-red-500' if @user.errors[:avatar].present?}" %>
+            <% if @user.errors[:avatar].present? %>
+              <p class="text-red-500 text-sm mt-1"><%= @user.errors[:avatar].first %></p>
+            <% end %>
+            <% if @user.avatar.attached? %>
+              <div class="mt-4">
+                <h3 class="text-lg font-semibold text-gray-800 mb-2">現在の画像:</h3>
+                <%= image_tag current_user.resized_avatar, 
+                              class: "w-24 h-24 rounded-full object-cover", 
+                              alt: "現在のアバター画像" %>
+              </div>
+            <% end %>
+          </div>
+
+          <!-- 更新ボタン -->
+          <div class="form-control mt-4">
+            <%= f.submit "更新する", 
+                         class: "btn bg-customBlue text-white border-0 hover:bg-blue-500 w-full py-3 text-lg" %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <!-- プロフィールページリンク -->
+    <div class="text-center mt-4">
+      <%= link_to "プロフィールページに戻る", 
+                  profile_path(@user), 
+                  class: "btn btn-outline border px-4 py-2 rounded-md hover:bg-gray-200 hover:text-gray-900" %>
+    </div>
+  </div>
+</div>

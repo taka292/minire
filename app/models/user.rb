@@ -31,6 +31,7 @@ class User < ApplicationRecord
 
   # リサイズした画像を返すメソッド
   def resized_avatar
+    return unless avatar.attached? && avatar.blob.present?
     avatar.variant(resize_to_fill: [ 100, 100 ]).processed
   end
 end
