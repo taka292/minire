@@ -13,6 +13,12 @@ Rails.application.routes.draw do
   resources :profiles, only: [ :show, :edit, :update ] do
     member do
       get :likes
+      get :edit_email
+      patch :update_email
     end
+  end
+
+  if Rails.env.development?
+    mount LetterOpenerWeb::Engine, at: "/letter_opener"
   end
 end

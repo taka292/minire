@@ -51,6 +51,10 @@
             <% end %>
           </div>
 
+          <div class="form-control mt-4">
+            <%= link_to "メールアドレスを変更する", edit_email_profile_path(@user), class: "btn btn-outline border px-4 py-2 rounded-md hover:bg-gray-200 hover:text-gray-900" %>
+          </div>
+
           <!-- 更新ボタン -->
           <div class="form-control mt-4">
             <%= f.submit "更新する", 

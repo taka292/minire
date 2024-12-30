@@ -1,0 +1,35 @@
+<div class="flex h-screen items-center justify-center bg-gray-100">
+  <div class="w-full max-w-lg px-2">
+    <!-- メールアドレス変更フォーム -->
+    <h2 class="text-center mt-2 mb-4 text-xl font-semibold">
+      メールアドレス変更
+    </h2>
+    <div class="card bg-white shadow-lg p-6 rounded-lg">
+      <div class="card-body">
+        <%= form_with model: @user, url: update_email_profile_path(@user), method: :patch, local: true do |f| %>
+          <!-- 新しいメールアドレス -->
+          <div class="form-control mb-4">
+            <label class="label">
+              <span class="label-text text-base font-medium">新しいメールアドレス</span>
+            </label>
+            <%= f.email_field :email, placeholder: "新しいメールアドレスを入力してください", class: "input input-bordered w-full h-14 text-base placeholder:text-sm" %>
+            <% if @user.errors[:email].present? %>
+              <p class="text-red-500 text-sm mt-1"><%= @user.errors[:email].first %></p>
+            <% end %>
+          </div>
+
+          <!-- 送信ボタン -->
+          <div class="form-control mt-4">
+            <%= f.submit "確認メールを送信", class: "btn bg-customBlue text-white border-0 hover:bg-blue-500 w-full py-3 text-lg" %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <!-- プロフィールページリンク -->
+    <p class="text-center mt-4 text-sm">
+      プロフィールページに戻る場合は
+      <%= link_to "こちらをクリック", profile_path(@user), class: "link link-primary font-semibold text-sm" %>
+    </p>
+  </div>
+</div>
