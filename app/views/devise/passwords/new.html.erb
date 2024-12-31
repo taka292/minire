@@ -1,16 +1,32 @@
-<h2>Forgot your password?</h2>
+<div class="flex h-screen items-center justify-center bg-gray-100">
+  <div class="w-full max-w-lg px-2">
+    <!-- パスワードリセットカード -->
+    <h2 class="text-center mt-2 mb-4 text-xl font-semibold">
+      パスワードをリセット
+    </h2>
+    <div class="card bg-white shadow-lg p-6 rounded-lg">
+      <div class="card-body">
+        <%= form_with model: resource, url: password_path(resource_name), local: true do |f| %>
+          <!-- メールアドレス入力フィールド -->
+          <div class="form-control mb-4">
+            <label class="label">
+              <span class="label-text text-base font-medium">メールアドレス</span>
+            </label>
+            <%= f.email_field :email, placeholder: "メールアドレスを入力してください", class: "input input-bordered w-full h-14 text-base placeholder:text-sm" %>
+          </div>
 
-<%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f| %>
-  <%= render "devise/shared/error_messages", resource: resource %>
+          <!-- 送信ボタン -->
+          <div class="form-control mt-4">
+            <%= f.submit "リセットリンクを送信", class: "btn bg-customBlue text-white border-0 hover:bg-blue-500 w-full py-3 text-lg" %>
+          </div>
+        <% end %>
+      </div>
+    </div>
 
-  <div class="field">
-    <%= f.label :email %><br />
-    <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
+    <!-- ログインページリンク -->
+    <p class="text-center mt-4 text-sm">
+      ログインページに戻る場合は
+      <%= link_to "こちらをクリック", new_session_path(resource_name), class: "link link-primary font-semibold text-sm" %>
+    </p>
   </div>
-
-  <div class="actions">
-    <%= f.submit "Send me reset password instructions" %>
-  </div>
-<% end %>
-
-<%= render "devise/shared/links" %>
+</div>
