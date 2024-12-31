@@ -55,6 +55,10 @@
             <%= link_to "メールアドレスの変更", edit_email_profile_path(@user), class: "text-blue-500 hover:text-blue-700 underline" %>
           </div>
 
+          <div class="form-control mt-4">
+            <%= link_to "パスワードの変更", edit_password_profile_path(@user), class: "text-blue-500 hover:text-blue-700 underline" %>
+          </div>
+
           <!-- 更新ボタン -->
           <div class="form-control mt-4">
             <%= f.submit "更新する", 
