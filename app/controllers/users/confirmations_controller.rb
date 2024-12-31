@@ -11,10 +11,20 @@ class Users::ConfirmationsController < Devise::ConfirmationsController
   #   super
   # end
 
-  # GET /resource/confirmation?confirmation_token=abcdef
-  # def show
-  #   super
-  # end
+  def show
+    self.resource = resource_class.confirm_by_token(params[:confirmation_token])
+
+    if resource.errors.empty?
+      # 正常に確認された場合のリダイレクト
+      redirect_to edit_profile_path(resource), notice: "メールアドレスの確認が完了しました。"
+    elsif resource.confirmed?
+      # 既に確認済みの場合のリダイレクト
+      redirect_to edit_profile_path(resource), alert: "このメールアドレスは既に確認済みです。"
+    else
+      # その他のエラーの場合はデフォルトの処理
+      super
+    end
+  end
 
   protected
 
