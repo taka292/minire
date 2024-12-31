@@ -87,9 +87,9 @@ group :development, :test do
   gem "factory_bot_rails"
   gem "faker"
 
-  gem 'letter_opener'
-  gem 'letter_opener_web'
-  gem 'dotenv-rails'
+  gem "letter_opener"
+  gem "letter_opener_web"
+  gem "dotenv-rails"
 end
 
 group :development do
