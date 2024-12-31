@@ -16,6 +16,8 @@ Rails.application.routes.draw do
       get :likes
       get :edit_email
       patch :update_email
+      get :edit_password
+      patch :update_password
     end
   end
 

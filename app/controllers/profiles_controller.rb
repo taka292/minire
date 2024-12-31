@@ -14,6 +14,10 @@ class ProfilesController < ApplicationController
   def edit_email
   end
 
+  # パスワード変更用フォームの表示
+  def edit_password
+  end
+
   # プロフィール情報（名前、自己紹介、アバター画像）の更新
   def update
     if @user.update(profile_params)
@@ -31,6 +35,17 @@ class ProfilesController < ApplicationController
     else
       flash.now[:alert] = "メールアドレスの更新に失敗しました。"
       render :edit_email, status: :unprocessable_entity
+    end
+  end
+
+  # パスワード更新処理
+  def update_password
+    if @user.update_with_password(password_update_params)
+      bypass_sign_in(@user) # サインイン状態を維持
+      redirect_to profile_path(@user), notice: "パスワードを変更しました！"
+    else
+      flash.now[:alert] = "パスワードの変更に失敗しました。"
+      render :edit_password, status: :unprocessable_entity
     end
   end
 
@@ -52,5 +67,9 @@ class ProfilesController < ApplicationController
 
   def email_update_params
     params.require(:user).permit(:email) # メールアドレスの変更を許可
+  end
+
+  def password_update_params
+    params.require(:user).permit(:current_password, :password, :password_confirmation)
   end
 end
