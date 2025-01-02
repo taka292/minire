@@ -11,6 +11,8 @@ ja:
         password_confirmation: パスワード（確認）
       comment:
         content: コメント
+      item:
+        name: 商品名
     errors:
       messages:
         blank: "%{attribute}を入力してください"

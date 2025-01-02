@@ -1,8 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Review, type: :model do
-  let(:user) { User.create(email: "test@example.com", password: "password") }
-  let(:valid_review) { Review.new(title: "タイトル", content: "内容", user: user) }
+  let(:valid_review) { build(:review) }
 
   describe 'バリデーション' do
     it '有効なデータがあれば保存できる' do

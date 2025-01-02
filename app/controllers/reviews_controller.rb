@@ -9,13 +9,37 @@ class ReviewsController < ApplicationController
   end
 
   def create
-    @review = current_user.reviews.build(review_params)
-    if @review.save
-      redirect_to reviews_path, notice: "レビューを投稿しました！"
-    else
-      render :new, status: :unprocessable_entity
+    result = ActiveRecord::Base.transaction do
+      # レビューを初期化
+      @review = current_user.reviews.build(review_params)
+
+      # 商品名が空の場合のエラーハンドリング
+      if params[:item_name].blank?
+        @review.errors.add(:item_name, "商品名を入力してください")
+        raise ActiveRecord::Rollback
+      end
+
+      # 商品を検索または作成
+      item_name = params[:item_name].strip
+      item = Item.find_or_initialize_by(name: item_name)
+      unless item.save
+        @review.errors.add(:item_name, item.errors.full_messages.join(", "))
+        raise ActiveRecord::Rollback
+      end
+
+      # 商品を関連付けてレビューを保存
+      @review.item = item
+      if @review.save
+        redirect_to reviews_path, notice: "レビューを投稿しました！"
+      else
+        raise ActiveRecord::Rollback
+      end
     end
+  unless result
+    render :new, status: :unprocessable_entity
   end
+end
+
 
   def show
     @review = Review.find(params[:id])
@@ -58,7 +82,7 @@ class ReviewsController < ApplicationController
   def set_review
     @review = current_user.reviews.find_by(id: params[:id])
     unless @review
-      redirect_to review_path, alert: "他のユーザーのレビューは編集・削除できません。"
+      redirect_to reviews_path, alert: "他のユーザーのレビューは編集・削除できません。"
     end
   end
 end

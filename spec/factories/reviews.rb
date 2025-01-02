@@ -3,5 +3,6 @@ FactoryBot.define do
     title { "テストタイトル" }
     content { "テスト内容" }
     association :user
+    association :item
   end
 end
