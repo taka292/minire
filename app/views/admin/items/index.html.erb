@@ -1,0 +1,25 @@
+<div class="max-w-6xl mx-auto mt-8">
+  <h1 class="text-2xl font-bold mb-6 text-center">商品一覧</h1>
+  <table class="table-auto w-full border border-gray-300 bg-white shadow-md rounded-lg">
+    <thead class="bg-gray-200">
+      <tr>
+        <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">商品名</th>
+        <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">販売元</th>
+        <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">価格</th>
+        <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">編集</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @items.each do |item| %>
+        <tr class="hover:bg-gray-100 border-t">
+          <td class="px-4 py-2 text-sm text-gray-800"><%= item.name %></td>
+          <td class="px-4 py-2 text-sm text-gray-800"><%= item.manufacturer %></td>
+          <td class="px-4 py-2 text-sm text-gray-800"><%= number_to_currency(item.price, unit: "¥", format: "%u%n", precision: 0) %></td>
+          <td class="px-4 py-2">
+            <%= link_to "編集", edit_admin_item_path(item), class: "text-blue-600 hover:underline" %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

@@ -23,6 +23,10 @@ Rails.application.routes.draw do
 
   resources :items, only: [ :index ]
 
+  namespace :admin do
+    resources :items, only: [:index, :edit, :update]
+  end
+
   if Rails.env.development?
     mount LetterOpenerWeb::Engine, at: "/letter_opener"
   end

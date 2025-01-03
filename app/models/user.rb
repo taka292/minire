@@ -43,4 +43,8 @@ class User < ApplicationRecord
 
     self.update_columns(confirmed_at: Time.current) # 明示的に確認済み状態に設定
   end
+
+  def admin?
+    self.admin
+  end
 end
