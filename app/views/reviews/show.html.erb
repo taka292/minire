@@ -101,8 +101,14 @@
         <img src="https://via.placeholder.com/100" alt="商品画像" class="w-16 h-16 object-cover rounded-md">
       <% end %>
       <div class="ml-4">
-        <p class="text-gray-800 text-sm font-medium">ブランド: MockBrand</p>
-        <p class="text-gray-800 text-sm font-medium">商品名: MockItem</p>
+        <!-- ブランド名が登録されていたらブランド名を表示 -->
+        <% if @review.item&.manufacturer.present? %>
+          <p class="text-xm text-gray-500"><%= @review.item.manufacturer %></p>
+        <% end %>
+        <!-- 商品名が登録されていたら商品名を表示 -->
+          <% if @review.item&.name.present? %>
+            <p class="text-sm text-gray-800 font-medium"><%= @review.item.name %></p>
+          <% end %>
       </div>
     </div>
   </div>
