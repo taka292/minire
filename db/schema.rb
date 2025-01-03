@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_12_30_073844) do
+ActiveRecord::Schema[7.2].define(version: 2025_01_01_161358) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -52,6 +52,17 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_30_073844) do
     t.index ["user_id"], name: "index_comments_on_user_id"
   end
 
+  create_table "items", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "price"
+    t.string "manufacturer"
+    t.string "amazon_url"
+    t.string "asin"
+    t.datetime "last_updated_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "likes", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.bigint "review_id", null: false
@@ -75,6 +86,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_30_073844) do
     t.text "content", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "item_id"
+    t.index ["item_id"], name: "index_reviews_on_item_id"
     t.index ["user_id"], name: "index_reviews_on_user_id"
   end
 
@@ -104,5 +117,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_30_073844) do
   add_foreign_key "likes", "reviews"
   add_foreign_key "likes", "users"
   add_foreign_key "releasable_items", "reviews"
+  add_foreign_key "reviews", "items"
   add_foreign_key "reviews", "users"
 end

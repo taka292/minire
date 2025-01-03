@@ -18,6 +18,7 @@ class Review < ApplicationRecord
   validate :image_content_type
   validate :image_size
   validate :image_count_within_limit
+  belongs_to :item
 
   # ファイル形式のバリデーション
   def image_content_type

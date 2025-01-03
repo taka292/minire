@@ -1,4 +1,21 @@
-<%= render "shared/error_messages", object: form.object %>
+<%= render "shared/error_messages", object: @review %>
+
+<div class="form-control mb-6" data-controller="autocomplete" data-autocomplete-url-value="<%= items_path %>"  >
+  <%= form.label :item_name, "商品名", class: "block text-lg font-medium text-gray-700" %>
+  <%= text_field_tag :item_name, @review.item&.name,
+      placeholder: "商品名を入力してください", 
+      class: "input input-bordered w-full h-12 text-lg placeholder:text-sm", 
+      data: { 
+        autocomplete_target: "input", 
+        autocomplete_url: items_path 
+      } %>
+  <%= form.hidden_field :name, data: { autocomplete_target: 'hidden' } %>
+  <% if form.object.errors[:item_name].any? %>
+    <p class="text-red-500 text-sm mt-1"><%= form.object.errors[:item_name].first %></p>
+  <% end %>
+  <ul class="list-group bg-white border border-gray-300 rounded-md shadow-md absolute w-full md:text-sm max-w-max" data-autocomplete-target="results"></ul>
+</div>
+
 <div class="form-control mb-6">
   <%= form.label :title, "タイトル", class: "block text-lg font-medium text-gray-700" %>
   <%= form.text_field :title, class: "input input-bordered w-full h-12 text-lg placeholder:text-sm", placeholder: "レビュータイトルを入力してください" %>
