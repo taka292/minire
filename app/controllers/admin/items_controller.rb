@@ -1,6 +1,6 @@
 class Admin::ItemsController < ApplicationController
   before_action :authenticate_admin!
-  
+
   def index
     @items = Item.all
   end
@@ -39,7 +39,7 @@ end
   private
 
   def item_params
-    params.require(:item).permit(:name, :manufacturer, :price, :amazon_url, :asin, images: [],remove_images: [])
+    params.require(:item).permit(:name, :manufacturer, :price, :amazon_url, :asin, images: [], remove_images: [])
   end
 
   def authenticate_admin!
