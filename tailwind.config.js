@@ -7,7 +7,7 @@ module.exports = {
   ],
     theme: {
     extend: {
-      colors: {
+        colors: {
         customBlue: '#3BB1D8', // カスタムカラー名を定義
       },
     },
