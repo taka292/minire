@@ -67,19 +67,34 @@
         </div>
 
         <!-- 商品情報 -->
-        <div class="flex items-center">
-          <img src="https://via.placeholder.com/100" alt="商品画像" class="w-16 h-16 object-cover rounded-md">
-          <div class="ml-4">
-            <!-- ブランド名が登録されていたらブランド名を表示 -->
-            <% if review.item&.manufacturer.present? %>
-              <p class="text-xm text-gray-500"><%= review.item.manufacturer %></p>
-            <% end %>
-            <!-- 商品名が登録されていたら商品名を表示 -->
-            <% if review.item&.name.present? %>
-              <p class="text-sm text-gray-800 font-medium"><%= review.item.name %></p>
+        <% if review.item.present? %>
+          <div class="flex items-center">
+            <%= link_to item_path(review.item), class: "flex items-center w-full hover:bg-gray-100 p-2 rounded-md" do %>
+              <!-- 商品名の画像が登録されていたら、リサイズした商品画像を表示(1枚目) -->
+              <% if review.item.images.attached? %>
+                <%= image_tag review.item.resized_images.first,
+                              alt: "商品画像",
+                              class: "w-16 h-16 object-cover rounded-md" %>
+              <% else %>
+                <img src="https://via.placeholder.com/100" alt="商品画像" class="w-16 h-16 object-cover rounded-md">
+              <% end %>
+              <div class="ml-4">
+                <!-- ブランド名が登録されていたらブランド名を表示 -->
+                <% if review.item.manufacturer.present? %>
+                  <p class="text-xm text-gray-500"><%= review.item.manufacturer %></p>
+                <% end %>
+                <!-- 商品名が登録されていたら商品名を表示 -->
+                <% if review.item.name.present? %>
+                  <p class="text-sm text-gray-800 font-medium"><%= review.item.name %></p>
+                <% end %>
+              </div>
             <% end %>
           </div>
-        </div>
+        <% else %>
+          <div class="flex items-center text-gray-500">
+            <p>商品情報がありません</p>
+          </div>
+        <% end %>
       </div>
     <% end %>
   </div>

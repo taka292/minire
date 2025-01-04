@@ -1,0 +1,46 @@
+<div class="max-w-4xl mx-auto mt-8">
+  <h1 class="text-2xl font-bold mb-6 text-center"><%= @item.name %>の編集</h1>
+  <%= form_with(model: @item, url: admin_item_path(@item), method: :patch, local: true) do |f| %>
+    <div class="mb-4">
+      <%= f.label :name, "商品名", class: "block text-sm font-medium text-gray-700" %>
+      <%= f.text_field :name, class: "input input-bordered w-full h-12 text-lg" %>
+    </div>
+    <div class="mb-4">
+      <%= f.label :manufacturer, "販売元", class: "block text-sm font-medium text-gray-700" %>
+      <%= f.text_field :manufacturer, class: "input input-bordered w-full h-12 text-lg" %>
+    </div>
+    <div class="mb-4">
+      <%= f.label :price, "価格", class: "block text-sm font-medium text-gray-700" %>
+      <%= f.number_field :price, class: "input input-bordered w-full h-12 text-lg" %>
+    </div>
+    <div class="mb-4">
+      <%= f.label :amazon_url, "Amazon URL", class: "block text-sm font-medium text-gray-700" %>
+      <%= f.text_field :amazon_url, class: "input input-bordered w-full h-12 text-lg" %>
+    </div>
+    <!-- 商品画像の編集 -->
+    <div class="mb-4">
+      <h2 class="text-lg font-medium text-gray-700">商品画像</h2>
+      <!-- 画像プレビュー -->
+      <div class="flex flex-wrap gap-4 mt-2">
+        <% @item.images.each_with_index do |image, index| %>
+          <div class="relative">
+            <img src="<%= url_for(image) %>" alt="画像<%= index + 1 %>" class="h-32 w-32 object-cover rounded">
+            <div class="absolute top-1 right-1">
+              <!-- 削除チェックボックス -->
+              <%= check_box_tag "item[remove_images][]", image.blob.id, false, id: "remove_image_#{index}" %>
+              <%= label_tag "remove_image_#{index}", "削除", class: "text-sm text-red-600 cursor-pointer" %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+      <!-- 追加アップロード -->
+      <div class="mt-4">
+        <%= f.label :images, "商品画像を追加" %>
+        <%= f.file_field :images, multiple: true, class: "input" %>
+      </div>
+    </div>
+    <div class="text-center">
+      <%= f.submit "更新", class: "btn bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-500" %>
+    </div>
+  <% end %>
+</div>
