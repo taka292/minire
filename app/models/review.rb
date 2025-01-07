@@ -2,10 +2,12 @@ class Review < ApplicationRecord
   belongs_to :user
   has_many :releasable_items, dependent: :destroy
   has_many :comments, dependent: :destroy
+  belongs_to :category
 
   # バリデーション
   validates :title, presence: true, length: { maximum: 100, message: "100文字以内で入力してください" }
   validates :content, presence: true, length: { maximum: 1000, message: "1000文字以内で入力してください" }
+  # validates :category_id, presence: { message: "カテゴリを選択してください" }
 
   # accepts_nested_attributes_for :releasable_items, allow_destroy: true, reject_if: proc { |attributes| attributes['name'].blank? }
   accepts_nested_attributes_for :releasable_items, allow_destroy: true

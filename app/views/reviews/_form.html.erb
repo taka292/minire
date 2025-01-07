@@ -17,6 +17,16 @@
 </div>
 
 <div class="form-control mb-6">
+  <%= form.label :category_id, "カテゴリ", class: "block text-lg font-medium text-gray-700" %>
+  <%= form.collection_select :category_id, Category.all, :id, :name, 
+      { selected: Category.find_by(name: "その他")&.id },
+      { class: "input input-bordered w-full h-12 text-lg placeholder:text-sm" } %>
+  <% if form.object.errors[:category_id].any? %>
+    <p class="text-red-500 text-sm mt-1"><%= form.object.errors[:category_id].first %></p>
+  <% end %>
+</div>
+
+<div class="form-control mb-6">
   <%= form.label :title, "タイトル", class: "block text-lg font-medium text-gray-700" %>
   <%= form.text_field :title, class: "input input-bordered w-full h-12 text-lg placeholder:text-sm", placeholder: "レビュータイトルを入力してください" %>
   <% if form.object.errors[:title].any? %>
