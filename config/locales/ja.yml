@@ -4,6 +4,8 @@ ja:
       review:
         title: タイトル
         content: 内容
+        item: 商品名
+        category: カテゴリ
       user:
         name: ユーザー名
         email: メールアドレス
@@ -11,8 +13,6 @@ ja:
         password_confirmation: パスワード（確認）
       comment:
         content: コメント
-      item:
-        name: 商品名
     errors:
       messages:
         blank: "%{attribute}を入力してください"
