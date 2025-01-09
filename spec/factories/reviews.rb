@@ -4,5 +4,6 @@ FactoryBot.define do
     content { "テスト内容" }
     association :user
     association :item
+    association :category
   end
 end

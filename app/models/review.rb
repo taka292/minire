@@ -1,5 +1,7 @@
 class Review < ApplicationRecord
   belongs_to :user
+  belongs_to :item
+  belongs_to :category
   has_many :releasable_items, dependent: :destroy
   has_many :comments, dependent: :destroy
 
@@ -18,7 +20,7 @@ class Review < ApplicationRecord
   validate :image_content_type
   validate :image_size
   validate :image_count_within_limit
-  belongs_to :item
+
 
   # ファイル形式のバリデーション
   def image_content_type

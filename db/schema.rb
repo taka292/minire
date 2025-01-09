@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_01_03_033216) do
+ActiveRecord::Schema[7.2].define(version: 2025_01_07_115736) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -40,6 +40,13 @@ ActiveRecord::Schema[7.2].define(version: 2025_01_03_033216) do
     t.bigint "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+  end
+
+  create_table "categories", force: :cascade do |t|
+    t.string "name", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_categories_on_name", unique: true
   end
 
   create_table "comments", force: :cascade do |t|
@@ -87,6 +94,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_01_03_033216) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "item_id"
+    t.integer "category_id", null: false
+    t.index ["category_id"], name: "index_reviews_on_category_id"
     t.index ["item_id"], name: "index_reviews_on_item_id"
     t.index ["user_id"], name: "index_reviews_on_user_id"
   end
@@ -118,6 +127,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_01_03_033216) do
   add_foreign_key "likes", "reviews"
   add_foreign_key "likes", "users"
   add_foreign_key "releasable_items", "reviews"
+  add_foreign_key "reviews", "categories"
   add_foreign_key "reviews", "items"
   add_foreign_key "reviews", "users"
 end
