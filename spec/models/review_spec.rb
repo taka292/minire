@@ -67,5 +67,14 @@ RSpec.describe Review, type: :model do
       expect(valid_review).not_to be_valid
       expect(valid_review.errors[:images]).to include("5枚以下でアップロードしてください")
     end
+
+    it 'カテゴリが関連付けられていない場合無効' do
+      valid_review.category = nil
+      expect(valid_review).not_to be_valid
+      expect(valid_review.errors[:category]).to include(
+        I18n.t('errors.messages.blank', attribute: I18n.t('activerecord.attributes.review.category'))
+      )
+      # expect(valid_review.errors[:category]).to include("カテゴリを入力してください")
+    end
   end
 end
