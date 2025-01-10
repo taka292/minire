@@ -1,5 +1,34 @@
-<div class="container mx-auto px-10 py-10">
-  <h1 class="text-2xl font-bold mb-6">レビュー一覧</h1>
+<div class="container mx-auto py-10">
+  <h1 class="text-2xl font-bold mb-6 text-center">レビュー一覧</h1>
+
+<!-- 絞り込みフォーム -->
+  <!-- 絞り込みメニュー -->
+  <div class="mb-8">
+  <form method="get" action="<%= reviews_path %>">
+    <div class="relative bg-white rounded-lg shadow-sm p-4">
+      <!-- 絞り込み条件のラベル -->
+      <label for="filter_type" class="block text-sm font-medium text-gray-600 mb-3">
+        絞り込み条件
+      </label>
+      <!-- プルダウンメニュー -->
+      <select name="filter_type" id="filter_type"
+              class="w-full h-12 text-base pl-4 pr-4 bg-gray-50 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition duration-200"
+              onchange="this.form.submit()">
+        <!-- 初期選択肢 -->
+        <option value="" <%= 'selected' if params[:filter_type].blank? %>>すべてのレビュー</option>
+        <!-- 手放せるものあり -->
+        <option value="releasable" <%= 'selected' if params[:filter_type] == 'releasable' %>>手放せるものがあるレビュー</option>
+        <!-- カテゴリ一覧 -->
+        <% Category.all.each do |category| %>
+          <option value="category_<%= category.id %>" <%= 'selected' if params[:filter_type] == "category_#{category.id}" %>>
+            カテゴリ: <%= category.name %>
+          </option>
+        <% end %>
+      </select>
+    </div>
+  </form>
+</div>
+
 
   <!-- グリッドレイアウト -->
   <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
