@@ -21,6 +21,15 @@ class Review < ApplicationRecord
   validate :image_size
   validate :image_count_within_limit
 
+  # 絞り込み条件
+  # カテゴリ絞り込みスコープ
+  scope :by_category, ->(category_id) { where(category_id: category_id) if category_id.present? }
+
+  # 手放せるものの絞り込みスコープ (EXISTS クエリを使用)
+  scope :releasable, -> {
+    where("EXISTS (SELECT 1 FROM releasable_items WHERE releasable_items.review_id = reviews.id)")
+  }
+
 
   # ファイル形式のバリデーション
   def image_content_type

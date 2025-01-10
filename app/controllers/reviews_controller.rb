@@ -47,7 +47,23 @@ end
   end
 
   def index
-    @reviews = Review.includes(:user).all.order(created_at: :desc).page(params[:page])
+    # 初期データ (常に新着順がデフォルト)
+    @reviews = Review.order(created_at: :desc)
+
+    # 絞り込み処理
+    if params[:filter_type].present?
+      @reviews = case params[:filter_type]
+      when /^category_(\d+)$/ # カテゴリ絞り込み
+                   @reviews.by_category($1.to_i)
+      when "releasable" # 手放せるもの
+                   @reviews.releasable
+      else
+                   @reviews
+      end
+    end
+
+    # ページネーション適用
+    @reviews = @reviews.page(params[:page])
   end
 
   def edit
