@@ -47,6 +47,7 @@ end
   end
 
   def index
+    @query = params[:query]
     # 初期データ (常に新着順がデフォルト)
     @reviews = Review.order(created_at: :desc)
 
@@ -63,7 +64,7 @@ end
     end
 
     # ページネーション適用
-    @reviews = @reviews.page(params[:page])
+    @reviews = @reviews.search(@query).page(params[:page])
   end
 
   def edit
