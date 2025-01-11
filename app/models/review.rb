@@ -66,7 +66,7 @@ class Review < ApplicationRecord
     end
   end
 
-  def self.search(query)  
+  def self.search(query)
     return all if query.blank?
 
     joins(:item, :category, :releasable_items).where(

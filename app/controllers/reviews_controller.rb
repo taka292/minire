@@ -48,23 +48,25 @@ end
 
   def index
     @query = params[:query]
-    # 初期データ (常に新着順がデフォルト)
-    @reviews = Review.order(created_at: :desc)
+    @reviews = Review.all
 
     # 絞り込み処理
     if params[:filter_type].present?
       @reviews = case params[:filter_type]
-      when /^category_(\d+)$/ # カテゴリ絞り込み
-                   @reviews.by_category($1.to_i)
-      when "releasable" # 手放せるもの
-                   @reviews.releasable
+      when /^category_(\d+)$/
+        @reviews.by_category($1.to_i)
+      when "releasable"
+        @reviews.releasable
       else
-                   @reviews
+        @reviews
       end
     end
 
-    # ページネーション適用
-    @reviews = @reviews.search(@query).page(params[:page])
+    # 検索条件を適用
+    @reviews = @reviews.search(@query)
+
+    # ページネーション
+    @reviews = @reviews.order(created_at: :desc).page(params[:page])
   end
 
   def edit
