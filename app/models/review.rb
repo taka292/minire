@@ -66,6 +66,15 @@ class Review < ApplicationRecord
     end
   end
 
+  def self.search(query)
+    return all if query.blank?
+
+    joins(:item, :category, :releasable_items).where(
+      "items.name ILIKE :query OR reviews.title ILIKE :query OR reviews.content ILIKE :query ",
+      query: "%#{query}%"
+    ).distinct
+  end
+
   private
 
   # 空白は親要素を保存するタイミングで子モデルをまとめて削除
