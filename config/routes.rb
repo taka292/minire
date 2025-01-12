@@ -23,6 +23,9 @@ Rails.application.routes.draw do
 
   resources :items, only: [ :index, :show ]
 
+  get "/terms_of_service", to: "static_pages#terms_of_service"
+  get "/privacy_policy", to: "static_pages#privacy_policy"
+
   namespace :admin do
     resources :items, only: [ :index, :edit, :update ]
   end

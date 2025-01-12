@@ -3,8 +3,8 @@
     <!-- Footer Links -->
     <div class="flex flex-col md:flex-row items-center gap-4">
       <%= link_to 'お問い合わせ', 'https://docs.google.com/forms/d/e/1FAIpQLSekpXn40Ny_dXzf-HF85rMtgz67KkxKMzny7y8xRVp9K8-MNA/viewform?usp=header', target: '_blank', rel: 'noopener noreferrer', class: 'hover:underline' %>
-      <a href="#" class="hover:underline">利用規約</a>
-      <a href="#" class="hover:underline">プライバシーポリシー</a>
+      <%= link_to '利用規約', terms_of_service_path, class: 'hover:underline' %>
+      <%= link_to 'プライバシーポリシー', privacy_policy_path, class: 'hover:underline' %>
     </div>
     <!-- Footer Copy -->
     <div class="flex items-center gap-4 mt-4 md:mt-0">
