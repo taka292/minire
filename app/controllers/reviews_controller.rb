@@ -77,7 +77,24 @@ end
   end
 
   def update
-    if @review.update(review_params)
+    # 画像更新の処理
+    if params[:review][:images].present?
+      # 新しい画像がアップロードされている場合のみ画像を置き換える
+      # @review.images.purge # 既存の画像を削除
+      @review.images.attach(params[:review][:images]) # 新しい画像を添付
+    end
+
+
+    # 削除対象の画像を削除
+    if params[:review][:remove_images].present?
+      params[:review][:remove_images].each do |image_id|
+        image = @review.images.find_by(id: image_id)
+        image.purge if image
+      end
+    end
+
+    # 他のレビュー情報を更新
+    if @review.update(review_params.except(:images))
       redirect_to @review, notice: "レビューを更新しました！"
     else
       render :edit, status: :unprocessable_entity
