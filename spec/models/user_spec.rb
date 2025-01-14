@@ -27,7 +27,7 @@ RSpec.describe User, type: :model do
       it '重複したメールアドレスは無効である' do
         create(:user, email: user.email) # 既存のユーザーを作成
         expect(user).not_to be_valid
-        expect(user.errors[:email]).to include('はすでに存在します')
+        expect(user.errors[:email]).to include('メールアドレスはすでに存在します')
       end
 
       it 'パスワードが空であれば無効である' do
@@ -40,13 +40,13 @@ RSpec.describe User, type: :model do
         user.password = 'short'
         user.password_confirmation = 'short'
         expect(user).not_to be_valid
-        expect(user.errors[:password]).to include('は6文字以上で入力してください')
+        expect(user.errors[:password]).to include('パスワードは6文字以上で入力してください')
       end
 
       it 'パスワード確認が一致しなければ無効である' do
         user.password_confirmation = 'different'
         expect(user).not_to be_valid
-        expect(user.errors[:password_confirmation]).to include('とパスワードの入力が一致しません')
+        expect(user.errors[:password_confirmation]).to include('パスワードが一致しません')
       end
 
       it 'ユーザー名が空であれば無効である' do

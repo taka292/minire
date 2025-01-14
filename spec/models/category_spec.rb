@@ -28,7 +28,7 @@ RSpec.describe Category, type: :model do
         create(:category, name: "家電")
         category.name = "家電" # 同じ名前
         expect(category).not_to be_valid
-        expect(category.errors[:name]).to include("はすでに存在します")
+        expect(category.errors[:name]).to include("カテゴリ名はすでに存在します")
       end
     end
   end

@@ -25,6 +25,9 @@
           name: カテゴリ名
       errors:
         messages:
+          taken: "%{attribute}はすでに存在します"
+          too_short: "%{attribute}は%{count}文字以上で入力してください"
+          confirmation: "%{attribute}が一致しません"
           blank: "%{attribute}を入力してください"
           too_long: "%{count}文字以内で入力してください"
     views:

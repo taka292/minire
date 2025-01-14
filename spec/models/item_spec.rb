@@ -32,7 +32,7 @@ RSpec.describe Item, type: :model do
         create(:item, name: "ミニマリスト用テーブル")
         item.name = "ミニマリスト用テーブル" # 同じ名前
         expect(item).not_to be_valid
-        expect(item.errors[:name]).to include("はすでに存在します")
+        expect(item.errors[:name]).to include("商品名はすでに存在します")
       end
 
       it "Amazon URLが無効な形式の場合、無効である" do
