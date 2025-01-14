@@ -30,6 +30,7 @@
           confirmation: "%{attribute}が一致しません"
           blank: "%{attribute}を入力してください"
           too_long: "%{count}文字以内で入力してください"
+          invalid: "現在のパスワードが正しくありません"
     views:
       pagination:
         previous: <i class="fas fa-angle-left"></i>
