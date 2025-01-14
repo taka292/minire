@@ -6,6 +6,7 @@
           content: 内容
           category: カテゴリ
           item_name: 商品名
+          images: レビュー画像
         review/releasable_items:
           name: 手放せるもの
         # 手放せるものの文字制限で使用
