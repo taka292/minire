@@ -5,6 +5,7 @@ ja:
         title: タイトル
         content: 内容
         category: カテゴリ
+        item_name: 商品名
       user:
         name: ユーザー名
         email: メールアドレス
