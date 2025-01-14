@@ -1,28 +1,33 @@
-ja:
-  activerecord:
-    attributes:
-      review:
-        title: タイトル
-        content: 内容
-        category: カテゴリ
-        item_name: 商品名
-      user:
-        name: ユーザー名
-        email: メールアドレス
-        password: パスワード
-        password_confirmation: パスワード（確認）
-      comment:
-        content: コメント
-      item:
-        name: 商品名
-      category:
-        name: カテゴリ名
-    errors:
-      messages:
-        blank: "%{attribute}を入力してください"
-        too_long: "%{count}文字以内で入力してください"
-  views:
-    pagination:
-      previous: <i class="fas fa-angle-left"></i>
-      next: <i class="fas fa-angle-right"></i>
-      truncate: "..."
+  ja:
+    activerecord:
+      attributes:
+        review:
+          title: タイトル
+          content: 内容
+          category: カテゴリ
+          item_name: 商品名
+        review/releasable_items:
+          name: 手放せるもの
+        # 手放せるものの文字制限で使用
+        releasable_item:
+          name: 手放せるものを
+        user:
+          name: ユーザー名
+          email: メールアドレス
+          password: パスワード
+          password_confirmation: パスワード（確認）
+        comment:
+          content: コメント
+        item:
+          name: 商品名
+        category:
+          name: カテゴリ名
+      errors:
+        messages:
+          blank: "%{attribute}を入力してください"
+          too_long: "%{count}文字以内で入力してください"
+    views:
+      pagination:
+        previous: <i class="fas fa-angle-left"></i>
+        next: <i class="fas fa-angle-right"></i>
+        truncate: "..."

@@ -72,10 +72,22 @@
   <div data-controller="releasable-items">
     <%= form.fields_for :releasable_items do |item_fields| %>
       <%= render "releasable_items_form", item_fields: item_fields %>
+    <!--エラーメッセージ表示
+    <% if @review.errors[:releasable_items].any? %>
+      ------------------------------------------------
+      <p class="text-red-500 text-sm mt-1"><%= @review.errors[:releasable_items].first %></p>
+    <% end %>-->
+    <!-- 各アイテムのエラーメッセージを表示 -->
+      <% if item_fields.object.errors.any? %>
+        <ul class="text-red-500 text-sm mt-1">
+          <% item_fields.object.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      <% end %>
     <% end %>
   </div>
 </div>
-
 <div class="form-control mt-6">
   <%= form.submit button_label, class: "btn bg-customBlue text-white border-0 hover:bg-blue-500 w-full py-3 text-lg" %>
 </div>
