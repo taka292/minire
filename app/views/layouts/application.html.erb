@@ -28,9 +28,13 @@
     <div class="bg-white border-b border-black">
       <%= render 'layouts/header' %>
     </div>
-    
+
     <% flash.each do |key, value| %>
       <%= render 'layouts/flash_message', key: key, value: value %>
+    <% end %>
+
+    <% if defined?(@review) && @review.errors.any? %>
+      <%= render 'shared/error_messages', object: @review %>
     <% end %>
 
     <%= yield %>
