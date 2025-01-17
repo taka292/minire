@@ -2,20 +2,14 @@ class Review < ApplicationRecord
   belongs_to :user
   belongs_to :item
   belongs_to :category
-  has_many :releasable_items, dependent: :destroy
   has_many :comments, dependent: :destroy
 
   # バリデーション
   validates :title, presence: true, length: { maximum: 100, message: "100文字以内で入力してください" }
   validates :content, presence: true, length: { maximum: 1000, message: "1000文字以内で入力してください" }
 
-  # accepts_nested_attributes_for :releasable_items, allow_destroy: true, reject_if: proc { |attributes| attributes['name'].blank? }
-  accepts_nested_attributes_for :releasable_items, allow_destroy: true
-
-  # 空欄の手放せるものは保存前に削除
-  before_save :mark_empty_items_for_destruction
-
   has_many_attached :images
+
   has_many :likes, dependent: :destroy
   validate :image_content_type
   validate :image_size
@@ -65,6 +59,14 @@ class Review < ApplicationRecord
       errors.add(:images, "5枚以下でアップロードしてください")
     end
   end
+
+  has_many :releasable_items, dependent: :destroy
+
+  # accepts_nested_attributes_for :releasable_items, allow_destroy: true, reject_if: proc { |attributes| attributes['name'].blank? }
+  accepts_nested_attributes_for :releasable_items, allow_destroy: true
+
+  # 空欄の手放せるものは保存前に削除
+  before_save :mark_empty_items_for_destruction
 
   def self.search(query)
     return all if query.blank?

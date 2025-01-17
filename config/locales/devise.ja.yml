@@ -7,6 +7,3 @@ ja:
       signed_out: "ログアウトしました。"
     registrations:
       signed_up: "新規登録が完了しました。"
-    errors:
-      messages:
-        confirmation: "%{attribute}が一致しません"

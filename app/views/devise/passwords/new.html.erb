@@ -12,7 +12,11 @@
             <label class="label">
               <span class="label-text text-base font-medium">メールアドレス</span>
             </label>
-            <%= f.email_field :email, placeholder: "メールアドレスを入力してください", class: "input input-bordered w-full h-14 text-base placeholder:text-sm" %>
+            <%= f.email_field :email, autofocus: true, autocomplete: "email", placeholder: "メールアドレスを入力してください", class: "input input-bordered w-full h-14 text-base placeholder:text-sm 
+            #{error_class(resource, :email)}" %>
+            <% if resource.errors[:email].present? %>
+              <p class="text-red-500 text-sm mt-1"><%= resource.errors[:email].first %></p>
+            <% end %>
           </div>
 
           <!-- 送信ボタン -->

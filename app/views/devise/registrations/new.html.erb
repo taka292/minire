@@ -1,5 +1,4 @@
-<%= render "shared/error_messages", object: resource %>
-<div class="flex h-screen items-center justify-center bg-gray-100">
+<div class="min-h-screen flex items-center justify-center bg-gray-100 py-10">
   <div class="w-full max-w-lg px-2">
     <!-- サインアップカード -->
     <h2 class="text-center mt-2 mb-4 text-xl font-semibold">
@@ -13,7 +12,7 @@
             <label class="label">
               <span class="label-text text-base font-medium">名前</span>
             </label>
-            <%= f.text_field :name, autofocus: true, placeholder: "ユーザー名を入力してください", class: "input input-bordered w-full h-14 text-base placeholder:text-sm" %>
+            <%= f.text_field :name, autofocus: true, placeholder: "ユーザー名を入力してください", class: "input input-bordered w-full h-14 text-base placeholder:text-sm #{error_class(resource, :name)}" %>
             <% if resource.errors[:name].present? %>
               <p class="text-red-500 text-sm mt-1"><%= resource.errors[:name].first %></p>
             <% end %>
@@ -22,7 +21,7 @@
             <label class="label">
               <span class="label-text text-base font-medium">メールアドレス</span>
             </label>
-            <%= f.email_field :email, placeholder: "メールアドレスを入力してください", class: "input input-bordered w-full h-14 text-base placeholder:text-sm" %>
+            <%= f.email_field :email, placeholder: "メールアドレスを入力してください", class: "input input-bordered w-full h-14 text-base placeholder:text-sm #{error_class(resource, :name)}" %>
             <% if resource.errors[:email].present? %>
               <p class="text-red-500 text-sm mt-1"><%= resource.errors[:email].first %></p>
             <% end %>
@@ -31,7 +30,7 @@
             <label class="label">
               <span class="label-text text-base font-medium">パスワード</span>
             </label>
-            <%= f.password_field :password, autocomplete: "new-password", placeholder: "パスワードを入力してください", class: "input input-bordered w-full h-14 text-base placeholder:text-sm" %>
+            <%= f.password_field :password, autocomplete: "new-password", placeholder: "パスワードを入力してください", class: "input input-bordered w-full h-14 text-base placeholder:text-sm #{error_class(resource, :password)}" %>
             <% if resource.errors[:password].present? %>
               <p class="text-red-500 text-sm mt-1"><%= resource.errors[:password].first %></p>
             <% end %>
@@ -40,7 +39,7 @@
             <label class="label">
               <span class="label-text text-base font-medium">パスワード（確認）</span>
             </label>
-            <%= f.password_field :password_confirmation, autocomplete: "new-password", placeholder: "パスワードを再入力してください", class: "input input-bordered w-full h-14 text-base placeholder:text-sm" %>
+            <%= f.password_field :password_confirmation, autocomplete: "new-password", placeholder: "パスワードを再入力してください", class: "input input-bordered w-full h-14 text-base placeholder:text-sm #{error_class(resource, :password_confirmation)}" %>
             <% if resource.errors[:password_confirmation].present? %>
               <p class="text-red-500 text-sm mt-1"><%= resource.errors[:password_confirmation].first %></p>
             <% end %>
@@ -49,7 +48,7 @@
             <label class="label">
               <span class="label-text text-base font-medium">自己紹介</span>
             </label>
-            <%= f.text_area :introduction, placeholder: "簡単な自己紹介を入力してください", class: "textarea textarea-bordered w-full h-28 text-base placeholder:text-sm" %>
+            <%= f.text_area :introduction, placeholder: "簡単な自己紹介を入力してください", class: "textarea textarea-bordered w-full h-28 text-base placeholder:text-sm #{error_class(resource, :introduction)}" %>
             <% if resource.errors[:introduction].present? %>
               <p class="text-red-500 text-sm mt-1"><%= resource.errors[:introduction].first %></p>
             <% end %>
@@ -59,7 +58,7 @@
             <label class="label">
               <span class="label-text text-base font-medium">アバター画像</span>
             </label>
-            <%= f.file_field :avatar, class: "file-input file-input-bordered w-full" %>
+            <%= f.file_field :avatar, class: "file-input file-input-bordered w-full #{error_class(resource, :avatar)}" %>
             <% if resource.errors[:avatar].present? %>
               <p class="text-red-500 text-sm mt-1"><%= resource.errors[:avatar].first %></p>
             <% end %>

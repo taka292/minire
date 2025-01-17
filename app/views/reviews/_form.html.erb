@@ -1,5 +1,3 @@
-<%= render "shared/error_messages", object: @review %>
-
 <div class="form-control mb-6 relative" data-controller="autocomplete" data-autocomplete-url-value="<%= items_path %>"  >
   <%= form.label :item_name, "商品名", class: "block text-lg font-medium text-gray-700" %>
   <%= text_field_tag :item_name, @review.item&.name,
@@ -45,6 +43,22 @@
 <!-- レビュー画像アップロード -->
 <div class="form-control mb-6">
   <%= form.label :images, "レビュー画像", class: "block text-lg font-medium text-gray-700" %>
+
+  <!-- 既存の画像をプレビュー表示 -->
+  <% @review.images.each do |image| %>
+    <% if image.persisted? %>
+      <div class="relative mb-2">
+        <%= image_tag image.variant(resize_to_limit: [200, 200]), class: "block mb-1" %>
+        <label>
+          <%= check_box_tag "review[remove_images][]", image.id, false %>
+          削除
+        </label>
+      </div>
+      <!-- 既存画像のsigned_idを隠しフィールドで送信 -->
+    <% end %>
+  <% end %>
+
+  <!-- 新しい画像のアップロード -->
   <%= form.file_field :images, multiple: true, class: "input input-bordered w-full" %>
   <% if @review.errors[:images].any? %>
     <p class="text-red-500 text-sm mt-1"><%= @review.errors[:images].first %></p>
@@ -56,10 +70,22 @@
   <div data-controller="releasable-items">
     <%= form.fields_for :releasable_items do |item_fields| %>
       <%= render "releasable_items_form", item_fields: item_fields %>
+    <!--エラーメッセージ表示
+    <% if @review.errors[:releasable_items].any? %>
+      ------------------------------------------------
+      <p class="text-red-500 text-sm mt-1"><%= @review.errors[:releasable_items].first %></p>
+    <% end %>-->
+    <!-- 各アイテムのエラーメッセージを表示 -->
+      <% if item_fields.object.errors.any? %>
+        <ul class="text-red-500 text-sm mt-1">
+          <% item_fields.object.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      <% end %>
     <% end %>
   </div>
 </div>
-
 <div class="form-control mt-6">
   <%= form.submit button_label, class: "btn bg-customBlue text-white border-0 hover:bg-blue-500 w-full py-3 text-lg" %>
 </div>

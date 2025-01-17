@@ -12,7 +12,7 @@
             <label class="label">
               <span class="label-text text-base font-medium">新しいメールアドレス</span>
             </label>
-            <%= f.email_field :email, placeholder: "新しいメールアドレスを入力してください", class: "input input-bordered w-full h-14 text-base placeholder:text-sm" %>
+            <%= f.email_field :email, placeholder: "新しいメールアドレスを入力してください", class: "input input-bordered w-full h-14 text-base placeholder:text-sm  #{error_class(@user, :email)}" %>
             <% if @user.errors[:email].present? %>
               <p class="text-red-500 text-sm mt-1"><%= @user.errors[:email].first %></p>
             <% end %>
