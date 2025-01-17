@@ -17,9 +17,14 @@ class Users::PasswordsController < Devise::PasswordsController
   # end
 
   # PUT /resource/password
-  # def update
-  #   super
-  # end
+  def update
+    super do |resource|
+      if resource.errors.any?
+        flash[:alert] = I18n.t("devise.passwords.failure")
+      end
+    end
+  end
+
 
   # protected
 

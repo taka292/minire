@@ -7,3 +7,10 @@ ja:
       signed_out: "ログアウトしました。"
     registrations:
       signed_up: "新規登録が完了しました。"
+      failure: 'アカウントの登録に失敗しました。入力内容を確認してください。'
+    passwords:
+      send_instructions: "パスワード再設定のためのメールを送信しました。"
+      updated: "パスワードを変更しました。"
+      updated_not_active: "パスワードを変更しましたが、アカウントは有効化されていません。"
+      send_paranoid_instructions: "パスワード再設定のためのメールを送信しました。"
+      failure: "パスワードの再設定に失敗しました。入力内容を確認してください。"
