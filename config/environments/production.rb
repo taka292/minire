@@ -92,6 +92,8 @@ Rails.application.configure do
   # ]
   # minire.onrender.comを許可するホストとして追加
   config.hosts << "minire.onrender.com"
+  config.hosts << "minire.jp"
+  config.hosts << "www.minire.jp"
   #
   # Skip DNS rebinding protection for the default health check endpoint.
   # config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
