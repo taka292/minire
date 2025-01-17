@@ -13,7 +13,7 @@
               <span class="label-text text-base font-medium">ユーザー名</span>
             </label>
             <%= f.text_field :name, placeholder: "ユーザー名を入力してください", 
-                             class: "input input-bordered w-full h-14 text-base placeholder:text-sm #{'border-red-500' if @user.errors[:name].present?}" %>
+                             class: "input input-bordered w-full h-14 text-base placeholder:text-sm #{error_class(@user, :name)}" %>
             <% if @user.errors[:name].present? %>
               <p class="text-red-500 text-sm mt-1"><%= @user.errors[:name].first %></p>
             <% end %>
@@ -25,7 +25,7 @@
               <span class="label-text text-base font-medium">自己紹介文</span>
             </label>
             <%= f.text_area :introduction, rows: 5, placeholder: "自己紹介文を入力してください", 
-                             class: "textarea textarea-bordered w-full text-base placeholder:text-sm #{'border-red-500' if @user.errors[:introduction].present?}" %>
+                            class: "textarea textarea-bordered w-full text-base placeholder:text-sm #{error_class(@user, :introduction)}" %>
             <% if @user.errors[:introduction].present? %>
               <p class="text-red-500 text-sm mt-1"><%= @user.errors[:introduction].first %></p>
             <% end %>
@@ -37,7 +37,7 @@
               <span class="label-text text-base font-medium">アバター画像</span>
             </label>
             <%= f.file_field :avatar, accept: "image/*", 
-                             class: "file-input file-input-bordered w-full text-base #{'border-red-500' if @user.errors[:avatar].present?}" %>
+                              class: "input input-bordered w-full h-14 text-base #{error_class(@user, :avatar)}" %>
             <% if @user.errors[:avatar].present? %>
               <p class="text-red-500 text-sm mt-1"><%= @user.errors[:avatar].first %></p>
             <% end %>

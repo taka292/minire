@@ -11,13 +11,14 @@
             <label class="label">
               <span class="label-text text-base font-medium">メールアドレス</span>
             </label>
-            <%= f.email_field :email, autofocus: true, autocomplete: "email", placeholder: "メールアドレスを入力してください", class: "input input-bordered w-full h-14 text-base placeholder:text-sm" %>
+            <!--フォーム入力でエラーがあれば赤枠で囲む-->
+            <%= f.email_field :email, autofocus: true, autocomplete: "email", placeholder: "メールアドレスを入力してください", class: "input input-bordered w-full h-14 text-base placeholder:text-sm #{'border-red-500' if flash[:alert].present?}" %>
           </div>
           <div class="form-control mb-4">
             <label class="label">
               <span class="label-text text-base font-medium">パスワード</span>
             </label>
-            <%= f.password_field :password, autocomplete: "current-password", placeholder: "パスワードを入力してください", class: "input input-bordered w-full h-14 text-base placeholder:text-sm" %>
+            <%= f.password_field :password, autocomplete: "current-password", placeholder: "パスワードを入力してください", class: "input input-bordered w-full h-14 text-base placeholder:text-sm #{'border-red-500' if flash[:alert].present?}" %>
           </div>
 
           <% if devise_mapping.rememberable? %>
