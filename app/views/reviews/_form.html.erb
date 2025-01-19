@@ -58,12 +58,17 @@
     <% end %>
   <% end %>
 
-  <!-- 新しい画像のアップロード -->
-  <%= form.file_field :images, multiple: true, class: "input input-bordered w-full  #{error_class(@review, :images)}" %>
-  <% if @review.errors[:images].any? %>
+  <!-- 画像アップロードフォーム -->
+  <div class="form-control mb-4">
+    <%= form.file_field :images, multiple: true, class: "file-input file-input-bordered w-full #{error_class(@review, :images)}" %>
+  </div>
+
+  <!-- エラーメッセージ -->
+  <% if @review.errors[:images].present? %>
     <p class="text-red-500 text-sm mt-1"><%= @review.errors[:images].first %></p>
   <% end %>
 </div>
+
 
 <div class="form-control mb-6">
   <h3 class="block text-lg font-medium text-gray-700">手放せるもの（未入力でも可）</h3>
