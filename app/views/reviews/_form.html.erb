@@ -68,18 +68,21 @@
 <div class="form-control mb-6">
   <h3 class="block text-lg font-medium text-gray-700">手放せるもの（未入力でも可）</h3>
   <div data-controller="releasable-items">
-    <%= form.fields_for :releasable_items do |item_fields| %>
-      <%= render "releasable_items_form", item_fields: item_fields %>
-      <% if item_fields.object.errors.any? %>
-        <ul class="text-red-500 text-sm mt-1">
-          <% item_fields.object.errors.full_messages.each do |message| %>
-            <li><%= message %></li>
-          <% end %>
-        </ul>
+    <% @review.releasable_items.each_with_index do |item, index| %>
+      <%= form.fields_for :releasable_items, item do |item_fields| %>
+        <%= render "reviews/releasable_items_form", item_fields: item_fields, index: index %>
+        <% if item_fields.object.errors.any? %>
+          <ul class="text-red-500 text-sm mt-1">
+            <% item_fields.object.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+          </ul>
+        <% end %>
       <% end %>
     <% end %>
   </div>
 </div>
+
 <div class="form-control mt-6">
   <%= form.submit button_label, class: "btn bg-customBlue text-white border-0 hover:bg-blue-500 w-full py-3 text-lg" %>
 </div>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= content_for(:title) || "Minire" %></title>
+    <title><%= content_for(:title) || "MiniRe" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
@@ -22,6 +22,8 @@
     <!-- JavaScript -->
     <link rel="preload" href="/assets/application-33583849.js" as="script" crossorigin="anonymous">
     <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module", defer: true, crossorigin: "anonymous" %>
+    <%= favicon_link_tag "/favicon.ico" %>
+
   </head>
 
   <body>

@@ -1,8 +1,10 @@
 <header class="flex items-center justify-between px-4 py-2">
   <!-- ロゴと検索フォーム -->
   <div class="flex items-center gap-8">
-    <!-- ロゴ部分 -->
-    <%= link_to "MiniRe", reviews_path, class: "text-2xl font-bold text-gray-700" %>
+    <!-- ロゴ部分a(app/assets/images/logo.pngを表示) -->
+    <%= link_to root_path, class: "flex items-center" do %>
+      <%= image_tag "logo.png", alt: "MiniRe", class: "w-12" %>
+    <% end %>
 
     <!-- 検索フォーム -->
     <form class="flex items-center gap-2" action="<%= reviews_path %>" method="get">
