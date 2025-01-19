@@ -36,7 +36,7 @@
   <%= form.label :content, "内容", class: "block text-lg font-medium text-gray-700" %>
   <%= form.text_area :content, rows: 8, class: "textarea textarea-bordered w-full text-lg placeholder:text-sm #{error_class(@review, :content)}", placeholder: "レビュー内容を入力してください" %>
   <% if form.object.errors[:content].any? %>
-    <p class="text-red-500 text-sm mt-1"><%= form.object.errors[:content].first %></p>
+    <p class="text-red-500 text-sm mt-1 "><%= form.object.errors[:content].first %></p>
   <% end %>
 </div>
 

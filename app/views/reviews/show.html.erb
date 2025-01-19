@@ -27,11 +27,7 @@
                         class: "aspect-square rounded-md col-span-1 object-cover",
                         alt: "投稿写真" %>
         <% end %>
-      <% else %>
-        <% 3.times do %>
-          <img src="https://via.placeholder.com/200" alt="投稿写真" class="aspect-square rounded-md col-span-1 object-cover">
-        <% end %>
-      <% end %>
+      <% end %>      
     </div>
 
     <!-- 投稿タイトル -->
@@ -100,7 +96,7 @@
                         alt: "商品画像",
                         class: "w-16 h-16 object-cover rounded-md" %>
         <% else %>
-          <img src="https://via.placeholder.com/100" alt="商品画像" class="w-16 h-16 object-cover rounded-md">
+          <%= image_tag "logo.png", alt: "MiniRe", class: "w-16 h-16 object-cover" %>
         <% end %>
         <!-- 商品情報 -->
         <div class="ml-4">
