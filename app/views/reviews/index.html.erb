@@ -46,7 +46,7 @@
             <!-- 投稿写真 -->
             <div class="mb-4 grid grid-cols-3 gap-3">
               <% if review.images.attached? %>
-                <% review.resized_images.each do |image| %>
+                <% review.resized_images.take(3).each do |image| %>
                   <%= image_tag image, alt: "投稿写真", class: "aspect-square rounded-md col-span-1 object-cover" %>
                 <% end %>
               <% end %>
