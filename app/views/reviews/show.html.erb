@@ -20,14 +20,14 @@
     </div>
 
     <!-- 投稿写真 -->
-    <div class="mb-4 grid grid-cols-3 gap-3">
-      <% if @review.images.attached? %>
-        <% @review.resized_images.each do |image| %>
-          <%= image_tag image,
-                        class: "aspect-square rounded-md col-span-1 object-cover",
-                        alt: "投稿写真" %>
+    <div class="flex space-x-4" style="overflow-x: auto;">
+        <% if @review.images.attached? %>
+          <% @review.resized_images.each do |image| %>
+            <%= image_tag image,
+                          class: "aspect-square rounded-md col-span-1 object-cover flex-none",
+                          alt: "投稿写真" %>
+          <% end %>
         <% end %>
-      <% end %>      
     </div>
 
     <!-- 投稿タイトル -->
