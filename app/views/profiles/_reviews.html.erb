@@ -1,8 +1,7 @@
-<div class="container mx-auto px-10 py-10">
-  <!-- グリッドレイアウト -->
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
-    <% @reviews.each do |review| %>
-      <%= render "shared/review_card", review: review %>
-    <% end %>
-  </div>
-</div>
+<%= render "shared/review_list",
+           reviews: @reviews,
+           path: profile_path(@user),
+           filter_form: false,
+           paginated: false,
+           empty_message: "まだレビューを投稿していません。",
+           title: nil %>

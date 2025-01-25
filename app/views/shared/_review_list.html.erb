@@ -1,0 +1,43 @@
+<div class="container mx-auto py-10">
+  <% if defined?(title) && title.present? %>
+    <h1 class="text-2xl font-bold mb-6 text-center"><%= title %></h1>
+  <% end %>
+
+  <% if filter_form %>
+    <!-- 絞り込みフォーム -->
+    <form method="get" action="<%= path %>">
+      <input type="hidden" name="query" value="<%= params[:query] %>">
+
+      <div class="relative bg-white rounded-lg shadow-sm p-4">
+        <label for="filter_type" class="block text-sm font-medium text-gray-600 mb-3">絞り込み条件</label>
+        <select name="filter_type" id="filter_type"
+                class="w-full h-12 text-base pl-4 pr-4 bg-gray-50 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition duration-200"
+                onchange="this.form.submit()">
+          <option value="" <%= 'selected' if params[:filter_type].blank? %>>すべてのレビュー</option>
+          <option value="releasable" <%= 'selected' if params[:filter_type] == 'releasable' %>>手放せるものがあるレビュー</option>
+          <% Category.all.each do |category| %>
+            <option value="category_<%= category.id %>" <%= 'selected' if params[:filter_type] == "category_#{category.id}" %>>
+              カテゴリ: <%= category.name %>
+            </option>
+          <% end %>
+        </select>
+      </div>
+    </form>
+  <% end %>
+
+  <% if reviews.present? %>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+      <% reviews.each do |review| %>
+        <%= render "shared/review_card", review: review %>
+      <% end %>
+    </div>
+
+    <% if paginated %>
+      <div class="mt-8">
+        <%= paginate reviews %>
+      </div>
+    <% end %>
+  <% else %>
+    <p class="text-gray-600 text-center mt-10"><%= empty_message %></p>
+  <% end %>
+</div>
