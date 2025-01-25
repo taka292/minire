@@ -12,7 +12,7 @@
             <label class="label">
               <span class="label-text text-base font-medium">新しいパスワード</span>
             </label>
-            <%= f.password_field :password, placeholder: "新しいパスワードを入力してください", class: "input input-bordered w-full h-14 text-base placeholder:text-sm" %>
+            <%= f.password_field :password, placeholder: "新しいパスワードを入力してください", class: "input input-bordered w-full h-14 text-base placeholder:text-sm  #{error_class(resource, :password)}" %>
             <% if resource.errors[:password].present? %>
               <p class="text-red-500 text-sm mt-1"><%= resource.errors[:password].first %></p>
             <% end %>
@@ -23,7 +23,7 @@
             <label class="label">
               <span class="label-text text-base font-medium">新しいパスワード（確認）</span>
             </label>
-            <%= f.password_field :password_confirmation, placeholder: "新しいパスワードを再入力してください", class: "input input-bordered w-full h-14 text-base placeholder:text-sm" %>
+            <%= f.password_field :password_confirmation, placeholder: "新しいパスワードを再入力してください", class: "input input-bordered w-full h-14 text-base placeholder:text-sm #{error_class(resource, :password_confirmation)}" %>
             <% if resource.errors[:password_confirmation].present? %>
               <p class="text-red-500 text-sm mt-1"><%= resource.errors[:password_confirmation].first %></p>
             <% end %>

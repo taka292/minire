@@ -10,9 +10,13 @@ class Users::RegistrationsController < Devise::RegistrationsController
   # end
 
   # POST /resource
-  # def create
-  #   super
-  # end
+  def create
+    super do |resource|
+      if resource.errors.any? # もしエラーがあれば
+        flash[:alert] = I18n.t("devise.registrations.failure") # カスタムメッセージを設定
+      end
+    end
+  end
 
   # GET /resource/edit
   # def edit

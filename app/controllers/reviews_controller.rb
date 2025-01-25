@@ -77,20 +77,17 @@ end
   end
 
   def update
-    # 画像更新の処理
-    if params[:review][:images].present?
-      # 新しい画像がアップロードされている場合のみ画像を置き換える
-      # @review.images.purge # 既存の画像を削除
-      @review.images.attach(params[:review][:images]) # 新しい画像を添付
-    end
-
-
     # 削除対象の画像を削除
     if params[:review][:remove_images].present?
       params[:review][:remove_images].each do |image_id|
         image = @review.images.find_by(id: image_id)
         image.purge if image
       end
+    end
+
+    # 画像更新の処理
+    if params[:review][:images].present?
+      @review.images.attach(params[:review][:images]) # 新しい画像を添付
     end
 
     # 他のレビュー情報を更新

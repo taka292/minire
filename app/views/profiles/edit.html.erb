@@ -36,8 +36,9 @@
             <label class="label">
               <span class="label-text text-base font-medium">アバター画像</span>
             </label>
-            <%= f.file_field :avatar, accept: "image/*", 
-                              class: "input input-bordered w-full h-14 text-base #{error_class(@user, :avatar)}" %>
+
+            <!-- 画像アップロードフォーム -->
+            <%= f.file_field :avatar, accept: "image/*", class: "file-input file-input-bordered w-full #{error_class(@user, :avatar)}" %>
             <% if @user.errors[:avatar].present? %>
               <p class="text-red-500 text-sm mt-1"><%= @user.errors[:avatar].first %></p>
             <% end %>

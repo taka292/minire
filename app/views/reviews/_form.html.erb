@@ -2,7 +2,7 @@
   <%= form.label :item_name, "商品名", class: "block text-lg font-medium text-gray-700" %>
   <%= text_field_tag :item_name, @review.item&.name,
       placeholder: "商品名を入力してください", 
-      class: "input input-bordered w-full h-12 text-lg placeholder:text-sm", 
+      class: "input input-bordered w-full h-12 text-lg placeholder:text-sm #{error_class(@review, :item_name)}", 
       data: { 
         autocomplete_target: "input", 
         autocomplete_url: items_path 
@@ -18,7 +18,7 @@
   <%= form.label :category_id, "カテゴリ", class: "block text-lg font-medium text-gray-700" %>
   <%= form.collection_select :category_id, Category.all, :id, :name,
         { prompt: "カテゴリを選択してください" },
-        { class: "input input-bordered w-full h-12 text-lg placeholder:text-sm appearance-none pr-10" } %>
+        { class: "input input-bordered w-full h-12 text-lg placeholder:text-sm appearance-none pr-10 #{error_class(@review, :category)}" } %>
 <% if form.object.errors[:category].any? %>
   <p class="text-red-500 text-sm mt-1">カテゴリを選択してください</p>
 <% end %>
@@ -26,7 +26,7 @@
 
 <div class="form-control mb-6">
   <%= form.label :title, "タイトル", class: "block text-lg font-medium text-gray-700" %>
-  <%= form.text_field :title, class: "input input-bordered w-full h-12 text-lg placeholder:text-sm", placeholder: "レビュータイトルを入力してください" %>
+  <%= form.text_field :title, class: "input input-bordered w-full h-12 text-lg placeholder:text-sm #{error_class(@review, :title)}", placeholder: "レビュータイトルを入力してください" %>
   <% if form.object.errors[:title].any? %>
     <p class="text-red-500 text-sm mt-1"><%= form.object.errors[:title].first %></p>
   <% end %>
@@ -34,9 +34,9 @@
 
 <div class="form-control mb-6">
   <%= form.label :content, "内容", class: "block text-lg font-medium text-gray-700" %>
-  <%= form.text_area :content, rows: 8, class: "textarea textarea-bordered w-full text-lg placeholder:text-sm", placeholder: "レビュー内容を詳しく入力してください" %>
+  <%= form.text_area :content, rows: 8, class: "textarea textarea-bordered w-full text-lg placeholder:text-sm #{error_class(@review, :content)}", placeholder: "レビュー内容を入力してください" %>
   <% if form.object.errors[:content].any? %>
-    <p class="text-red-500 text-sm mt-1"><%= form.object.errors[:content].first %></p>
+    <p class="text-red-500 text-sm mt-1 "><%= form.object.errors[:content].first %></p>
   <% end %>
 </div>
 
@@ -58,34 +58,36 @@
     <% end %>
   <% end %>
 
-  <!-- 新しい画像のアップロード -->
-  <%= form.file_field :images, multiple: true, class: "input input-bordered w-full" %>
-  <% if @review.errors[:images].any? %>
+  <!-- 画像アップロードフォーム -->
+  <div class="form-control mb-4">
+    <%= form.file_field :images, multiple: true, class: "file-input file-input-bordered w-full #{error_class(@review, :images)}" %>
+  </div>
+
+  <!-- エラーメッセージ -->
+  <% if @review.errors[:images].present? %>
     <p class="text-red-500 text-sm mt-1"><%= @review.errors[:images].first %></p>
   <% end %>
 </div>
 
+
 <div class="form-control mb-6">
   <h3 class="block text-lg font-medium text-gray-700">手放せるもの（未入力でも可）</h3>
   <div data-controller="releasable-items">
-    <%= form.fields_for :releasable_items do |item_fields| %>
-      <%= render "releasable_items_form", item_fields: item_fields %>
-    <!--エラーメッセージ表示
-    <% if @review.errors[:releasable_items].any? %>
-      ------------------------------------------------
-      <p class="text-red-500 text-sm mt-1"><%= @review.errors[:releasable_items].first %></p>
-    <% end %>-->
-    <!-- 各アイテムのエラーメッセージを表示 -->
-      <% if item_fields.object.errors.any? %>
-        <ul class="text-red-500 text-sm mt-1">
-          <% item_fields.object.errors.full_messages.each do |message| %>
-            <li><%= message %></li>
-          <% end %>
-        </ul>
+    <% @review.releasable_items.each_with_index do |item, index| %>
+      <%= form.fields_for :releasable_items, item do |item_fields| %>
+        <%= render "reviews/releasable_items_form", item_fields: item_fields, index: index %>
+        <% if item_fields.object.errors.any? %>
+          <ul class="text-red-500 text-sm mt-1">
+            <% item_fields.object.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+          </ul>
+        <% end %>
       <% end %>
     <% end %>
   </div>
 </div>
+
 <div class="form-control mt-6">
   <%= form.submit button_label, class: "btn bg-customBlue text-white border-0 hover:bg-blue-500 w-full py-3 text-lg" %>
 </div>
