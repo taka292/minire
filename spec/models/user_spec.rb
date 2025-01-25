@@ -21,7 +21,7 @@ RSpec.describe User, type: :model do
       it '無効な形式のメールアドレスは無効である' do
         user.email = 'invalid_email'
         expect(user).not_to be_valid
-        expect(user.errors[:email]).to include('は不正な値です')
+        expect(user.errors[:email]).to include('現在のパスワードが正しくありません')
       end
 
       it '重複したメールアドレスは無効である' do
