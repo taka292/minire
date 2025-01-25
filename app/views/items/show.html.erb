@@ -1,39 +1,29 @@
 <div class="bg-gray-100 min-h-screen py-8 px-4">
-  <div class="max-w-6xl mx-auto bg-white px-8 py-8 shadow-md rounded-md space-y-8">
+  <div class="max-w-6xl mx-auto bg-white px-6 sm:px-8 py-6 sm:py-8 shadow-md rounded-md space-y-8">
     <!-- 商品詳細セクション -->
-    <div class="flex flex-col md:flex-row gap-12 items-start">
-      <!-- 左側: サムネイル & メイン画像 -->
-      <div class="flex items-start gap-8">
-        <div class="flex flex-col gap-4">
+    <div class="flex flex-col md:flex-row gap-8 sm:gap-12 items-start">
+      <!-- 左側: 商品画像 (横スクロール) -->
+      <div class="w-full md:w-1/2">
+        <div class="flex space-x-4 p-2  overflow-x-auto">
           <% if @item.images.attached? %>
             <% @item.images.each do |image| %>
-              <img src="<%= url_for(image) %>" alt="サムネイル画像" 
-                   class="w-16 h-16 object-cover rounded-md border border-gray-300 cursor-pointer"
-                   onclick="document.getElementById('main-image').src = '<%= url_for(image) %>'">
+              <img src="<%= url_for(image) %>" alt="<%= @item.name %>" 
+                   class="w-[300px] h-[250px] object-cover rounded-md shadow-md flex-shrink-0">
             <% end %>
           <% else %>
             <% 3.times do %>
-              <img src="https://via.placeholder.com/80x80" alt="サムネイル画像" 
-                   class="w-16 h-16 object-cover rounded-md border border-gray-300 cursor-pointer">
+              <img src="https://via.placeholder.com/400x300" alt="<%= @item.name %>" 
+                   class="w-[300px] h-[250px] object-cover rounded-md shadow-md flex-shrink-0">
             <% end %>
-          <% end %>
-        </div>
-        <div class="w-[500px] h-[400px] overflow-hidden rounded-md shadow-md bg-gray-200 flex items-center justify-center">
-          <% if @item.images.attached? %>
-            <img id="main-image" src="<%= url_for(@item.images.first) %>" alt="<%= @item.name %>" 
-                 class="max-w-full max-h-full object-contain">
-          <% else %>
-            <img src="https://via.placeholder.com/400x300" alt="<%= @item.name %>" 
-                 class="max-w-full max-h-full object-contain">
           <% end %>
         </div>
       </div>
 
       <!-- 右側: 商品情報 -->
-      <div class="flex flex-col md:w-1/2 space-y-6 px-8">
+      <div class="flex flex-col w-full md:w-1/2 space-y-4 sm:space-y-6 px-4 sm:px-8">
         <h1 class="text-2xl font-bold text-gray-800"><%= @item.name %></h1>
-        <p class="text-gray-600 text-lg">販売元: <%= @item.manufacturer || '情報がありません' %></p>
-        <p class="text-gray-600 text-lg">価格: <%= @item.price.present? ? "¥#{number_to_currency(@item.price, unit: '', delimiter: ',')}" : '情報がありません' %></p>
+        <p class="text-gray-600 text-base sm:text-lg">販売元: <%= @item.manufacturer || '情報がありません' %></p>
+        <p class="text-gray-600 text-base sm:text-lg">価格: <%= @item.price.present? ? "¥#{number_to_currency(@item.price, unit: '', delimiter: ',')}" : '情報がありません' %></p>
 
         <% if @item.amazon_url.present? %>
           <%= link_to "Amazonで購入する", @item.amazon_url, 
@@ -46,16 +36,16 @@
   </div>
 
   <!-- レビュー一覧セクション -->
-  <div class="max-w-6xl mx-auto bg-white mt-8 px-8 py-8 shadow-md rounded-md">
-    <h2 class="text-xl font-bold text-gray-800 mb-6 border-b border-gray-300 pb-2">レビュー一覧</h2>
+  <div class="max-w-6xl mx-auto bg-white mt-8 px-6 sm:px-8 py-6 sm:py-8 shadow-md rounded-md">
+    <h2 class="text-xl font-bold text-gray-800 mb-4 sm:mb-6 border-b border-gray-300 pb-2">レビュー一覧</h2>
     <% if @reviews.any? %>
-      <ul class="space-y-6">
+      <ul class="space-y-4 sm:space-y-6">
         <% @reviews.each do |review| %>
           <li class="bg-gray-50 p-4 rounded-md shadow-md hover:shadow-lg transition-shadow">
             <h3 class="text-lg font-medium text-gray-800 mb-2">
               <%= link_to review.title, review_path(review), class: "hover:text-blue-500" %>
             </h3>
-            <p class="text-sm text-gray-600 mb-4"><%= truncate(review.content, length: 100) %></p>
+            <p class="text-sm text-gray-600 mb-2 sm:mb-4"><%= truncate(review.content, length: 100) %></p>
             <p class="text-xs text-gray-500">投稿者: <%= review.user.name %></p>
             <p class="text-xs text-gray-500">投稿日: <%= l(review.created_at, format: :long) %></p>
           </li>

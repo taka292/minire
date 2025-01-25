@@ -20,7 +20,7 @@
     </div>
 
     <!-- 投稿写真 -->
-    <div class="flex space-x-4" style="overflow-x: auto;">
+    <div class="flex space-x-4 overflow-x-auto">
         <% if @review.images.attached? %>
           <% @review.resized_images.each do |image| %>
             <%= image_tag image,

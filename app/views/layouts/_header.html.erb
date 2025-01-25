@@ -1,59 +1,100 @@
-<header class="flex items-center justify-between px-4 py-2">
-  <!-- ロゴと検索フォーム -->
-  <div class="flex items-center gap-8">
-    <!-- ロゴ部分a(app/assets/images/logo.pngを表示) -->
-    <%= link_to root_path, class: "flex items-center" do %>
-      <%= image_tag "logo.png", alt: "MiniRe", class: "w-12" %>
-    <% end %>
+<header class="w-full px-4 sm:px-10 py-2">
+  <!-- PC時 (1行表示) -->
+  <div class="hidden md:flex items-center justify-between w-full">
+    <!-- 左側：ロゴ -->
+    <div class="flex flex-shrink-0">
+      <%= link_to root_path, class: "flex items-center" do %>
+        <%= image_tag "logo.png", alt: "MiniRe", class: "w-12" %>
+      <% end %>
+    </div>
 
-    <!-- 検索フォーム -->
-    <form class="flex items-center gap-2" action="<%= reviews_path %>" method="get">
-      <!-- 検索クエリ -->
-      <input type="text" name="query" value="<%= params[:query] %>" placeholder="商品名・キーワード" class="input input-bordered input-sm w-64 placeholder-gray-400">
+    <!-- 中央：検索フォーム (PC専用) -->
+    <div class="hidden md:flex flex-1 ml-8">
+      <form class="flex items-center gap-2 md:w-80" action="<%= reviews_path %>" method="get">
+        <input type="text" name="query" value="<%= params[:query] %>" placeholder="商品名・キーワード"
+          class="input input-bordered input-sm w-full placeholder-gray-400">
+        <input type="hidden" name="filter_type" value="<%= params[:filter_type] %>">
+        <button type="submit" class="btn btn-sm bg-blue-400 text-white border-none">検索</button>
+      </form>
+    </div>
 
-      <!-- 絞り込みパラメータを保持 -->
-      <input type="hidden" name="filter_type" value="<%= params[:filter_type] %>">
-
-      <button type="submit" class="btn btn-sm bg-blue-400 text-white border-none">検索</button>
-    </form>
-  </div>
-
-  <!-- アイコン部分 -->
-  <div class="flex items-center gap-4">
-    <!-- レビュー投稿 -->
-    <%= link_to new_review_path, class: "flex items-center justify-center" do %>
-      <span class="material-icons text-gray-600 text-3xl" aria-label="レビュー">rate_review</span>
-    <% end %>
-
-    <!-- レビュー検索 -->
-    <span class="material-icons text-gray-600 text-3xl" aria-label="検索">manage_search</span>
-
-    <!-- いいね一覧 -->
-    <% if user_signed_in? %>
-      <%= link_to likes_profile_path(current_user), class: "flex items-center justify-center" do %>
-        <span class="material-icons text-gray-600 text-3xl" aria-label="いいね一覧">favorite_border</span>
+    <!-- 右側：アイコン -->
+    <div class="flex gap-2 flex-shrink-0">
+      <%= link_to new_review_path, class: "flex items-center justify-center" do %>
+        <span class="material-icons text-gray-600 text-3xl" aria-label="レビュー">rate_review</span>
       <% end %>
 
-      <!-- ログアウト -->
-      <%= link_to destroy_user_session_path, method: :delete, data: { turbo_method: :delete }, class: "flex items-center justify-center" do %>
-        <span class="material-icons text-gray-600 text-3xl" aria-label="ログアウト">logout</span>
-      <% end %>
+      <% if user_signed_in? %>
+        <%= link_to likes_profile_path(current_user), class: "flex items-center justify-center" do %>
+          <span class="material-icons text-gray-600 text-3xl" aria-label="いいね一覧">favorite_border</span>
+        <% end %>
 
-      <!-- アバター表示 -->
-      <%= link_to profile_path(current_user), class: "flex items-center justify-center" do %>
-        <% if current_user.avatar.attached? %>
-          <%= image_tag current_user.resized_avatar, 
-                        class: "w-10 h-10 rounded-full object-cover", 
-                        alt: "アバター画像" %>
-        <% else %>
-          <span class="material-symbols-outlined text-gray-600 text-3xl">account_circle</span>
+        <%= link_to destroy_user_session_path, method: :delete, data: { turbo_method: :delete }, class: "flex items-center justify-center" do %>
+          <span class="material-icons text-gray-600 text-3xl" aria-label="ログアウト">logout</span>
+        <% end %>
+
+        <%= link_to profile_path(current_user), class: "flex items-center justify-center" do %>
+          <% if current_user.avatar.attached? %>
+            <%= image_tag current_user.resized_avatar, 
+                          class: "w-10 h-10 rounded-full object-cover", 
+                          alt: "アバター画像" %>
+          <% end %>
+        <% end %>
+      <% else %>
+        <%= link_to new_user_session_path, class: "flex items-center justify-center" do %>
+          <span class="material-icons text-gray-600 text-3xl" aria-label="ログイン">login</span>
         <% end %>
       <% end %>
-    <% else %>
-      <!-- ログイン -->
-      <%= link_to new_user_session_path, class: "flex items-center justify-center" do %>
-        <span class="material-icons text-gray-600 text-3xl" aria-label="ログイン">login</span>
-      <% end %>
-    <% end %>
+    </div>
+  </div>
+
+  <!-- スマホ時 (2段表示) -->
+  <div class="flex flex-col md:hidden w-full">
+    <!-- 上段：ロゴ + アイコン -->
+    <div class="flex items-center justify-between w-full">
+      <!-- 左側：ロゴ -->
+      <div class="flex flex-shrink-0">
+        <%= link_to root_path, class: "flex items-center" do %>
+          <%= image_tag "logo.png", alt: "MiniRe", class: "w-12" %>
+        <% end %>
+      </div>
+
+      <!-- 右側：アイコン -->
+      <div class="flex gap-2">
+        <%= link_to new_review_path, class: "flex items-center justify-center" do %>
+          <span class="material-icons text-gray-600 text-3xl" aria-label="レビュー">rate_review</span>
+        <% end %>
+
+        <% if user_signed_in? %>
+          <%= link_to likes_profile_path(current_user), class: "flex items-center justify-center" do %>
+            <span class="material-icons text-gray-600 text-3xl" aria-label="いいね一覧">favorite_border</span>
+          <% end %>
+
+          <%= link_to profile_path(current_user), class: "flex items-center justify-center" do %>
+            <% if current_user.avatar.attached? %>
+              <%= image_tag current_user.resized_avatar, 
+                            class: "w-10 h-10 rounded-full object-cover", 
+                            alt: "アバター画像" %>
+            <% else %>
+              <span class="material-symbols-outlined text-gray-600 text-3xl">account_circle</span>
+            <% end %>
+          <% end %>
+        <% else %>
+          <%= link_to new_user_session_path, class: "flex items-center justify-center" do %>
+            <span class="material-icons text-gray-600 text-3xl" aria-label="ログイン">login</span>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+
+    <!-- 下段：検索フォーム (スマホ専用) -->
+    <div class="mt-2">
+      <form class="flex items-center gap-2 w-full" action="<%= reviews_path %>" method="get">
+        <input type="text" name="query" value="<%= params[:query] %>" placeholder="商品名・キーワード"
+          class="input input-bordered input-sm w-full placeholder-gray-400">
+        <input type="hidden" name="filter_type" value="<%= params[:filter_type] %>">
+        <button type="submit" class="btn btn-sm bg-blue-400 text-white border-none">検索</button>
+      </form>
+    </div>
   </div>
 </header>
