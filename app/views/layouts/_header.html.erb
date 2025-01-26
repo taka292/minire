@@ -70,6 +70,10 @@
             <span class="material-icons text-gray-600 text-3xl" aria-label="いいね一覧">favorite_border</span>
           <% end %>
 
+          <%= link_to destroy_user_session_path, method: :delete, data: { turbo_method: :delete }, class: "flex items-center justify-center" do %>
+            <span class="material-icons text-gray-600 text-3xl" aria-label="ログアウト">logout</span>
+          <% end %>
+
           <%= link_to profile_path(current_user), class: "flex items-center justify-center" do %>
             <% if current_user.avatar.attached? %>
               <%= image_tag current_user.resized_avatar, 
