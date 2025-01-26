@@ -5,7 +5,7 @@
       <% if review.user.avatar.attached? %>
         <%= image_tag review.user.resized_avatar, class: "w-12 h-12 rounded-full object-cover", alt: "User Avatar" %>
       <% else %>
-        <span class="material-symbols-outlined text-gray-600 items-center justify-center">account_circle</span>
+        <span class="material-symbols-outlined text-gray-600 item#F2F2F2s-center justify-center">account_circle</span>
       <% end %>
       <p class="ml-4 text-sm text-gray-800 font-medium"><%= review.user.name %></p>
     <% end %>
