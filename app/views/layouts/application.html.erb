@@ -10,9 +10,11 @@
 
     <%= yield :head %>
 
-    <link rel="icon" href="/icon.png" type="image/png">
-    <link rel="icon" href="/icon.svg" type="image/svg+xml">
-    <link rel="apple-touch-icon" href="/icon.png">
+    <!-- favicon(スマホ・PC・) -->
+    <%= favicon_link_tag 'favicon.ico' %>
+    <%= favicon_link_tag 'apple-touch-icon.png', rel: 'apple-touch-icon', type: 'image/png' %>
+    <%= favicon_link_tag 'android-chrome-192x192.png', rel: 'icon', type: 'image/png', sizes: '192x192' %>
+    <%= favicon_link_tag 'android-chrome-512x512.png', rel: 'icon', type: 'image/png', sizes: '512x512' %>
 
     <!-- Stylesheets -->
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
@@ -22,8 +24,8 @@
     <!-- JavaScript -->
     <link rel="preload" href="/assets/application-33583849.js" as="script" crossorigin="anonymous">
     <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module", defer: true, crossorigin: "anonymous" %>
-    <%= favicon_link_tag "/favicon.ico" %>
 
+    <link rel="manifest" href="/pwa/manifest.json">
   </head>
 
   <body>
