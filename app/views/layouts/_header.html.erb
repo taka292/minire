@@ -20,8 +20,8 @@
 
     <!-- 右側：アイコン -->
     <div class="flex gap-2 flex-shrink-0">
-      <%= link_to new_review_path, class: "flex items-center justify-center" do %>
-        <span class="material-icons text-gray-600 text-3xl" aria-label="レビュー">rate_review</span>
+      <%= link_to reviews_path, class: "flex items-center justify-center" do %>
+        <span class="material-symbols-outlined  text-gray-600 text-3xl" aria-label="レビュー一覧">quick_reference_all</span>
       <% end %>
 
       <% if user_signed_in? %>
@@ -61,8 +61,8 @@
 
       <!-- 右側：アイコン -->
       <div class="flex gap-2">
-        <%= link_to new_review_path, class: "flex items-center justify-center" do %>
-          <span class="material-icons text-gray-600 text-3xl" aria-label="レビュー">rate_review</span>
+        <%= link_to reviews_path, class: "flex items-center justify-center" do %>
+          <span class="material-symbols-outlined  text-gray-600 text-3xl" aria-label="レビュー一覧">quick_reference_all</span>
         <% end %>
 
         <% if user_signed_in? %>
