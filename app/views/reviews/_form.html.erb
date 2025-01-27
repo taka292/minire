@@ -42,31 +42,22 @@
 
 <!-- レビュー画像アップロード -->
 <div class="form-control mb-6">
-  <%= form.label :images, "レビュー画像（未入力でも可）", class: "block text-lg font-medium text-gray-700" %>
+  <%= form.label :images, "レビュー画像（複数可）", class: "block text-lg font-medium text-gray-700" %>
 
-  <!-- 既存の画像をプレビュー表示 -->
+<!-- 画像プレビューエリア -->
+<div id="image-preview" class="flex flex-wrap gap-2 mb-4">
   <% @review.images.each do |image| %>
-    <% if image.persisted? %>
-      <div class="relative mb-2">
-        <%= image_tag image.variant(resize_to_limit: [200, 200]), class: "block mb-1" %>
-        <label>
-          <%= check_box_tag "review[remove_images][]", image.id, false %>
-          削除
-        </label>
-      </div>
-      <!-- 既存画像のsigned_idを隠しフィールドで送信 -->
-    <% end %>
+    <div class="relative preview-image" data-image-id="<%= image.id %>">
+      <%= image_tag image.variant(resize_to_limit: [200, 200]), class: "w-24 h-24 object-cover border" %>
+    </div>
   <% end %>
+</div>
 
-  <!-- 画像アップロードフォーム -->
-  <div class="form-control mb-4">
-    <%= form.file_field :images, multiple: true, class: "file-input file-input-bordered w-full #{error_class(@review, :images)}" %>
-  </div>
+<%= hidden_field_tag "review[remove_images]", "", id: "remove-images-input" %>
 
-  <!-- エラーメッセージ -->
-  <% if @review.errors[:images].present? %>
-    <p class="text-red-500 text-sm mt-1"><%= @review.errors[:images].first %></p>
-  <% end %>
+<!-- 画像選択フィールド -->
+<div class="form-control mb-4">
+  <%= form.file_field :images, name: "review[images][]", multiple: true, class: "file-input file-input-bordered w-full", id: "image-input" %>
 </div>
 
 
@@ -91,3 +82,121 @@
 <div class="form-control mt-6">
   <%= form.submit button_label, class: "btn bg-customBlue text-white border-0 hover:bg-blue-500 w-full py-3 text-lg" %>
 </div>
+
+<script>
+  function initializeImagePreview() {
+  // console.log("initializeImagePreview 実行");
+
+  const imageInput = document.getElementById("image-input");
+  const previewArea = document.getElementById("image-preview");
+  const removeImagesInput = document.getElementById("remove-images-input");
+
+  if (!imageInput || !previewArea || !removeImagesInput) {
+    // console.error("画像入力フィールドまたはプレビューエリアが見つかりません。");
+    return;
+  }
+
+  // `selectedFiles` をリセット
+  let selectedFiles = [];
+
+  // 既存の画像をリストに追加
+  document.querySelectorAll(".preview-image").forEach((imageElement) => {
+    const imageId = imageElement.dataset.imageId;
+    if (imageId) {
+      selectedFiles.push({ id: imageId, element: imageElement });
+    }
+  });
+
+  // 画像選択時の処理
+  imageInput.addEventListener("change", function (event) {
+    const files = Array.from(event.target.files);
+
+    // すでにある画像を追加しない（name, size, lastModified を比較）
+    files.forEach((file) => {
+      if (
+        !selectedFiles.some(
+          (f) =>
+            f instanceof File &&
+            f.name === file.name &&
+            f.size === file.size &&
+            f.lastModified === file.lastModified
+        )
+      ) {
+        selectedFiles.push(file);
+      }
+    });
+
+    updatePreview();
+    updateFileInput();
+  });
+
+  function updatePreview() {
+    // console.log("updatePreview 実行");
+
+    previewArea.innerHTML = ""; // プレビューをリセット
+
+    selectedFiles.forEach((file, index) => {
+      const container = document.createElement("div");
+      container.classList.add("relative", "preview-image");
+
+      const removeBtn = document.createElement("button");
+      removeBtn.innerText = "×";
+      removeBtn.classList.add("ml-2", "text-red-500", "cursor-pointer");
+      removeBtn.addEventListener("click", function () {
+        if (file instanceof File) {
+          // 新しい画像の場合
+          selectedFiles.splice(index, 1);
+        } else {
+          // 既存の画像の場合、hidden_field に削除IDを追加
+          if (removeImagesInput) {
+            let currentValue = removeImagesInput.value ? removeImagesInput.value.split(',') : [];
+            currentValue.push(file.id);
+            removeImagesInput.value = currentValue.join(',');
+          }
+          selectedFiles.splice(index, 1);
+        }
+        updatePreview();
+        updateFileInput();
+      });
+
+      if (file instanceof File) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          const img = document.createElement("img");
+          img.src = e.target.result;
+          img.classList.add("w-24", "h-24", "object-cover", "border");
+          container.appendChild(img);
+          container.appendChild(removeBtn);
+          previewArea.appendChild(container);
+        };
+        reader.readAsDataURL(file);
+      } else {
+        // 既存の画像をプレビューとして表示
+        container.appendChild(file.element);
+        container.appendChild(removeBtn);
+        previewArea.appendChild(container);
+      }
+    });
+  }
+
+  function updateFileInput() {
+    // console.log("updateFileInput 実行");
+
+    const dataTransfer = new DataTransfer();
+    selectedFiles.forEach((file) => {
+      if (file instanceof File) {
+        dataTransfer.items.add(file);
+      }
+    });
+    imageInput.files = dataTransfer.files;
+    // console.log("Updated file input (after selection):", imageInput.files);
+  }
+
+  updatePreview(); // 初期プレビューを表示
+}
+
+// ✅ `turbo:load` の多重登録を防ぐ
+document.removeEventListener("turbo:load", initializeImagePreview);
+document.addEventListener("turbo:load", initializeImagePreview, { once: true });
+
+</script>

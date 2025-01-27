@@ -79,7 +79,7 @@ end
   def update
     # 削除対象の画像を削除
     if params[:review][:remove_images].present?
-      params[:review][:remove_images].each do |image_id|
+      params[:review][:remove_images].split(",").each do |image_id|
         image = @review.images.find_by(id: image_id)
         image.purge if image
       end
