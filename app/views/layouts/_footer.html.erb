@@ -8,9 +8,14 @@
     </div>
     <!-- Footer Copy -->
     <div class="flex items-center gap-4 mt-4 md:mt-0">
+      <!-- SNS Icons -->
+      <!--
       <i class="fa-brands fa-instagram text-2xl"></i>
       <i class="fa-brands fa-twitter text-2xl"></i>
-      <i class="fa-brands fa-github text-2xl"></i>
+      -->
+      <%= link_to 'https://github.com/taka292/minire', target: '_blank', rel: 'noopener noreferrer', class: 'text-gray-600 hover:text-gray-800' do %>
+        <i class="fa-brands fa-github text-2xl"></i>
+      <% end %>
       <p class="text-gray-600">&copy; <%= Time.current.year %> MiniRe</p>
     </div>
   </div>
