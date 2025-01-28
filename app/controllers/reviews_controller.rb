@@ -21,6 +21,7 @@ class ReviewsController < ApplicationController
 
       # 商品を検索または作成
       item_name = params[:item_name].strip
+      # 商品名を指定して初めの1件を取得し1件もなければ作成
       item = Item.find_or_initialize_by(name: item_name)
       unless item.save
         @review.errors.add(:item_name, item.errors.full_messages.join(", "))
@@ -77,26 +78,46 @@ end
   end
 
   def update
-    # 削除対象の画像を削除
-    if params[:review][:remove_images].present?
-      params[:review][:remove_images].split(",").each do |image_id|
-        image = @review.images.find_by(id: image_id)
-        image.purge if image
+    result = ActiveRecord::Base.transaction do
+      # 商品を検索または作成
+      item_name = params[:item_name]&.strip
+      if item_name.blank?
+        @review.errors.add(:item_name, "商品名を入力してください")
+        raise ActiveRecord::Rollback
+      end
+
+      # 商品名を指定して初めの1件を取得し1件もなければ作成
+      item = Item.find_or_initialize_by(name: item_name)
+      unless item.save
+        @review.errors.add(:item_name, item.errors.full_messages.join(", "))
+        raise ActiveRecord::Rollback
+      end
+
+      # 商品を関連付けてレビューを更新
+      @review.item = item
+
+      # 削除対象の画像を削除
+      if params[:review][:remove_images].present?
+        params[:review][:remove_images].split(",").each do |image_id|
+          image = @review.images.find_by(id: image_id)
+          image.purge if image
+        end
+      end
+
+      # 新しい画像を添付
+      @review.images.attach(params[:review][:images]) if params[:review][:images].present?
+
+      # 他のレビュー情報を更新
+      if @review.update(review_params.except(:images))
+        redirect_to @review, notice: "レビューを更新しました！"
+      else
+        raise ActiveRecord::Rollback
       end
     end
-
-    # 画像更新の処理
-    if params[:review][:images].present?
-      @review.images.attach(params[:review][:images]) # 新しい画像を添付
-    end
-
-    # 他のレビュー情報を更新
-    if @review.update(review_params.except(:images))
-      redirect_to @review, notice: "レビューを更新しました！"
-    else
-      render :edit, status: :unprocessable_entity
-    end
+  unless result
+    render :edit, status: :unprocessable_entity
   end
+end
 
   def destroy
     if @review.destroy
