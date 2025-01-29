@@ -13,54 +13,97 @@
 
   <body>
   <!-- メインコンテンツ -->
-  <div class="hero min-h-screen bg-base-200">
-    <div class="hero-content text-center">
-      <div class="max-w-2xl px-6">
-        <!-- タイトル -->
-        <h1 class="text-5xl font-bold mb-8">MiniReとは?</h1>
+<div class="min-h-screen bg-base-200 flex flex-col items-center justify-center text-center px-6">
+  <!-- Hero セクション -->
+  <h1 class="text-4xl font-bold mb-6 mt-10 text-gray-900 leading-tight">
+    探さない、迷わない。<br>MiniReがあるから。
+  </h1>
+  <p class="text-xl text-gray-700 max-w-2xl leading-relaxed mt-4">
+    「MiniRe (ミニレ)」は、少ないモノで豊かに暮らしを目指す、<br>
+    ミニマリストのためのレビューサイトです。<br>
+    シンプルな選択を、あなたの毎日に。
+  </p>
 
-        <!-- サイト説明 -->
-        <p class="text-lg text-gray-700 leading-relaxed mb-6">
-          MiniRe (ミニレ) － 無理なく、無駄なく、ミニマリズムを楽しむ<br />
-          「MiniRe (ミニレ)」は、「少ないモノで豊かに暮らす」を目指す、ミニマリストのためのレビューサイトです。<br />
-          名前に込めた以下の想いとともに、ミニマリズムの第一歩を応援します。
-        </p>
+  <!-- 使い方セクション -->
+  <div class="mt-12 space-y-16 max-w-4xl text-left">
+    <h2 class="text-3xl font-semibold text-center border-b-4 border-gray-300 pb-4">MiniReの使い方</h2>
 
-        <!-- 機能紹介 -->
-        <div class="text-left mb-6 space-y-6">
-          <div>
-            <h2 class="text-xl font-semibold mb-2">1. 厳選されたアイテムを探す</h2>
-            <p class="text-gray-700 leading-relaxed">
-              実際のミニマリストたちが愛用するアイテムやその活用法を知ることで、あなたにとって本当に必要なものを見つけられます。
-            </p>
-          </div>
-          <div>
-            <h2 class="text-xl font-semibold mb-2">2. 投稿を通じて共有・交流する</h2>
-            <p class="text-gray-700 leading-relaxed">
-              自分が愛用するアイテムを投稿し、他のミニマリストと知識や感動を共有できます。さらに、コメントや「いいね」で交流を深める場としても活用できます。
-            </p>
-          </div>
-          <div>
-            <h2 class="text-xl font-semibold mb-2">3. 無理なくミニマリズムを始める</h2>
-            <p class="text-gray-700 leading-relaxed">
-              初心者の方も、必要最低限のアイテムを迷わず選べるガイドやおすすめレビューが充実。無駄を減らしながら、心豊かな生活をサポートします。
-            </p>
-          </div>
-        </div>
+    <!-- 登録前の利用（グレー背景） -->
+    <div class="bg-gray-100 py-10 px-6 rounded-lg shadow-lg">
+      <h3 class="text-2xl font-semibold text-gray-800 text-center mb-6">🔍 登録なしで使える機能</h3>
+      <p class="text-gray-700 leading-relaxed text-center max-w-3xl mx-auto mb-6">
+        MiniReでは、登録しなくてもレビューを自由に閲覧できます。<br>
+        気になる商品ページへもアクセス可能です。
+      </p>
 
-        <!-- 名前の由来 -->
-        <div class="mb-8">
-          <h2 class="text-xl font-semibold mb-4">MiniReの名前に込めた想い</h2>
-          <p class="text-gray-700 leading-relaxed">
-            「MiniRe（ミニレ）」は、「ミニマリスト（Minimalist）」のミニと、「レビュー（Review）」のReを掛け合わせた名前です。
-            シンプルで洗練されたアイデアを提供する場として、誰でも使いやすいプラットフォームを目指しています。
-          </p>
-        </div>
+      <!-- 動画1（レビュー一覧） -->
+      <div class="flex flex-col items-center mt-8">
+        <h4 class="text-xl font-semibold mb-2">1. レビュー一覧をチェック</h4>
+        <video class="w-full max-w-4xl rounded-lg shadow-lg" autoplay loop muted playsinline>
+          <source src="/videos/review_display.mov" type="video/mp4">
+          お使いのブラウザは動画をサポートしていません。
+        </video>
+        <p class="text-gray-700 text-center mt-2">レビューを自由に閲覧できます。</p>
+      </div>
 
-        <!-- ボタン -->
-        <%= link_to "レビューを見る",reviews_path, class: "btn bg-customBlue text-white border-0 hover:bg-blue-500" %>
+      <!-- 動画2（商品ページ閲覧） -->
+      <div class="flex flex-col items-center mt-8">
+        <h4 class="text-xl font-semibold mb-2">2. 商品情報を閲覧</h4>
+        <video class="w-full max-w-4xl rounded-lg shadow-lg" autoplay loop muted playsinline>
+          <source src="/videos/item_show.mov" type="video/mp4">
+          お使いのブラウザは動画をサポートしていません。
+        </video>
+        <p class="text-gray-700 text-center mt-2">商品の詳細情報や関連レビューを確認できます。</p>
+      </div>
+    </div>
+
+    <!-- 登録後の利用（白背景） -->
+    <div class="py-10 px-6 rounded-lg shadow-lg">
+      <h3 class="text-2xl font-semibold text-gray-800 text-center mb-6">✏️ 登録するとできること</h3>
+      <p class="text-gray-700 leading-relaxed text-center max-w-3xl mx-auto mb-6">
+        ユーザー登録すると、あなたの愛用品を投稿したり、<br />
+        いいねやコメントで他のミニマリストと交流できます。
+      </p>
+
+      <!-- 動画3（レビュー投稿） -->
+      <div class="flex flex-col items-center mt-8">
+        <h4 class="text-xl font-semibold mb-2">3. レビューを投稿</h4>
+        <video class="w-full max-w-4xl rounded-lg shadow-lg" autoplay loop muted playsinline>
+          <source src="/videos/review_post.mov" type="video/mp4">
+          お使いのブラウザは動画をサポートしていません。
+        </video>
+        <p class="text-gray-700 text-center mt-2">あなたの愛用品をシェアできます。</p>
+      </div>
+
+      <!-- 動画4（コメント） -->
+      <div class="flex flex-col items-center mt-8">
+        <h4 class="text-xl font-semibold mb-2">4. コメントする</h4>
+        <video class="w-full max-w-4xl rounded-lg shadow-lg" autoplay loop muted playsinline>
+          <source src="/videos/comment.mov" type="video/mp4">
+          お使いのブラウザは動画をサポートしていません。
+        </video>
+        <p class="text-gray-700 text-center mt-2">他のミニマリストと交流できます。</p>
+      </div>
+
+      <!-- 動画5（いいね） -->
+      <div class="flex flex-col items-center mt-8">
+        <h4 class="text-xl font-semibold mb-2">5. いいねする</h4>
+        <video class="w-full max-w-4xl rounded-lg shadow-lg" autoplay loop muted playsinline>
+          <source src="/videos/like_review.mov" type="video/mp4">
+          お使いのブラウザは動画をサポートしていません。
+        </video>
+        <p class="text-gray-700 text-center mt-2">気に入った投稿に「いいね」できます。</p>
       </div>
     </div>
   </div>
+
+  <!-- CTAボタン -->
+  <div class="mt-12 flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-6">
+    <%= link_to "レビューを見る", reviews_path, class: "inline-flex items-center justify-center w-full md:w-auto bg-customBlue text-white px-8 py-4 text-lg rounded-lg shadow-md hover:scale-105 transition-transform" %>
+    <%= link_to "新規登録", new_user_registration_path, class: "inline-flex items-center justify-center w-full md:w-auto bg-customBlue text-white px-8 py-4 text-lg rounded-lg shadow-md hover:scale-105 transition-transform" %>
+  </div>
+</div>
+
+
 </body>
 </html>
