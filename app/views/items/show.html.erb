@@ -1,3 +1,6 @@
+<% content_for :title, "#{@item.name} - MiniRe (ミニレ)" %>
+<% content_for :meta_description, "#{@item.name}の詳細ページです。商品情報と関連レビューを紹介します。#{@item.amazon_url.present? ? 'Amazonでの購入リンクも掲載しています。' : ''}" %>
+
 <div class="bg-gray-100 min-h-screen py-8 px-4">
   <div class="max-w-6xl mx-auto bg-white px-6 sm:px-8 py-6 sm:py-8 shadow-md rounded-md space-y-8">
     <!-- 商品詳細セクション -->
