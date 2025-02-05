@@ -26,6 +26,8 @@
     <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module", defer: true, crossorigin: "anonymous" %>
   </head>
 
+    <title><%= content_for?(:title) ? content_for(:title) : "MiniRe (ミニレ) - ミニマリスト向けのレビューサイト" %></title>
+    <meta name="description" content="<%= content_for?(:meta_description) ? content_for(:meta_description) : '探さない、迷わない。MiniReがあるから。MiniReは、ミニマリストやシンプルライフを目指す人向けのレビューサイト。厳選されたアイテムのレビューを参考にし、少ないモノで豊かに暮らすヒントを見つけよう。' %>">
   <body>
     <div class="bg-[#F5F5F5] border-b border-black shadow-md  sticky top-0 z-50">
       <%= render 'layouts/header' %>
