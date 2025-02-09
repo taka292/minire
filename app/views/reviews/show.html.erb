@@ -38,7 +38,7 @@
 
     <!-- 投稿本文 -->
     <div class="mb-6 text-gray-700 text-sm">
-      <%= simple_format(@review.content) %>
+      <%= safe_join(@review.content.split("\n"), tag(:br)) %>
     </div>
 
     <!-- 手放せるもの -->
