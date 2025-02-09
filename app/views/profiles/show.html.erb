@@ -22,10 +22,9 @@
       <p>投稿数: <strong><%= @user.reviews.count %></strong></p>
       <!-- フォロワー数・フォロー数はここに後で追加予定 -->
     </div>
-
     <!-- 自己紹介文 -->
     <div class="mb-4">
-      <p class="text-gray-700"><%= simple_format(@user.introduction.presence || "よろしくお願いします！") %></p>
+      <p class="text-gray-700"><%= safe_join(@user.introduction.split("\n"), tag(:br)).presence || "よろしくお願いします！" %></p>
     </div>
 
     <!-- プロフィール編集ボタン -->
