@@ -6,6 +6,7 @@ class Item < ApplicationRecord
   validates :name, length: { minimum: 1, maximum: 50 }
   validates :amazon_url, format: { with: URI.regexp(%w[http https]), message: "正しいURL形式を入力してください。" }, allow_blank: true
   validate :image_content_type
+  validates :description, length: { maximum: 1000 }, allow_blank: true
 
   # ファイル形式のバリデーション
   def image_content_type
