@@ -39,6 +39,14 @@
       <%= render 'shared/error_messages', object: @review %>
     <% end %>
 
+    <!-- パンくずリスト -->
+    <% if breadcrumbs.present? %>
+      <nav class="breadcrumbs text-sm p-3 rounded-lg">
+        <%= breadcrumbs wrapper_tag: :ul, separator: '<span class="text-gray-400"> &rsaquo; </span>'.html_safe %>
+      </nav>
+    <% end %>
+
+    <!-- メインコンテンツ -->
     <%= yield %>
 
     <%= render 'layouts/footer' %>
