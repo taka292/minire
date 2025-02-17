@@ -1,9 +1,8 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= content_for?(:title) ? content_for(:title) : "MiniRe (ミニレ) - ミニマリスト向けのレビューサイト" %></title>
-    <meta name="description" content="<%= content_for?(:meta_description) ? content_for(:meta_description) : '探さない、迷わない。MiniReがあるから。MiniReは、ミニマリストやシンプルライフを目指す人向けのレビューサイトです。厳選されたアイテムのレビューを参考にし、少ないモノで豊かに暮らすヒントを見つけましょう。' %>">
-    <title><%= content_for(:title) || "MiniRe" %></title>
+    <title><%= content_for?(:title) ? yield(:title) : "MiniRe (ミニレ) | ミニマリスト向けのレビューサイト" %></title>
+    <meta name="description" content="<%= content_for?(:meta_description) ? yield(:meta_description) : '探さない、迷わない。MiniReがあるから。MiniReは、ミニマリストやシンプルライフを目指す人向けのレビューサイトです。厳選されたアイテムのレビューを参考にし、少ないモノで豊かに暮らすヒントを見つけましょう。' %>">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
