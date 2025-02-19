@@ -12,7 +12,9 @@
                       class: "w-24 h-24 rounded-full object-cover", 
                       alt: "ユーザーアイコン" %>
       <% else %>
-        <span class="material-symbols-outlined text-gray-500 text-6xl" aria-hidden="true">account_circle</span>
+            <span class="material-symbols-outlined text-gray-500 flex items-center justify-center w-24 h-24" 
+          style="font-size: 100px;" 
+          aria-hidden="true">account_circle</span>
         <span class="sr-only">ユーザーアイコン</span>
       <% end %>
       <p class="ml-4 text-lg font-medium text-gray-800"><%= @user.name %></p>
