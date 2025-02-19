@@ -3,7 +3,9 @@
   <% if comment.user.avatar.attached? %>
     <%= image_tag comment.user.avatar.variant(resize_to_fill: [40, 40]), class: "rounded-full w-10 h-10" %>
   <% else %>
-    <span class="material-symbols-outlined text-gray-600 items-center justify-center">account_circle</span>
+    <span class="material-symbols-outlined text-gray-600 flex items-center justify-center w-10 h-10" style="font-size: 40px;">
+      account_circle
+    </span>
   <% end %>
 
   <!-- コメント内容 -->
@@ -13,5 +15,14 @@
       <span class="text-gray-500 text-xs ml-2"><%= time_ago_in_words(comment.created_at) %>前</span>
     </div>
     <p class="text-gray-800 text-sm"><%= comment.content %></p>
+
+    <% if comment.user == current_user %>
+      <%= link_to review_comment_path(comment.review, comment), 
+          method: :delete,
+          data: { turbo_method: :delete, turbo_confirm: "本当に削除しますか？" },
+          class: "flex items-center gap-1 hover:text-red-600" do %>
+        削除
+      <% end %>
+    <% end %>
   </div>
 </li>
