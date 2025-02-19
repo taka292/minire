@@ -3,7 +3,9 @@
   <% if comment.user.avatar.attached? %>
     <%= image_tag comment.user.avatar.variant(resize_to_fill: [40, 40]), class: "rounded-full w-10 h-10" %>
   <% else %>
-    <span class="material-symbols-outlined text-gray-600 items-center justify-center">account_circle</span>
+    <span class="material-symbols-outlined text-gray-600 flex items-center justify-center w-10 h-10" style="font-size: 40px;">
+      account_circle
+    </span>
   <% end %>
 
   <!-- コメント内容 -->
