@@ -39,7 +39,7 @@ end
   private
 
   def item_params
-    params.require(:item).permit(:name, :manufacturer, :price, :amazon_url, :asin, :description,images: [], remove_images: [])
+    params.require(:item).permit(:name, :manufacturer, :price, :amazon_url, :asin, :description, images: [], remove_images: [])
   end
 
   def authenticate_admin!
