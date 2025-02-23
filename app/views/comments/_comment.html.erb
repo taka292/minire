@@ -1,4 +1,4 @@
-<li class="flex items-start space-x-4">
+<li id="<%= dom_id(comment) %>" class="flex items-start space-x-4">
   <!-- ユーザーのアバター -->
   <% if comment.user.avatar.attached? %>
     <%= image_tag comment.user.avatar.variant(resize_to_fill: [40, 40]), class: "rounded-full w-10 h-10" %>
@@ -19,6 +19,7 @@
     <% if comment.user == current_user %>
       <%= link_to review_comment_path(comment.review, comment), 
           method: :delete,
+          id: "button-delete-#{comment.id}",
           data: { turbo_method: :delete, turbo_confirm: "本当に削除しますか？" },
           class: "flex items-center gap-1 hover:text-red-600" do %>
         削除
