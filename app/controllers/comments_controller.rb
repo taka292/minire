@@ -27,7 +27,7 @@ class CommentsController < ApplicationController
     if @comment.user == current_user
       @comment.destroy
       respond_to do |format|
-        format.turbo_stream
+        format.turbo_stream  { flash.now[:notice] = "コメントを削除しました。" }
         format.html { redirect_to @comment.commentable, notice: "コメントを削除しました。" }
       end
     else
