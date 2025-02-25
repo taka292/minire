@@ -9,8 +9,8 @@ class CommentsController < ApplicationController
 
     respond_to do |format|
       if @comment.save
-        format.turbo_stream
-        format.html { redirect_to @commentable }
+        format.turbo_stream { flash.now[:notice] = "コメントを投稿しました。" }
+        format.html { redirect_to @commentable, notice: "コメントを投稿しました。" }
       else
         # format.turbo_stream do
         #   flash.now[:danger] = t('defaults.message.not_created', item: Comment.model_name.human)

@@ -1,5 +1,10 @@
 <%= turbo_frame_tag 'comment_form' do %>
-<%= form_with model: comment, url: review_comments_path(comment.review_id || review), id: "#{dom_id(comment)}_form", local: true do |form| %>
+  <div data-controller="comment">
+    <%= form_with model: Comment.new, url: review_comments_path(review), id: "comment_form", data: { action: "turbo:submit-end->comment#resetForm" } do |form| %>
+      <%= form.text_area :content, class: 'form-control', id: 'js-new-comment-body', data: { comment_target: "input" } %>
+      <%= form.submit "送信", class: 'btn btn-primary btn-sm' %>
+    <% end %>
+  </div>
 
   <% comment.errors.full_messages.each do |message| %>
     <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -7,12 +12,5 @@
       <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
   <% end %>
-  <div class="mb-3">
-    <%= form.label :content %>
-    <%= form.text_area :content, class: 'form-control', id: 'js-new-comment-body' %>
-  </div>
-  <div class="text-end">
-    <%= form.submit class: 'btn btn-primary btn-sm' %>
-  </div>
- <% end %>
+
 <% end %>

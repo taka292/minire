@@ -7,6 +7,9 @@ import { application } from "./application"
 // import AutocompleteController from "./autocomplete_controller"
 // application.register("autocomplete", AutocompleteController)
 
+// import CommentController from "./comment_controller";
+// application.register("comment", CommentController);
+
 import HelloController from "./hello_controller"
 application.register("hello", HelloController)
 
