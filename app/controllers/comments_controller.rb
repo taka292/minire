@@ -35,6 +35,29 @@ class CommentsController < ApplicationController
     end
   end
 
+  def edit
+    @comment = Comment.find_by(id: params[:id])
+  end
+
+  def update
+    respond_to do |format|
+      if @comment.update(comment_params)
+        format.turbo_stream { flash.now[:notice] = "コメントを編集しました。" }
+        format.html { redirect_to @comment.commentable,
+                      flash: { success: t('defaults.message.updated', item: Comment.model_name.human) } }
+      else
+        format.turbo_stream do
+          flash.now[:warning] = t('defaults.message.not_updated', item: Comment.model_name.human)
+          render turbo_stream: [
+            turbo_stream.replace("flash_messages", partial: "shared/flash_messages"),
+          ]
+        end
+        format.html { redirect_to @comment.commentable,
+                      flash: { danger: t('defaults.message.not_updated', item: Comment.model_name.human) } }
+      end
+    end
+  end
+
   private
 
   def set_comment
