@@ -1,3 +1,3 @@
 <%= turbo_frame_tag "comments_count" do %>
-  コメント数: <%= comments.count %>
+  <%= @review.comments.count %>件のコメント</h2>
 <% end %>

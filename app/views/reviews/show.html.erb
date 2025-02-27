@@ -124,7 +124,7 @@
   </div>
 
   <div class="mt-8">
-    <h2 class="text-xl font-bold mb-6"><%= @review.comments.count %>件のコメント</h2>
+    <h2 id = "comments_count" class="text-xl font-bold mb-6"><%= @review.comments.count %>件のコメント</h2>
 
     <div id="flash_message" class="mb-5">
       <%= render "shared/flash_message_turbo" %>

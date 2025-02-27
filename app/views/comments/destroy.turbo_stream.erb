@@ -1,2 +1,5 @@
 <%= turbo_stream.replace "flash_message", partial: "shared/flash_message_turbo" %>
 <%= turbo_stream.remove @comment %>
+<%= turbo_stream.update "comments_count" do %>
+  <%= render "comments_count", review: @review%>
+<% end %>

@@ -1,11 +1,10 @@
 class CommentsController < ApplicationController
   before_action :authenticate_user!
-  before_action :find_review, only: %i[create edit]
+  before_action :find_review, only: %i[create edit destroy]
   before_action :find_comment, only: %i[destroy edit update]
 
   def create
     @comment = @review.comments.build(comment_params.merge(user: current_user))
-    # @comments = @review.comments.includes(:user)
 
     respond_to do |format|
       if @comment.save
