@@ -1,0 +1,11 @@
+<%= turbo_stream.replace "flash_message", partial: "shared/flash_message_turbo"%>
+
+<%= turbo_stream.replace "#{dom_id(Comment.new)}_form" do %>
+  <%= render "form", review: @comment.review, comment: Comment.new %>
+<% end %>
+
+<%= turbo_stream.update "comments_count" do %>
+  <%= render "comments_count", review: @review %>
+<% end %>
+
+<%= turbo_stream.append "comments", partial: "comments/comment", locals: { comment: @comment } %>

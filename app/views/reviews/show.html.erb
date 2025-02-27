@@ -124,25 +124,18 @@
   </div>
 
   <div class="mt-8">
-  <h2 class="text-xl font-bold mb-6"><%= @review.comments.count %>件のコメント</h2>
+    <h2 id = "comments_count" class="text-xl font-bold mb-6"><%= @review.comments.count %>件のコメント</h2>
 
-  <% if user_signed_in? %>
-    <div class="flex mb-6 items-start">
-      <!-- コメント投稿フォーム -->
-      <div class="flex-1">
-        <%= form_with model: [@review, Comment.new], local: true, class: "flex flex-col space-y-3" do |f| %>
-          <%= f.text_area :content, rows: 3, placeholder: "コメントを入力してください", class: "w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500" %>
-          <%= f.submit "投稿する", class: "self-end btn bg-customBlue text-white border-0 hover:bg-blue-500 px-4 py-2 text-base rounded-md" %>
-        <% end %>
-      </div>
+    <div id="flash_message" class="mb-5">
+      <%= render "shared/flash_message_turbo" %>
     </div>
-  <% else %>
-    <p class="text-gray-600 mb-6">コメントを投稿するにはログインしてください。</p>
-  <% end %>
 
-  <!-- コメント一覧 -->
-  <ul class="space-y-6">
-    <%= render @review.comments %>
-  </ul>
-</div>
+    <div id="comment_form">
+    <%= render "comments/form", review: @review, comment: @comment %>
+    </div>
+
+    <!--非同期でのコメントの表示-->
+    <div id="comments">
+      <%= render "comments/comments", comments: @comments %>
+    </div>
 </div>

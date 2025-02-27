@@ -45,6 +45,7 @@ end
   def show
     @review = Review.find(params[:id])
     @comments = @review.comments.includes(:user)
+    @comment = @review.comments.new
   end
 
   def index

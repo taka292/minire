@@ -1,33 +1,70 @@
 class CommentsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_comment, only: [ :destroy ]
+  before_action :find_review, only: %i[create edit destroy]
+  before_action :find_comment, only: %i[destroy edit update]
 
   def create
-    @review = Review.find(params[:review_id])
     @comment = @review.comments.build(comment_params.merge(user: current_user))
-    if @comment.save
-      redirect_to @review, notice: "コメントを投稿しました！"
-    else
-      redirect_to @review, alert: "コメントの投稿に失敗しました。"
+
+    respond_to do |format|
+      if @comment.save
+        format.turbo_stream { flash.now[:notice] = "コメントを投稿しました。" }
+        format.html { redirect_to @review, notice: "コメントを投稿しました。" }
+      else
+        format.turbo_stream do
+          flash.now[:alert] = "コメントの投稿に失敗しました。"
+          render turbo_stream: [
+            turbo_stream.replace("flash_message", partial: "shared/flash_message_turbo")
+          ]
+        end
+        format.html { redirect_to @review, alert: "コメントの投稿に失敗しました。" }
+      end
     end
   end
 
   def destroy
     if @comment.user == current_user
       @comment.destroy
-      redirect_to @comment.review, notice: "コメントを削除しました。"
+      respond_to do |format|
+        format.turbo_stream  { flash.now[:notice] = "コメントを削除しました。" }
+        format.html { redirect_to @comment.review, notice: "コメントを削除しました。" }
+      end
     else
       redirect_to @comment.review, alert: "コメントの削除権限がありません。"
     end
   end
 
+  def edit
+  end
+
+  def update
+    respond_to do |format|
+      if @comment.update(comment_params)
+        format.turbo_stream { flash.now[:notice] = "コメントを編集しました。" }
+        format.html { redirect_to @comment.review, notice: "コメントを編集しました。" }
+      else
+        format.turbo_stream do
+          flash.now[:alert] = "コメントの編集に失敗しました。"
+          render turbo_stream: [
+            turbo_stream.replace("flash_message", partial: "shared/flash_message_turbo")
+          ]
+        end
+        format.html { redirect_to @comment.review, alert: "コメントの編集に失敗しました。" }
+      end
+    end
+  end
+
   private
 
-  def set_comment
-    @comment = Comment.find(params[:id])
+  def find_comment
+    @comment = current_user.comments.find(params[:id])
   end
 
   def comment_params
     params.require(:comment).permit(:content)
+  end
+
+  def find_review
+    @review = Review.find(params[:review_id])
   end
 end
