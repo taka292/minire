@@ -1,7 +1,7 @@
 <%= turbo_frame_tag dom_id(comment) do %>
-  <li class="flex items-start space-x-4">
+  <li class="flex items-start space-x-4 py-2">
     <!-- ユーザーのアバター -->
-    <% if comment .user.avatar.attached? %>
+    <% if comment.user.avatar.attached? %>
       <%= image_tag comment.user.avatar.variant(resize_to_fill: [40, 40]), class: "rounded-full w-10 h-10" %>
     <% else %>
       <span class="material-symbols-outlined text-gray-600 flex items-center justify-center w-10 h-10" style="font-size: 40px;">
@@ -15,24 +15,25 @@
         <span class="font-semibold text-sm"><%= comment.user.name %></span>
         <span class="text-gray-500 text-xs ml-2"><%= time_ago_in_words(comment.created_at) %>前</span>
       </div>
-      <p class="text-gray-800 text-sm"><%= comment.content %></p>
+      <p class="text-gray-800 text-sm"><%= safe_join(comment.content.split("\n"), tag(:br)) %></p>
 
       <% if comment.user == current_user %>
-        <%= link_to review_comment_path(comment.review, comment), 
-            method: :delete,
-            id: "button-delete-#{comment.id}",
-            data: { turbo_method: :delete, turbo_confirm: "本当に削除しますか？" },
-            class: "flex items-center gap-1 hover:text-red-600" do %>
-          削除
-        <% end %>
-      <% end %>
+        <div class="flex space-x-4 justify-end mt-2">
+          <!-- 編集ボタン -->
+          <%= link_to edit_review_comment_path(comment.review, comment), class: "flex items-center text-gray-600 hover:text-blue-800 text-sm" do %>
+            <span class="material-symbols-outlined text-base">edit</span> 編集
+          <% end %>
 
-      <% if comment.user == current_user %>
-        <!--コメントの編集-->
-        <%= link_to edit_review_comment_path(comment.review, comment), class: "flex items-center gap-1 hover:text-blue-600" do %>
-          編集
-        <% end %>
+          <!-- 削除ボタン -->
+          <%= link_to review_comment_path(comment.review, comment), 
+              method: :delete,
+              id: "button-delete-#{comment.id}",
+              data: { turbo_method: :delete, turbo_confirm: "本当に削除しますか？" },
+              class: "flex items-center text-gray-600 hover:text-red-800 text-sm" do %>
+            <span class="material-symbols-outlined text-base">delete</span> 削除
+          <% end %>
+        </div>
       <% end %>
     </div>
-</li>
+  </li>
 <% end %>
