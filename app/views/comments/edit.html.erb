@@ -1,0 +1,4 @@
+<%= turbo_frame_tag dom_id(@comment) do %>
+      <%= render 'comments/form', review: @comment.review, comment: @comment %>
+      <%= link_to "キャンセル", @comment.review, class: 'btn btn-secondary btn-sm float-end mt-2' %>
+<% end %>

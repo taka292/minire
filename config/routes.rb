@@ -8,7 +8,7 @@ Rails.application.routes.draw do
   get "home/index"
   root "home#index"
   resources :reviews do
-    resources :comments, only: [ :create, :destroy ]
+    resources :comments, only: [ :create, :destroy, :edit, :update ]
     resources :likes, only: [ :create, :destroy ]
   end
 

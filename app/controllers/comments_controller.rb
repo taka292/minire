@@ -1,24 +1,24 @@
 class CommentsController < ApplicationController
   before_action :authenticate_user!
-  before_action :find_commentable, only: %i[create]
-  before_action :set_comment, only: %i[destroy]
+  before_action :find_review, only: %i[create edit]
+  before_action :find_comment, only: %i[destroy edit update]
 
   def create
-    @comment = @commentable.comments.build(comment_params.merge(user: current_user))
-    @comments = @commentable.comments.includes(:user)
+    @comment = @review.comments.build(comment_params.merge(user: current_user))
+    # @comments = @review.comments.includes(:user)
 
     respond_to do |format|
       if @comment.save
         format.turbo_stream { flash.now[:notice] = "コメントを投稿しました。" }
-        format.html { redirect_to @commentable, notice: "コメントを投稿しました。" }
+        format.html { redirect_to @review, notice: "コメントを投稿しました。" }
       else
-        # format.turbo_stream do
-        #   flash.now[:danger] = t('defaults.message.not_created', item: Comment.model_name.human)
-        # render turbo_stream: [
-        #   turbo_stream.replace("flash_messages", partial: "shared/flash_messages"),
-        # ]
-        # end
-        format.html { redirect_to @commentable }
+        format.turbo_stream do
+          flash.now[:alert] = "コメントの投稿に失敗しました。"
+          render turbo_stream: [
+            turbo_stream.replace("flash_message", partial: "shared/flash_message_turbo")
+          ]
+        end
+        format.html { redirect_to @review, alert: "コメントの投稿に失敗しました。" }
       end
     end
   end
@@ -28,39 +28,36 @@ class CommentsController < ApplicationController
       @comment.destroy
       respond_to do |format|
         format.turbo_stream  { flash.now[:notice] = "コメントを削除しました。" }
-        format.html { redirect_to @comment.commentable, notice: "コメントを削除しました。" }
+        format.html { redirect_to @comment.review, notice: "コメントを削除しました。" }
       end
     else
-      redirect_to @comment.commentable, alert: "コメントの削除権限がありません。"
+      redirect_to @comment.review, alert: "コメントの削除権限がありません。"
     end
   end
 
   def edit
-    @comment = Comment.find_by(id: params[:id])
   end
 
   def update
     respond_to do |format|
       if @comment.update(comment_params)
         format.turbo_stream { flash.now[:notice] = "コメントを編集しました。" }
-        format.html { redirect_to @comment.commentable,
-                      flash: { success: t('defaults.message.updated', item: Comment.model_name.human) } }
+        format.html { redirect_to @comment.review, notice: "コメントを編集しました。" }
       else
         format.turbo_stream do
-          flash.now[:warning] = t('defaults.message.not_updated', item: Comment.model_name.human)
+          flash.now[:alert] = "コメントの編集に失敗しました。"
           render turbo_stream: [
-            turbo_stream.replace("flash_messages", partial: "shared/flash_messages"),
+            turbo_stream.replace("flash_message", partial: "shared/flash_message_turbo")
           ]
         end
-        format.html { redirect_to @comment.commentable,
-                      flash: { danger: t('defaults.message.not_updated', item: Comment.model_name.human) } }
+        format.html { redirect_to @comment.review, alert: "コメントの編集に失敗しました。" }
       end
     end
   end
 
   private
 
-  def set_comment
+  def find_comment
     @comment = current_user.comments.find(params[:id])
   end
 
@@ -68,7 +65,7 @@ class CommentsController < ApplicationController
     params.require(:comment).permit(:content)
   end
 
-  def find_commentable
-    @commentable = Review.find(params[:review_id])
+  def find_review
+    @review = Review.find(params[:review_id])
   end
 end

@@ -26,9 +26,12 @@
           削除
         <% end %>
       <% end %>
-      <!--コメントの編集-->
-      <%= link_to edit_review_comment_path(comment.review, comment), class: "flex items-center gap-1 hover:text-blue-600" do %>
-        編集
+
+      <% if comment.user == current_user %>
+        <!--コメントの編集-->
+        <%= link_to edit_review_comment_path(comment.review, comment), class: "flex items-center gap-1 hover:text-blue-600" do %>
+          編集
+        <% end %>
       <% end %>
     </div>
 </li>
