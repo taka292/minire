@@ -7,15 +7,27 @@ class LikesController < ApplicationController
   end
 
   def create
-    like = @review.likes.new(user: current_user)
-    like.save
-    redirect_back fallback_location: @review
+    @like = @review.likes.new(user: current_user)
+    respond_to do |format|
+      if @like.save
+        format.turbo_stream
+        format.html { redirect_to @review }
+      else
+        format.html { redirect_to @review }
+      end
+    end
   end
 
   def destroy
-    like = @review.likes.find_by(user: current_user)
-    like&.destroy
-    redirect_back fallback_location: @review
+    @like = @review.likes.find_by(user: current_user)
+    respond_to do |format|
+      if @like&.destroy
+        format.turbo_stream
+        format.html { redirect_to @review }
+      else
+        format.html { redirect_to @review }
+      end
+    end
   end
 
   private
