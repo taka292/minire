@@ -9,6 +9,16 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
+    <!-- Google Analytics (gtag.js) のタグ -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ND1MZMEC14"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-ND1MZMEC14');
+    </script>
+
     <%= yield :head %>
 
     <!-- favicon(スマホ・PC・) -->
