@@ -2,6 +2,6 @@
   <%= render "shared/review_like_button", review: @review %>
 <% end %>
 
-<%= turbo_stream.replace "likes_count_#{@review.id}" do %>
+<%= turbo_stream.update "likes_count_#{@review.id}" do %>
   <%= render "shared/review_likes_count", review: @review %>
 <% end %>
