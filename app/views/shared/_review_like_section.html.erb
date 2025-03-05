@@ -1,0 +1,27 @@
+<div class="flex justify-end mb-4 items-center space-x-1">
+  <!-- いいねボタン -->
+  <turbo-frame id="like_button_<%= review.id %>">
+    <% if user_signed_in? %>
+      <% if review.likes.exists?(user: current_user) %>
+        <%= button_to review_like_path(review, current_user.likes.find_by(review: review)),
+                      method: :delete,
+                      class: "flex items-center text-red-500 hover:text-red-600",
+                      data: { turbo: true } do %>
+          <span class="material-icons text-2xl">favorite</span>
+        <% end %>
+      <% else %>
+        <%= button_to review_likes_path(review),
+                      method: :post,
+                      class: "flex items-center text-gray-500 hover:text-red-500",
+                      data: { turbo: true } do %>
+          <span class="material-icons text-2xl">favorite_border</span>
+        <% end %>
+      <% end %>
+    <% end %>
+  </turbo-frame>
+
+  <!-- いいね数 -->
+  <turbo-frame id="likes_count_<%= review.id %>">
+    <%= render "shared/review_likes_count", review: review %>
+  </turbo-frame>
+</div>
