@@ -39,14 +39,7 @@
   <hr class="my-4 border-gray-300">
 
   <!-- いいねボタン -->
-  <div class="flex justify-end mb-4 items-center space-x-1">
-    <%= render "shared/review_like_button", review: review %>
-
-    <!-- いいね数を表示する turbo-frame -->
-    <turbo-frame id="likes_count_<%= review.id %>">
-      <%= render "shared/review_likes_count", review: review %>
-    </turbo-frame>
-  </div>
+  <%= render "shared/review_like_section", review: review %>
 
   <!-- 商品情報 -->
 
