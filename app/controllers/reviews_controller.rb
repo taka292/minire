@@ -50,7 +50,7 @@ end
 
   def index
     @query = params[:query]
-    @reviews = Review.all
+    @reviews = Review.includes(:user, :likes, :item, images_attachments: :blob)
 
     # 絞り込み処理
     if params[:filter_type].present?
