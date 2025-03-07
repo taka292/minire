@@ -67,6 +67,10 @@ end
     # 検索条件を適用
     @reviews = @reviews.search(@query)
 
+    # 並び替え
+    @reviews = @reviews.apply_sort(params[:sort])
+
+
     # ページネーション
     @reviews = @reviews.order(created_at: :desc).page(params[:page])
   end

@@ -23,6 +23,24 @@
         </select>
       </div>
     </form>
+
+    <!-- 並び替えフォーム -->
+    <form method="get" action="<%= path %>">
+      <input type="hidden" name="query" value="<%= params[:query] %>">
+      <input type="hidden" name="filter_type" value="<%= params[:filter_type] %>">
+
+      <div class="relative rounded-lg p-4 mb-6">
+        <label for="sort" class="block text-sm font-medium text-gray-600 mb-3">並び替え</label>
+        <select name="sort" id="sort"
+                class="w-full h-12 text-base pl-4 pr-4 bg-gray-50 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition duration-200"
+                onchange="this.form.submit()">
+          <option value="newest" <%= 'selected' if params[:sort] == 'newest' %>>新着順</option>
+          <option value="oldest" <%= 'selected' if params[:sort] == 'oldest' %>>古い順</option>
+          <option value="most_liked" <%= 'selected' if params[:sort] == 'most_liked' %>>いいねが多い順</option>
+        </select>
+      </div>
+    </form>
+
   <% end %>
 
   <% if reviews.present? %>
