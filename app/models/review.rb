@@ -27,21 +27,23 @@ class Review < ApplicationRecord
   # 並び替え
   scope :sort_by_newest, -> { order(created_at: :desc) }
   scope :sort_by_oldest, -> { order(created_at: :asc) }
-  scope :sort_by_most_liked, -> {
-  left_joins(:likes)
-    .select('reviews.*, COUNT(likes.id) AS likes_count')
-    .group('reviews.id')
-    .order(Arel.sql('likes_count DESC NULLS LAST'))
+  scope :with_likes_count, -> {
+    left_joins(:likes)
+      .select("reviews.*, COUNT(likes.id) AS likes_count")
+      .group("reviews.id")
   }
 
+  scope :sort_by_most_liked, -> {
+    with_likes_count.order(Arel.sql("likes_count DESC NULLS LAST"))
+  }
 
   def self.apply_sort(sort_param)
     case sort_param
-    when 'newest' then sort_by_newest
-    when 'oldest' then sort_by_oldest
-    when 'highest_rating' then sort_by_highest_rating
-    when 'lowest_rating' then sort_by_lowest_rating
-    when 'most_liked' then sort_by_most_liked
+    when "newest" then sort_by_newest
+    when "oldest" then sort_by_oldest
+    when "highest_rating" then sort_by_highest_rating
+    when "lowest_rating" then sort_by_lowest_rating
+    when "most_liked" then sort_by_most_liked
     else sort_by_newest # デフォルト
     end
   end

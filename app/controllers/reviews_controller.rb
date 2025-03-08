@@ -48,9 +48,15 @@ end
     @comment = @review.comments.new
   end
 
-  def index
-    @query = params[:query]
-    @reviews = Review.includes(:user, :likes, :item, images_attachments: :blob)
+    def index
+      @query = params[:query]
+    if params[:sort] == "most_liked"
+      @reviews = Review.with_likes_count
+    else
+      @reviews = Review.includes(:user, :item, images_attachments: :blob)
+    end
+
+    @categories = Category.all
 
     # 絞り込み処理
     if params[:filter_type].present?

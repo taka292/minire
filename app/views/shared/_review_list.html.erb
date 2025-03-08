@@ -3,44 +3,40 @@
     <h1 class="text-2xl font-bold mb-6 text-center"><%= title %></h1>
   <% end %>
 
+  <!--filter_formがtrueの場合、絞り込み・並び替えフォームを表示する-->
   <% if filter_form %>
+  <form method="get" action="<%= path %>" class="flex flex-col md:flex-row items-center justify-between gap-4 mb-6">
     <!-- 絞り込みフォーム -->
-    <form method="get" action="<%= path %>">
-      <input type="hidden" name="query" value="<%= params[:query] %>">
+    <div class="md:flex w-full">
+      
+      <label for="filter_type" class="text-sm font-medium text-gray-600 inline-flex items-center whitespace-nowrap min-w-fit">絞り込み:　</label>
+      <select name="filter_type" id="filter_type"
+              class="w-full h-12 text-base pl-4 pr-4 bg-gray-50 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition duration-200"
+              onchange="this.form.submit()">
+        <option value="" <%= "selected='selected'" if params[:filter_type].blank? %>>すべてのレビュー</option>
+        <option value="releasable" <%= "selected='selected'" if params[:filter_type] == 'releasable' %>>手放せるものがあるレビュー</option>
+        <% @categories.each do |category| %>
+          <option value="category_<%= category.id %>" <%= "selected='selected'" if params[:filter_type] == "category_#{category.id}" %>>
+            カテゴリ: <%= category.name %>
+          </option>
+        <% end %>
+      </select>
+    </div>
 
-      <div class="relative rounded-lg p-4 mb-6">
-        <label for="filter_type" class="block text-sm font-medium text-gray-600 mb-3">絞り込み条件</label>
-        <select name="filter_type" id="filter_type"
-                class="w-full h-12 text-base pl-4 pr-4 bg-gray-50 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition duration-200"
-                onchange="this.form.submit()">
-          <option value="" <%= 'selected' if params[:filter_type].blank? %>>すべてのレビュー</option>
-          <option value="releasable" <%= 'selected' if params[:filter_type] == 'releasable' %>>手放せるものがあるレビュー</option>
-          <% Category.all.each do |category| %>
-            <option value="category_<%= category.id %>" <%= 'selected' if params[:filter_type] == "category_#{category.id}" %>>
-              カテゴリ: <%= category.name %>
-            </option>
-          <% end %>
-        </select>
-      </div>
-    </form>
-
-    <!-- 並び替えフォーム -->
-    <form method="get" action="<%= path %>">
-      <input type="hidden" name="query" value="<%= params[:query] %>">
-      <input type="hidden" name="filter_type" value="<%= params[:filter_type] %>">
-
-      <div class="relative rounded-lg p-4 mb-6">
-        <label for="sort" class="block text-sm font-medium text-gray-600 mb-3">並び替え</label>
-        <select name="sort" id="sort"
-                class="w-full h-12 text-base pl-4 pr-4 bg-gray-50 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition duration-200"
-                onchange="this.form.submit()">
-          <option value="newest" <%= 'selected' if params[:sort] == 'newest' %>>新着順</option>
-          <option value="oldest" <%= 'selected' if params[:sort] == 'oldest' %>>古い順</option>
-          <option value="most_liked" <%= 'selected' if params[:sort] == 'most_liked' %>>いいねが多い順</option>
-        </select>
-      </div>
-    </form>
-
+    <!-- 並び替えフォーム（スマホでは右寄せ、PCでは高さ揃え） -->
+    <div class="w-full flex justify-end md:w-auto md:flex md:items-center space-x-2">
+      <label for="sort" class="text-sm font-medium text-gray-600 flex items-center space-x-2">
+        <i class="material-icons text-gray-500">sort</i>
+      </label>
+      <select name="sort" id="sort"
+              class="h-12 text-base pl-4 pr-4 bg-gray-50 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition duration-200"
+              onchange="this.form.submit()">
+        <option value="newest" <%= "selected='selected'" if params[:sort] == 'newest' %>>新着順</option>
+        <option value="oldest" <%= "selected='selected'" if params[:sort] == 'oldest' %>>古い順</option>
+        <option value="most_liked" <%= "selected='selected'" if params[:sort] == 'most_liked' %>>いいねが多い順</option>
+      </select>
+    </div>
+  </form>
   <% end %>
 
   <% if reviews.present? %>
