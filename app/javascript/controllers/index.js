@@ -15,3 +15,6 @@ application.register("hello", HelloController)
 
 import ReleasableItemsController from "./releasable_items_controller"
 application.register("releasable-items", ReleasableItemsController)
+
+import ImagePreviewController from "./image_preview_controller";
+application.register("image-preview", ImagePreviewController);
