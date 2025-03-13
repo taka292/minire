@@ -48,8 +48,9 @@ end
     @comment = @review.comments.new
   end
 
-    def index
-      @query = params[:query]
+  def index
+    @query = params[:query]
+
     if params[:sort] == "most_liked"
       @reviews = Review.with_likes_count
     else
