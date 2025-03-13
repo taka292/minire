@@ -19,20 +19,20 @@
 
     <!-- 右側：アイコン -->
     <div class="flex gap-2 flex-shrink-0 h-16 items-center">
-      <%= link_to reviews_path, class: "flex items-center justify-center" do %>
+      <%= link_to reviews_path, class: "flex items-center justify-center", title: "レビュー 一覧" do %>
         <span class="material-symbols-outlined text-gray-600 text-3xl">quick_reference_all</span>
       <% end %>
 
       <% if user_signed_in? %>
-        <%= link_to likes_profile_path(current_user), class: "flex items-center justify-center" do %>
+        <%= link_to likes_profile_path(current_user), class: "flex items-center justify-center", title: "いいねしたレビュー" do %>
           <span class="material-icons text-gray-600 text-3xl">favorite_border</span>
         <% end %>
 
-        <%= link_to destroy_user_session_path, method: :delete, data: { turbo_method: :delete }, class: "flex items-center justify-center" do %>
+        <%= link_to destroy_user_session_path, method: :delete, data: { turbo_method: :delete }, class: "flex items-center justify-center", title: "ログアウト" do %>
           <span class="material-icons text-gray-600 text-3xl">logout</span>
         <% end %>
 
-        <%= link_to profile_path(current_user), class: "flex items-center justify-center" do %>
+        <%= link_to profile_path(current_user), class: "flex items-center justify-center", title: "プロフィール" do %>
           <% if current_user.avatar.attached? %>
             <%= image_tag current_user.resized_avatar, class: "w-10 h-10 rounded-full object-cover", alt: "アバター画像" %>
           <% else %>
@@ -40,7 +40,7 @@
           <% end %>
         <% end %>
       <% else %>
-        <%= link_to new_user_session_path, class: "flex items-center justify-center" do %>
+        <%= link_to new_user_session_path, class: "flex items-center justify-center", title: "ログイン" do %>
           <span class="material-icons text-gray-600 text-3xl">login</span>
         <% end %>
       <% end %>
@@ -60,20 +60,20 @@
 
       <!-- 右側：アイコン -->
       <div class="flex gap-2 h-14 items-center">
-        <%= link_to reviews_path, class: "flex items-center justify-center" do %>
+        <%= link_to reviews_path, class: "flex items-center justify-center", title: "レビュー 一覧" do %>
           <span class="material-symbols-outlined text-gray-600 text-3xl">quick_reference_all</span>
         <% end %>
 
         <% if user_signed_in? %>
-          <%= link_to likes_profile_path(current_user), class: "flex items-center justify-center" do %>
+          <%= link_to likes_profile_path(current_user), class: "flex items-center justify-center", title: "いいねしたレビュー" do %>
             <span class="material-icons text-gray-600 text-3xl">favorite_border</span>
           <% end %>
 
-          <%= link_to destroy_user_session_path, method: :delete, data: { turbo_method: :delete }, class: "flex items-center justify-center" do %>
+          <%= link_to destroy_user_session_path, method: :delete, data: { turbo_method: :delete }, class: "flex items-center justify-center", title: "ログアウト" do %>
             <span class="material-icons text-gray-600 text-3xl">logout</span>
           <% end %>
 
-          <%= link_to profile_path(current_user), class: "flex items-center justify-center" do %>
+          <%= link_to profile_path(current_user), class: "flex items-center justify-center", title: "プロフィール" do %>
             <% if current_user.avatar.attached? %>
               <%= image_tag current_user.resized_avatar, class: "w-10 h-10 rounded-full object-cover", alt: "アバター画像" %>
             <% else %>
@@ -81,7 +81,7 @@
             <% end %>
           <% end %>
         <% else %>
-          <%= link_to new_user_session_path, class: "flex items-center justify-center" do %>
+          <%= link_to new_user_session_path, class: "flex items-center justify-center", title: "ログイン" do %>
             <span class="material-icons text-gray-600 text-3xl">login</span>
           <% end %>
         <% end %>
