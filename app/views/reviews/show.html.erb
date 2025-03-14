@@ -60,14 +60,14 @@
     <!-- 編集・削除ボタン -->
     <% if current_user == @review.user %>
       <div class="flex justify-end gap-4 mt-4">
-        <%= link_to edit_review_path(@review), class: "flex items-center gap-1 hover:text-blue-600" do %>
+        <%= link_to edit_review_path(@review), class: "flex items-center gap-1 hover:text-blue-600", title: "レビュー編集" do %>
           <span class="material-symbols-outlined">edit_document</span>
         <% end %>
 
         <%= link_to review_path(@review),
                     method: :delete,
                     data: { turbo_method: :delete, turbo_confirm: "本当に削除しますか？" },
-                    class: "flex items-center gap-1 hover:text-red-600" do %>
+                    class: "flex items-center gap-1 hover:text-red-600", title: "レビュー削除" do %>
           <span class="material-symbols-outlined">delete</span>
         <% end %>
       </div>

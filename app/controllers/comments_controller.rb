@@ -8,16 +8,16 @@ class CommentsController < ApplicationController
 
     respond_to do |format|
       if @comment.save
-        format.turbo_stream { flash.now[:notice] = "コメントを投稿しました。" }
-        format.html { redirect_to @review, notice: "コメントを投稿しました。" }
+        format.turbo_stream { flash.now[:comment_notice] = "コメントを投稿しました。" }
+        format.html { redirect_to @review, flash: { comment_notice: "コメントを投稿しました。" } }
       else
         format.turbo_stream do
-          flash.now[:alert] = "コメントの投稿に失敗しました。"
+          flash.now[:comment_alert] = "コメントの投稿に失敗しました。"
           render turbo_stream: [
             turbo_stream.replace("flash_message", partial: "shared/flash_message_turbo")
           ]
         end
-        format.html { redirect_to @review, alert: "コメントの投稿に失敗しました。" }
+        format.html { redirect_to @review, flash: { comment_alert: "コメントの投稿に失敗しました。" } }
       end
     end
   end
@@ -26,11 +26,11 @@ class CommentsController < ApplicationController
     if @comment.user == current_user
       @comment.destroy
       respond_to do |format|
-        format.turbo_stream  { flash.now[:notice] = "コメントを削除しました。" }
-        format.html { redirect_to @comment.review, notice: "コメントを削除しました。" }
+        format.turbo_stream  { flash.now[:comment_notice] = "コメントを削除しました。" }
+        format.html { redirect_to @comment.review, comment_notice: "コメントを削除しました。" }
       end
     else
-      redirect_to @comment.review, alert: "コメントの削除権限がありません。"
+      redirect_to @comment.review, comment_alert: "コメントの削除権限がありません。"
     end
   end
 
@@ -40,16 +40,16 @@ class CommentsController < ApplicationController
   def update
     respond_to do |format|
       if @comment.update(comment_params)
-        format.turbo_stream { flash.now[:notice] = "コメントを編集しました。" }
-        format.html { redirect_to @comment.review, notice: "コメントを編集しました。" }
+        format.turbo_stream { flash.now[:comment_notice] = "コメントを編集しました。" }
+        format.html { redirect_to @comment.review, comment_notice: "コメントを編集しました。" }
       else
         format.turbo_stream do
-          flash.now[:alert] = "コメントの編集に失敗しました。"
+          flash.now[:comment_alert] = "コメントの編集に失敗しました。"
           render turbo_stream: [
             turbo_stream.replace("flash_message", partial: "shared/flash_message_turbo")
           ]
         end
-        format.html { redirect_to @comment.review, alert: "コメントの編集に失敗しました。" }
+        format.html { redirect_to @comment.review, comment_alert: "コメントの編集に失敗しました。" }
       end
     end
   end

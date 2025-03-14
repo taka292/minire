@@ -1,13 +1,16 @@
-<%= turbo_frame_tag dom_id(comment) do %>
-  <li class="flex items-start space-x-4 py-2">
-    <!-- ユーザーのアバター -->
-    <% if comment.user.avatar.attached? %>
-      <%= image_tag comment.user.avatar.variant(resize_to_fill: [40, 40]), class: "rounded-full w-10 h-10" %>
-    <% else %>
-      <span class="material-symbols-outlined text-gray-600 flex items-center justify-center w-10 h-10" style="font-size: 40px;">
-        account_circle
-      </span>
-    <% end %>
+  <%= turbo_frame_tag dom_id(comment) do %>
+    <li class="flex items-start space-x-4 py-2">
+      <!-- ユーザーのアバター -->
+      <!-- 通常のページ遷移をしようとすると、遷移先でturbo-frameを探してエラーになるため、通常のページ遷移（リロード）を行うよう明示 -->
+      <%= link_to profile_path(comment.user), class: "flex-shrink-0", data: { turbo_frame: "_top" } do %>
+        <% if comment.user.avatar.attached? %>
+          <%= image_tag comment.user.avatar.variant(resize_to_fill: [40, 40]), class: "rounded-full w-10 h-10" %>
+        <% else %>
+          <span class="material-symbols-outlined text-gray-600 flex items-center justify-center w-10 h-10" style="font-size: 40px;">
+            account_circle
+          </span>
+        <% end %>
+      <% end %>
 
     <!-- コメント内容 -->
     <div class="flex-1">
