@@ -54,7 +54,7 @@ end
     if params[:sort] == "most_liked"
       @reviews = Review.with_likes_count
     else
-      @reviews = Review.includes(:user, :item, images_attachments: :blob)
+      @reviews = Review.includes(:user, :item, :comments, images_attachments: :blob)
     end
 
     @categories = Category.all
