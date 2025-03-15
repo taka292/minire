@@ -13,7 +13,9 @@
           <!-- ユーザー名 -->
           <div class="form-control mb-4">
             <label class="label">
-              <span class="label-text text-base font-medium">ユーザー名</span>
+              <span class="label-text text-base font-medium">
+                ユーザー名 <span class="text-red-500">*</span>
+              </span>
             </label>
             <%= f.text_field :name, placeholder: "ユーザー名を入力してください", 
                              class: "input input-bordered w-full h-14 text-base placeholder:text-sm #{error_class(@user, :name)}" %>
