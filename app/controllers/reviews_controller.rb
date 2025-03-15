@@ -84,9 +84,7 @@ end
 
   def edit
       @review = current_user.reviews.find(params[:id])
-      # 登録している手放せるものを差し引いた、空のフォームを追加
-      remaining_slots = [ 3 - @review.releasable_items.size, 0 ].max
-      remaining_slots.times { @review.releasable_items.build }
+      set_releasable_items
   end
 
   def update
@@ -127,6 +125,7 @@ end
       end
     end
   unless result
+    set_releasable_items
     render :edit, status: :unprocessable_entity
   end
 end
@@ -140,7 +139,7 @@ end
   end
 
   private
-  # accepts_nested_attributes_forで削除するものを_destroyを追加
+  # accepts_nested_attributes_forで削除するものを_destroyで追加
   def review_params
     params.require(:review).permit(:title, :content, :category_id, images: [], releasable_items_attributes: [ :id, :name, :_destroy ])
   end
@@ -150,5 +149,11 @@ end
     unless @review
       redirect_to reviews_path, alert: "他のユーザーのレビューは編集・削除できません。"
     end
+  end
+
+  # 手放せるものフォームで、すでに登録されている数を確認し、足りない分だけフォームを追加
+  def set_releasable_items
+    remaining_slots = [ 3 - @review.releasable_items.size, 0 ].max
+    remaining_slots.times { @review.releasable_items.build }
   end
 end
