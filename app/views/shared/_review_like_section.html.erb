@@ -1,6 +1,6 @@
-<div class="flex justify-end mb-4 items-center space-x-1">
+<div class="flex justify-end items-center space-x-1">
   <!-- いいねボタン -->
-  <turbo-frame id="like_button_<%= review.id %>">
+  <turbo-frame id="like_button_<%= review.id %>" title="いいね">
     <%= render "shared/review_like_button", review: review %>
   </turbo-frame>
 

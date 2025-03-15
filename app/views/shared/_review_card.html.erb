@@ -38,9 +38,16 @@
   <!-- 区切り線 -->
   <hr class="my-4 border-gray-300">
 
-  <!-- いいねボタン -->
-  <%= render "shared/review_like_section", review: review %>
+  <div class="flex justify-end mb-4 items-center space-x-4">
+    <!-- いいねボタン -->
+    <%= render "shared/review_like_section", review: review %>
 
+    <!-- コメント -->
+    <%= link_to "#{review_path(review)}#comments", class: "flex items-center space-x-1 text-gray-500 hover:text-gray-700 transition", title:"コメント" do %>
+      <span class="material-icons text-2xl">chat_bubble_outline</span>
+      <span class="text-lg"><%= review.comments.count %></span>
+    <% end %>
+  </div>
   <!-- 商品情報 -->
 
 
