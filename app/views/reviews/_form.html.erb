@@ -1,5 +1,7 @@
 <div class="form-control mb-6 relative" data-controller="autocomplete" data-autocomplete-url-value="<%= items_path %>"  >
-  <%= form.label :item_name, "商品名", class: "block text-lg font-medium text-gray-700" %>
+  <%= form.label :item_name, class: "block text-lg font-medium text-gray-700" do %>
+    商品名 <span class="text-red-500">*</span>
+  <% end %>
   <%= text_field_tag :item_name, @review.item&.name,
       placeholder: "商品名を入力してください", 
       class: "input input-bordered w-full h-12 text-lg placeholder:text-sm #{error_class(@review, :item_name)}", 
@@ -15,7 +17,9 @@
 </div>
 
 <div class="form-control mb-6">
-  <%= form.label :category_id, "カテゴリ", class: "block text-lg font-medium text-gray-700" %>
+  <%= form.label :category_id, class: "block text-lg font-medium text-gray-700" do  %>
+    カテゴリ <span class="text-red-500">*</span>
+  <% end %>
   <%= form.collection_select :category_id, Category.all, :id, :name,
         { prompt: "カテゴリを選択してください" },
         { class: "input input-bordered w-full h-12 text-lg placeholder:text-sm appearance-none pr-10 #{error_class(@review, :category)}" } %>
@@ -25,7 +29,9 @@
 </div>
 
 <div class="form-control mb-6">
-  <%= form.label :title, "タイトル", class: "block text-lg font-medium text-gray-700" %>
+  <%= form.label :title, class: "block text-lg font-medium text-gray-700" do  %>
+    タイトル <span class="text-red-500">*</span>
+  <% end %>
   <%= form.text_field :title, class: "input input-bordered w-full h-12 text-lg placeholder:text-sm #{error_class(@review, :title)}", placeholder: "レビュータイトルを入力してください" %>
   <% if form.object.errors[:title].any? %>
     <p class="text-red-500 text-sm mt-1"><%= form.object.errors[:title].first %></p>
@@ -33,7 +39,9 @@
 </div>
 
 <div class="form-control mb-6">
-  <%= form.label :content, "内容", class: "block text-lg font-medium text-gray-700" %>
+  <%= form.label :content, class: "block text-lg font-medium text-gray-700" do  %>
+    内容 <span class="text-red-500">*</span>
+  <% end %>
   <%= form.text_area :content, rows: 8, class: "textarea textarea-bordered w-full text-lg placeholder:text-sm #{error_class(@review, :content)}", placeholder: "レビュー内容を入力してください" %>
   <% if form.object.errors[:content].any? %>
     <p class="text-red-500 text-sm mt-1 "><%= form.object.errors[:content].first %></p>
