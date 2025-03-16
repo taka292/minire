@@ -8,6 +8,8 @@ class CommentsController < ApplicationController
 
     respond_to do |format|
       if @comment.save
+        # コメントの投稿に対する通知を作成・保存
+        @review.create_notification_comment!(current_user, @comment.id)
         format.turbo_stream { flash.now[:comment_notice] = "コメントを投稿しました。" }
         format.html { redirect_to @review, flash: { comment_notice: "コメントを投稿しました。" } }
       else
