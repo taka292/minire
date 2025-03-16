@@ -3,6 +3,7 @@ class Review < ApplicationRecord
   belongs_to :item
   belongs_to :category
   has_many :comments, dependent: :destroy
+  has_many :notifications, dependent: :destroy
 
   # バリデーション
   validates :title, presence: true, length: { maximum: 100, message: "100文字以内で入力してください" }
@@ -100,6 +101,26 @@ class Review < ApplicationRecord
       query: "%#{query}%"
     ).distinct
   end
+
+  # reviewへのいいね通知機能
+ def create_notification_favorite_review!(current_user)
+   # 同じユーザーが同じ投稿に既にいいねしていないかを確認
+   existing_notification = Notification.find_by(review_id: self.id, visitor_id: current_user.id, action: "favorite_review")
+   
+   # すでにいいねされていない場合のみ通知レコードを作成
+   if existing_notification.nil? && current_user != self.user
+     notification = Notification.new(
+       review_id: self.id,
+       visitor_id: current_user.id,
+       visited_id: self.user.id,
+       action: "favorite_review"
+     )
+
+     if notification.valid?
+       notification.save
+     end
+   end
+ end
 
   private
 
