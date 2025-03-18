@@ -102,11 +102,11 @@ class Review < ApplicationRecord
     ).distinct
   end
 
-  # reviewへのいいね通知機能
+ # reviewへのいいね通知機能
  def create_notification_favorite_review!(current_user)
    # 同じユーザーが同じ投稿に既にいいねしていないかを確認
    existing_notification = Notification.find_by(review_id: self.id, visitor_id: current_user.id, action: "favorite_review")
-   
+
    # すでにいいねされていない場合のみ通知レコードを作成
    if existing_notification.nil? && current_user != self.user
      notification = Notification.new(
@@ -142,7 +142,7 @@ class Review < ApplicationRecord
       review_id: id,
       comment_id: comment_id,
       visited_id: visited_id,
-      action: 'comment'
+      action: "comment"
     )
 
     # 自分の投稿に対するコメントの場合は、通知済みとする

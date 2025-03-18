@@ -1,15 +1,19 @@
-<div class="container mx-auto px-4 py-6">
+<div class="container mx-auto px-4 py-6" data-controller="notifications">
   <h2 class="text-2xl font-bold text-gray-800 mb-4">通知一覧</h2>
 
-  <div class="bg-white shadow-md rounded-lg p-4">
-    <% if @unchecked_notifications.any? || @checked_notifications.any? %>
-      <% (@unchecked_notifications + @checked_notifications).each do |notification| %>
-        <div class="notification-item flex items-center justify-between border-b border-gray-300 py-2 px-3">
+  <!-- 未読の通知 -->
+  <div class="bg-white shadow-md rounded-lg p-4 mb-6">
+    <h3 class="text-lg font-semibold text-red-600 mb-3">未読の通知</h3>
+    
+    <% if @unchecked_notifications.any? %>
+      <% @unchecked_notifications.each do |notification| %>
+        <div class="notification-item flex items-center justify-between border-b border-gray-300 py-2 px-3 bg-gray-100">
           <div class="flex items-center space-x-3">
+
             <% if notification.visitor.avatar.attached? %>
-              <%= image_tag notification.visitor.avatar.variant(resize: "40x40"), class: "w-10 h-10 rounded-full" %>
+              <%= image_tag notification.visitor.resized_avatar, class: "w-10 h-10 rounded-full object-cover" %>
             <% else %>
-              <span class="material-icons text-gray-500 text-4xl">account_circle</span>
+              <span class="material-symbols-outlined text-gray-600 flex items-center justify-center w-10 h-10" style="font-size: 40px;">account_circle</span>
             <% end %>
             <div>
               <% if notification.action == 'favorite_review' %>
@@ -31,11 +35,44 @@
         </div>
       <% end %>
     <% else %>
-      <p class="text-center text-gray-600">通知はありません。</p>
+      <p class="text-center text-gray-600">未読の通知はありません。</p>
     <% end %>
   </div>
 
-  <div class="text-center mt-4">
-    <%= link_to "戻る", root_path, class: "inline-block bg-gray-500 hover:bg-gray-600 text-white text-sm font-semibold px-4 py-2 rounded-md shadow-md transition duration-200" %>
+  <!-- 既読の通知 -->
+  <div class="bg-white shadow-md rounded-lg p-4">
+    <h3 class="text-lg font-semibold text-gray-700 mb-3">既読の通知</h3>
+    
+    <% if @checked_notifications.any? %>
+      <% @checked_notifications.each do |notification| %>
+        <div class="notification-item flex items-center justify-between border-b border-gray-300 py-2 px-3">
+          <div class="flex items-center space-x-3">
+            <% if notification.visitor.avatar.attached? %>
+              <%= image_tag notification.visitor.resized_avatar, class: "w-10 h-10 rounded-full object-cover" %>
+            <% else %>
+              <span class="material-symbols-outlined text-gray-600 flex items-center justify-center w-10 h-10" style="font-size: 40px;">account_circle</span>
+            <% end %>
+            <div>
+              <% if notification.action == 'favorite_review' %>
+                <p class="text-gray-700">
+                  <%= link_to notification.visitor.name, profile_path(notification.visitor), class: "font-bold text-blue-600 hover:underline" %>
+                  さんがあなたの投稿に
+                  <%= link_to "いいねしました", review_path(notification.review), class: "text-blue-600 hover:underline" %>
+                </p>
+              <% elsif notification.action == 'comment' %>
+                <p class="text-gray-700">
+                  <%= link_to notification.visitor.name, profile_path(notification.visitor), class: "font-bold text-blue-600 hover:underline" %>
+                  さんがあなたの投稿に
+                  <%= link_to "コメントしました", review_path(notification.review), class: "text-blue-600 hover:underline" %>
+                </p>
+              <% end %>
+              <p class="text-sm text-gray-500"><%= time_ago_in_words(notification.created_at) %>前</p>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    <% else %>
+      <p class="text-center text-gray-600">既読の通知はありません。</p>
+    <% end %>
   </div>
 </div>

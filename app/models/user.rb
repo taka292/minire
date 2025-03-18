@@ -9,9 +9,9 @@ class User < ApplicationRecord
   has_many :likes, dependent: :destroy
   has_many :liked_reviews, through: :likes, source: :review
   # 自分からの通知
-  has_many :active_notifications, class_name: 'Notification', foreign_key: 'visitor_id', dependent: :destroy
+  has_many :active_notifications, class_name: "Notification", foreign_key: "visitor_id", dependent: :destroy
   # 相手からの通知
-  has_many :passive_notifications, class_name: 'Notification', foreign_key: 'visited_id', dependent: :destroy
+  has_many :passive_notifications, class_name: "Notification", foreign_key: "visited_id", dependent: :destroy
 
   # 名前の長さは50文字以内
   validates :name, presence: true, length: { maximum: 50 }
