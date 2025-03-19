@@ -5,4 +5,5 @@ class Notification < ApplicationRecord
   belongs_to :comment, optional: true
 
   validates :visitor_id, :visited_id, :action, presence: true
+  validates :comment_id, presence: true, if: -> { action == 'comment' }
 end
