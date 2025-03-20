@@ -41,7 +41,7 @@
         -->
 
         <% if @item.amazon_url.present? %>
-          <%= link_to "Amazonで購入する", @item.amazon_url, 
+          <%= link_to "Amazon", @item.amazon_url, 
                       class: "btn bg-customBlue text-white border-0 hover:bg-blue-600 py-3 text-lg rounded-md text-center shadow-md w-full", target: :_blank %>
         <% else %>
           <p class="text-sm text-red-500 mt-4">Amazonのリンク情報は未登録です</p>
