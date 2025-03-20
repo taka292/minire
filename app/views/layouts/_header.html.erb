@@ -1,4 +1,4 @@
-<header class="w-full px-4 sm:px-10 py-2">
+<header class="w-full px-4 sm:px-10 py-2 ">
   <!-- PC時 (1段表示) -->
   <div class="hidden md:flex items-center justify-between w-full h-16">
     <!-- 左側：ロゴ -->
@@ -30,6 +30,16 @@
 
         <%= link_to destroy_user_session_path, method: :delete, data: { turbo_method: :delete }, class: "flex items-center justify-center", title: "ログアウト" do %>
           <span class="material-icons text-gray-600 text-3xl">logout</span>
+        <% end %>
+
+        <!-- 通知アイコン -->
+        <%= link_to notifications_path, class: "relative flex items-center justify-center", title: "通知" do %>
+          <span class="material-symbols-outlined text-gray-600 text-3xl">notifications</span>
+          <% if unchecked_notifications.any? %>
+            <span class="absolute -top-1 -right-2 bg-red-500 text-white text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full">
+              <%= unchecked_notifications.count %>
+            </span>
+          <% end %>
         <% end %>
 
         <%= link_to profile_path(current_user), class: "flex items-center justify-center", title: "プロフィール" do %>
@@ -71,6 +81,16 @@
 
           <%= link_to destroy_user_session_path, method: :delete, data: { turbo_method: :delete }, class: "flex items-center justify-center", title: "ログアウト" do %>
             <span class="material-icons text-gray-600 text-3xl">logout</span>
+          <% end %>
+
+          <!-- 通知アイコン -->
+          <%= link_to notifications_path, class: "relative flex items-center justify-center", title: "通知" do %>
+            <span class="material-symbols-outlined text-gray-600 text-3xl">notifications</span>
+            <% if unchecked_notifications.any? %>
+              <span class="absolute -top-1 -right-2 bg-red-500 text-white text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full">
+                <%= unchecked_notifications.count %>
+              </span>
+            <% end %>
           <% end %>
 
           <%= link_to profile_path(current_user), class: "flex items-center justify-center", title: "プロフィール" do %>

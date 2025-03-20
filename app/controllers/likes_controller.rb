@@ -10,6 +10,9 @@ class LikesController < ApplicationController
     @like = @review.likes.new(user: current_user)
     respond_to do |format|
       if @like.save
+        if current_user != @review.user
+          @review.create_notification_favorite_review!(current_user)
+        end
         format.turbo_stream
         format.html { redirect_to @review }
       else
