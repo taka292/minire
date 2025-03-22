@@ -1,0 +1,7 @@
+<% @items.each do |item| %>
+  <li class="px-4 py-2 hover:bg-gray-200 cursor-pointer text-sm"
+      data-autocomplete-value="<%= item.id %>"
+      data-autocomplete-label="<%= item.name %>">
+    <%= item.name %>
+  </li>
+<% end %>

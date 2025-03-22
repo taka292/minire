@@ -16,6 +16,29 @@
   <ul class="list-group bg-white border border-gray-300 rounded-md shadow-md absolute top-full left-0 w-full md:text-sm max-w-max" data-autocomplete-target="results"></ul>
 </div>
 
+<!-- Amazon検索フォーム -->
+<div class="form-control mb-6 relative"
+     data-controller="autocomplete"
+     data-autocomplete-url-value="<%= amazon_index_path %>">
+
+  <%= form.label :amazon_item_name, "Amazon商品検索", class: "block text-lg font-medium text-gray-700" %>
+
+  <%= text_field_tag :amazon_item_name, nil,
+      placeholder: "Amazonの商品名を入力してください",
+      class: "input input-bordered w-full h-12 text-lg",
+      data: {
+        autocomplete_target: "input"
+      } %>
+
+  <%= hidden_field_tag :asin, nil, data: { autocomplete_target: "hidden" } %>
+
+  <ul class="list-group bg-white border border-gray-300 rounded-md shadow-md absolute top-full left-0 w-full z-10"
+      data-autocomplete-target="results">
+  </ul>
+</div>
+
+
+
 <div class="form-control mb-6">
   <%= form.label :category_id, class: "block text-lg font-medium text-gray-700" do  %>
     カテゴリ <span class="text-red-500">*</span>
