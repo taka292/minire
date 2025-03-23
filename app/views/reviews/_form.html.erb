@@ -1,3 +1,4 @@
+<!-- 登録アイテム検索フォーム -->
 <div class="form-control mb-6 relative" data-controller="autocomplete" data-autocomplete-url-value="<%= items_path %>"  >
   <%= form.label :item_name, class: "block text-lg font-medium text-gray-700" do %>
     商品名 <span class="text-red-500">*</span>
@@ -27,10 +28,12 @@
       placeholder: "Amazonの商品名を入力してください",
       class: "input input-bordered w-full h-12 text-lg",
       data: {
-        autocomplete_target: "input"
+        autocomplete_target: "input",
+        autocomplete_url: amazon_index_path
       } %>
 
-  <%= hidden_field_tag :asin, nil, data: { autocomplete_target: "hidden" } %>
+  <%= form.hidden_field :asin, data: { autocomplete_target: "hidden" } %>
+
 
   <ul class="list-group bg-white border border-gray-300 rounded-md shadow-md absolute top-full left-0 w-full z-10"
       data-autocomplete-target="results">

@@ -21,7 +21,7 @@ class AmazonController < ApplicationController
     end.compact # 🔸 nil を除く
 
     respond_to do |format|
-      format.js # views/amazon/index.html.erb を表示
+      format.html { render layout: false }
     end
   rescue StandardError => e
     logger.error "[AmazonAutocompleteError] #{e.message}"
