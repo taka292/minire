@@ -1,5 +1,21 @@
-<!-- 登録アイテム検索フォーム -->
-<div class="form-control mb-6 relative" data-controller="autocomplete" data-autocomplete-url-value="<%= items_path %>"  >
+
+<!-- 検索方法の選択 -->
+<div class="form-control mb-6" data-controller="search-toggle">
+  <label class="block text-lg font-medium text-gray-700">検索方法</label>
+  <div class="flex gap-4 mt-2">
+    <label class="flex items-center gap-2">
+      <%= radio_button_tag :search_method, "minire", true, data: { action: "search-toggle#toggle" } %>
+      MiniRe内検索
+    </label>
+    <label class="flex items-center gap-2">
+      <%= radio_button_tag :search_method, "amazon", false, data: { action: "search-toggle#toggle" } %>
+      Amazon検索
+    </label>
+  </div>
+</div>
+
+<!-- 登録アイテムフォーム -->
+<div id="minire-form" class="form-control mb-6 relative" data-controller="autocomplete" data-autocomplete-url-value="<%= items_path %>"  >
   <%= form.label :item_name, class: "block text-lg font-medium text-gray-700" do %>
     商品名 <span class="text-red-500">*</span>
   <% end %>
@@ -18,9 +34,7 @@
 </div>
 
 <!-- Amazon検索フォーム -->
-<div class="form-control mb-6 relative"
-     data-controller="autocomplete"
-     data-autocomplete-url-value="<%= amazon_index_path %>">
+<div id="amazon-form" class="form-control mb-6 relative hidden" data-controller="autocomplete" data-autocomplete-url-value="<%= amazon_index_path %>">
 
   <%= form.label :amazon_item_name, "Amazon商品検索", class: "block text-lg font-medium text-gray-700" %>
 
@@ -32,15 +46,12 @@
         autocomplete_url: amazon_index_path
       } %>
 
-  <%= form.hidden_field :asin, data: { autocomplete_target: "hidden" } %>
-
+  <%= hidden_field_tag :asin, nil, data: { autocomplete_target: "hidden" } %>
 
   <ul class="list-group bg-white border border-gray-300 rounded-md shadow-md absolute top-full left-0 w-full z-10"
       data-autocomplete-target="results">
   </ul>
 </div>
-
-
 
 <div class="form-control mb-6">
   <%= form.label :category_id, class: "block text-lg font-medium text-gray-700" do  %>
