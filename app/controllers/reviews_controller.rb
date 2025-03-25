@@ -12,21 +12,32 @@ class ReviewsController < ApplicationController
   result = ActiveRecord::Base.transaction do
     @review = current_user.reviews.build(review_params)
 
-    # AmazonかMiniReかで処理を分岐
-    if params[:asin].present?
-      # ✅ Amazonからの登録
-      asin = params[:asin].strip
-      item_name = params[:amazon_item_name].strip
+    case params[:search_method]
+    when "amazon"
+      asin = params[:asin]&.strip
+      item_name = params[:amazon_item_name]&.strip
+
+      # ASINか商品名が空ならエラー(手入力した場合、asinが空になって弾く)
+      if asin.blank? || item_name.blank?
+        @review.errors.add(:amazon_item_name, "Amazonの商品を選択してください")
+        raise ActiveRecord::Rollback
+      end
 
       item = Item.find_or_initialize_by(asin: asin) do |new_item|
         new_item.name = item_name
       end
-    elsif params[:item_name].present?
-      # ✅ MiniRe内登録
-      item_name = params[:item_name].strip
+
+    when "minire"
+      item_name = params[:item_name]&.strip
+
+      if item_name.blank?
+        @review.errors.add(:item_name, "商品名を入力してください")
+        raise ActiveRecord::Rollback
+      end
+
       item = Item.find_or_initialize_by(name: item_name)
+
     else
-      # ❌ どちらも未入力
       @review.errors.add(:item_name, "商品名を入力してください")
       raise ActiveRecord::Rollback
     end

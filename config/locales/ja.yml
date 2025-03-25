@@ -7,6 +7,7 @@
           category: カテゴリ
           item_name: 商品名
           images: レビュー画像
+          amazon_item_name: "Amazonの商品名"
         review/releasable_items:
           name: 手放せるもの
         # 手放せるものの文字制限で使用
