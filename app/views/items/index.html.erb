@@ -3,6 +3,11 @@
       role="option" 
       data-autocomplete-value="<%= item.id %>" 
       data-autocomplete-label="<%= item.name %>">
+
+    <% if item.images.attached? %>
+      <%= image_tag item.images.first.variant(resize_to_fill: [40, 40]), class: "w-10 h-10 object-cover rounded-md" %>
+    <% end %>
+
     <%= item.name %>
   </li>
 <% end %>
