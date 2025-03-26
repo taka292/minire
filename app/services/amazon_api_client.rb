@@ -8,9 +8,9 @@ class AmazonApiClient
   attr_reader :access_key, :secret_key, :partner_tag, :region, :service, :host
 
   def initialize
-    @access_key = ENV["AWS_ACCESS_KEY_ID"]
-    @secret_key = ENV["AWS_SECRET_ACCESS_KEY"]
-    @partner_tag = ENV["PARTNER_TAG"]
+    @access_key = ENV["AMAZON_API_ACCESS_KEY"]
+    @secret_key = ENV["AMAZON_API_SECRET_KEY"]
+    @partner_tag = ENV["AMAZON_API_PARTNER_TAG"]
     @region = "us-west-2"
     @service = "ProductAdvertisingAPI"
     @host = "webservices.amazon.co.jp"
@@ -50,7 +50,7 @@ class AmazonApiClient
   # ASINを指定して商品情報を取得
   def get_item_by_asin(asin)
     payload = {
-      "ItemIds": [asin],
+      "ItemIds": [ asin ],
       "Resources": [
         "ItemInfo.Title",
         "Images.Primary.Medium",
