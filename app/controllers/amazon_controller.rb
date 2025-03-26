@@ -5,7 +5,7 @@ class AmazonController < ApplicationController
     return render plain: "", status: :ok if params[:q].blank?
 
     # Amazon APIを使って商品検索
-    amazon = AmazonTransfer.new
+    amazon = AmazonApiClient.new
     response = amazon.search_items(params[:q])
 
     # 商品リストを取り出す（無ければ空配列）
