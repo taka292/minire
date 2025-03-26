@@ -1,0 +1,17 @@
+<% @items.each do |item| %>
+  <% label = sanitize(item[:name].to_s.strip.gsub(/\s+/, " ")) %>
+  <% value = sanitize(item[:id].to_s) %>
+  <% image_url = item[:image_url] %>
+
+  <li class="w-80 flex items-center gap-x-3.5 py-2 px-4 border-b border-gray-300 last:border-b-0 text-sm text-gray-800 hover:bg-gray-200 focus:ring-2 focus:ring-blue-500"
+      role="option"
+      data-autocomplete-value="<%= value %>"
+      data-autocomplete-label="<%= label %>">
+    
+    <% if image_url.present? %>
+      <img src="<%= image_url %>" alt="<%= label %>" class="w-10 h-10 object-contain rounded-md" />
+    <% end %>
+
+    <span><%= label %></span>
+  </li>
+<% end %>

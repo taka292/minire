@@ -9,37 +9,57 @@ class ReviewsController < ApplicationController
   end
 
   def create
-    result = ActiveRecord::Base.transaction do
-      # レビューを初期化
-      @review = current_user.reviews.build(review_params)
+  result = ActiveRecord::Base.transaction do
+    @review = current_user.reviews.build(review_params)
 
-      # 商品名が空の場合のエラーハンドリング
-      if params[:item_name].blank?
+    case params[:search_method]
+    when "amazon"
+      asin = params[:asin]&.strip
+      item_name = params[:amazon_item_name]&.strip
+
+      # ASINか商品名が空ならエラー(手入力した場合、asinが空になって弾く)
+      if asin.blank? || item_name.blank?
+        @review.errors.add(:amazon_item_name, "Amazonの商品を選択してください")
+        raise ActiveRecord::Rollback
+      end
+
+      item = Item.find_or_initialize_by(asin: asin) do |new_item|
+        new_item.name = item_name
+      end
+
+    when "minire"
+      item_name = params[:item_name]&.strip
+
+      if item_name.blank?
         @review.errors.add(:item_name, "商品名を入力してください")
         raise ActiveRecord::Rollback
       end
 
-      # 商品を検索または作成
-      item_name = params[:item_name].strip
-      # 商品名を指定して初めの1件を取得し1件もなければ作成
       item = Item.find_or_initialize_by(name: item_name)
-      unless item.save
-        @review.errors.add(:item_name, item.errors.full_messages.join(", "))
-        raise ActiveRecord::Rollback
-      end
 
-      # 商品を関連付けてレビューを保存
-      @review.item = item
-      if @review.save
-        redirect_to reviews_path, notice: "レビューを投稿しました！"
-      else
-        raise ActiveRecord::Rollback
-      end
+    else
+      @review.errors.add(:item_name, "商品名を入力してください")
+      raise ActiveRecord::Rollback
     end
+
+    unless item.save
+      @review.errors.add(:item_name, item.errors.full_messages.join(", "))
+      raise ActiveRecord::Rollback
+    end
+
+    @review.item = item
+    if @review.save
+      redirect_to reviews_path, notice: "レビューを投稿しました！"
+    else
+      raise ActiveRecord::Rollback
+    end
+  end
+
   unless result
     render :new, status: :unprocessable_entity
   end
 end
+
 
 
   def show

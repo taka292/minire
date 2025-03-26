@@ -7,6 +7,9 @@ import { application } from "./application"
 // import AutocompleteController from "./autocomplete_controller"
 // application.register("autocomplete", AutocompleteController)
 
+import Autocomplete from "stimulus-autocomplete"
+application.register("autocomplete", Autocomplete)
+
 // import CommentController from "./comment_controller";
 // application.register("comment", CommentController);
 
@@ -21,3 +24,6 @@ application.register("image-preview", ImagePreviewController);
 
 import NotificationsController from "./notifications_controller";
 application.register("notifications", NotificationsController);
+
+import SearchToggleController from "./search_toggle_controller"
+application.register("search-toggle", SearchToggleController)

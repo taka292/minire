@@ -26,5 +26,8 @@ module Minire
     config.i18n.default_locale = :ja
     config.active_storage.variant_processor = :vips
     config.hosts << "minire.onrender.com"
+
+    config.autoload_paths << Rails.root.join("lib")
+    config.eager_load_paths << Rails.root.join("lib") # 本番環境用
   end
 end

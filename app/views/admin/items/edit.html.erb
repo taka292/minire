@@ -1,6 +1,9 @@
 <% breadcrumb :edit_admin_item, @item %>
+
 <div class="max-w-4xl mx-auto mt-8">
   <h1 class="text-2xl font-bold mb-6 text-center"><%= @item.name %>の編集</h1>
+
+  <%= button_to "Amazonから情報を取得", fetch_amazon_info_admin_item_path(@item), method: :post, data: { turbo: false}, class: "btn btn-secondary" %>
   <%= form_with(model: @item, url: admin_item_path(@item), method: :patch, local: true) do |f| %>
     <div class="mb-4">
       <%= f.label :name, "商品名", class: "block text-sm font-medium text-gray-700" %>
