@@ -50,7 +50,7 @@ class AmazonApiClient
   # ASINを指定して商品情報を取得
   def get_item_by_asin(asin)
     payload = {
-      "ItemIds": [asin],
+      "ItemIds": [ asin ],
       "Resources": [
         "ItemInfo.Title",
         "Images.Primary.Medium",
