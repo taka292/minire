@@ -15,7 +15,7 @@ class AmazonController < ApplicationController
     @items = items.filter_map do |item|
       title = item.dig("ItemInfo", "Title", "DisplayValue")
       asin  = item["ASIN"]
-      image_url = item.dig("Images", "Primary", "Medium", "URL")
+      image_url = item.dig("Images", "Primary", "Large", "URL")
 
       # タイトルかASINが空なら次の商品へ
       next if title.blank? || asin.blank?

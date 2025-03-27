@@ -25,7 +25,7 @@ class AmazonApiClient
       "Marketplace": "www.amazon.co.jp",
       "Resources": [
         "ItemInfo.Title",
-        "Images.Primary.Medium",
+        "Images.Primary.Large",
         "ItemInfo.ByLineInfo",
         "Offers.Listings.Price"
       ]
@@ -53,7 +53,8 @@ class AmazonApiClient
       "ItemIds": [ asin ],
       "Resources": [
         "ItemInfo.Title",
-        "Images.Primary.Medium",
+        "Images.Primary.Large",
+        "Images.Variants.Large",
         "ItemInfo.ByLineInfo",
         "ItemInfo.Features",
         "Offers.Listings.Price"
