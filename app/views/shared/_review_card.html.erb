@@ -54,16 +54,11 @@
 <% if review.item.present? %>
   <div class="flex items-center">
     <%= link_to item_path(review.item), class: "flex items-center w-full p-2 rounded-md hover:bg-gray-100 cursor-pointer transition duration-200" do %>
-      <!-- 商品画像（現在コメントアウト） -->
-      <!--
       <% if review.item.images.attached? %>
         <%= image_tag review.item.resized_images.first,
                       alt: "商品画像",
                       class: "w-16 h-16 object-cover rounded-md" %>
-      <% else %>
-        <%= image_tag "logo.png", alt: "MiniRe", class: "w-16 h-16 object-cover rounded-md" %>
       <% end %>
-      -->
       <div class="ml-4 flex-1">
         <% if review.item.manufacturer.present? %>
           <p class="text-sm text-gray-500"><%= review.item.manufacturer %></p>
