@@ -47,7 +47,7 @@ end
 
 crumb :item do |item|
   link item.name, item_path(item)
-  parent :items
+  parent :reviews
 end
 
 crumb :profile do |user|

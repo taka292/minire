@@ -1,20 +1,19 @@
 <% content_for :title, "#{@item.name} | MiniRe (ミニレ)" %>
 <% content_for :meta_description, "#{@item.name}の詳細ページです。商品情報と関連レビューを紹介します。#{@item.amazon_url.present? ? 'Amazonでの購入リンクも掲載しています。' : ''}" %>
+<% breadcrumb :item, @item %>
 
 <div class="bg-gray-100 min-h-screen py-8 px-4">
   <div class="max-w-6xl mx-auto bg-white px-6 sm:px-8 py-6 sm:py-8 shadow-md rounded-md space-y-8">
     <!-- 商品詳細セクション -->
     <div class="flex flex-col md:flex-row gap-8 sm:gap-12 items-start">
-    <%
-=begin
-    %>
+
       <!-- 左側: 商品画像 (横スクロール) -->
       <div class="w-full md:w-1/2">
         <div class="flex space-x-4 p-2  overflow-x-auto">
           <% if @item.images.attached? %>
             <% @item.images.each do |image| %>
               <img src="<%= url_for(image) %>" alt="<%= @item.name %>" 
-                   class="w-[300px] h-[250px] object-cover rounded-md shadow-md flex-shrink-0">
+                   class="object-cover rounded-md shadow-md flex-shrink-0">
             <% end %>
           <% else %>
 
@@ -27,25 +26,36 @@
           <% end %>
         </div>
       </div>
-    <%
-=end
-    %>
 
       <!-- 右側: 商品情報 -->
       <div class="flex flex-col w-full md:w-1/2 space-y-4 sm:space-y-6 px-4 sm:px-8">
-        <h1 class="text-2xl font-bold text-gray-800"><%= @item.name %></h1>
-        <p class="text-gray-600 text-base sm:text-lg">販売元: <%= @item.manufacturer || '情報がありません' %></p>
-        <p class="text-gray-600 text-base sm:text-lg">商品説明: <%= @item.description.present? ? safe_join(@item.description.split("\n"), tag(:br)) : '情報がありません' %></p>
-        <!--
-        <p class="text-gray-600 text-base sm:text-lg">価格: <%= @item.price.present? ? "¥#{number_to_currency(@item.price, unit: '', delimiter: ',')}" : '情報がありません' %></p>
-        -->
+        <div class="space-y-4">
+          <div class="bg-gray-50 border-l-4 border-blue-300 px-4 py-2 rounded">
+            <p class="text-sm text-gray-500 font-semibold">販売元</p>
+            <p class="text-base text-gray-800"><%= @item.manufacturer || '情報がありません' %></p>
+          </div>
 
-        <% if @item.amazon_url.present? %>
-          <%= link_to "Amazon", @item.amazon_url, 
-                      class: "btn bg-customBlue text-white border-0 hover:bg-blue-600 py-3 text-lg rounded-md text-center shadow-md w-full", target: :_blank %>
-        <% else %>
-          <p class="text-sm text-red-500 mt-4">Amazonのリンク情報は未登録です</p>
-        <% end %>
+          <div class="bg-gray-50 border-l-4 border-blue-300 px-4 py-2 rounded">
+            <p class="text-sm text-gray-500 font-semibold">商品説明</p>
+            <p class="text-base text-gray-800 leading-relaxed">
+              <%= @item.description.present? ? safe_join(@item.description.split("\n"), tag(:br)) : '情報がありません' %>
+            </p>
+          </div>
+
+          <% if @item.price.present? %>
+            <div class="bg-gray-50 border-l-4 border-blue-300 px-4 py-2 rounded">
+              <p class="text-sm text-gray-500 font-semibold">価格</p>
+              <p class="text-lg font-bold text-gray-900"><%= @item.price.present? ? "¥#{number_to_currency(@item.price, unit: '', delimiter: ',')}" : '情報がありません' %></p>
+            </div>
+          <% end %>
+
+          <% if @item.amazon_url.present? %>
+            <%= link_to "Amazon", @item.amazon_url, 
+                        class: "btn bg-customBlue text-white border-0 hover:bg-blue-600 py-3 text-lg rounded-md text-center shadow-md w-full", target: :_blank %>
+          <% else %>
+            <p class="text-sm text-red-500 mt-4">Amazonのリンク情報は未登録です</p>
+          <% end %>
+        </div>
       </div>
     </div>
   </div>
