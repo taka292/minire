@@ -96,7 +96,7 @@ class Review < ApplicationRecord
   def self.search(query)
     return all if query.blank?
 
-    joins(:item, :category, :releasable_items).where(
+    left_outer_joins(:item, :category, :releasable_items).where(
       "items.name ILIKE :query OR reviews.title ILIKE :query OR reviews.content ILIKE :query ",
       query: "%#{query}%"
     ).distinct
