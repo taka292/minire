@@ -29,11 +29,16 @@ services:
       - TZ=${TZ}
       - GMAIL_USERNAME=${GMAIL_USERNAME}
       - GMAIL_PASSWORD=${GMAIL_PASSWORD}
+      - SELENIUM_DRIVER_URL=http://chrome:4444/wd/hub
     ports:
       - "3000:3000"
     depends_on:
       db:
         condition: service_healthy
+  chrome:
+    image: seleniarm/standalone-chromium:latest
+    ports:
+      - 4444:4444
 volumes:
   bundle_data:
   postgresql_data:
