@@ -14,7 +14,7 @@ RSpec.describe "ユーザー認証", type: :system do
     log_in(email: user.email, password: user.password)
 
     expect(page).to have_current_path(home_index_path)
-    expect(page).to have_content("ログイン") # or "ようこそ"など実際に表示されるものに調整
+    expect(page).to have_content("ログイン")
   end
 
   it "間違ったパスワードではログインに失敗する" do
