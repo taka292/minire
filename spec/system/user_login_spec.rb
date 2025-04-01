@@ -83,4 +83,55 @@ RSpec.describe "ユーザー認証", type: :system do
 
     expect(page).to have_content("メールアドレスはすでに存在します")
   end
+
+  describe "パスワードリセット" do
+    it "登録済みメールアドレスでリセットリンクを送信できる" do
+      visit new_user_password_path
+
+      fill_in "user[email]", with: user.email
+      click_button "リセットリンクを送信"
+
+      expect(page).to have_content("パスワード再設定のためのメールを送信しました。")
+      expect(ActionMailer::Base.deliveries.count).to eq(1)
+
+      mail = ActionMailer::Base.deliveries.last
+      expect(mail.to).to include(user.email)
+      expect(mail.subject).to include("パスワードの再設定")
+
+      # メール文言チェック（name + 文中の文言 + リンクテキスト）
+      expect(mail.body.encoded).to include("#{user.name}様")
+      expect(mail.body.encoded).to include("以下のリンクをクリックすることで、パスワードの変更が可能です")
+      expect(mail.body.encoded).to include("パスワードを変更する") # リンクテキスト
+    end
+
+    it "未登録メールアドレスではエラーになる" do
+      visit new_user_password_path
+
+      fill_in "user[email]", with: "notfound@example.com"
+      click_button "リセットリンクを送信"
+
+      expect(page).to have_content("メールアドレスが見つかりません")
+    end
+
+    it "リセットリンクからパスワードを再設定できる" do
+      token = user.send_reset_password_instructions
+      visit edit_user_password_path(reset_password_token: token)
+
+      fill_in "user[password]", with: "newsecurepass"
+      fill_in "user[password_confirmation]", with: "newsecurepass"
+      click_button "パスワードを変更"
+
+      expect(page).to have_content("パスワードを変更しました。")
+      expect(page).to have_current_path("/")
+
+      # 念のため再ログイン確認
+      click_link "ログアウト", match: :first
+      visit new_user_session_path
+      fill_in "user[email]", with: user.email
+      fill_in "user[password]", with: "newsecurepass"
+      click_button "ログイン"
+
+      expect(page).to have_current_path(home_index_path)
+    end
+  end
 end
