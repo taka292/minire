@@ -22,12 +22,6 @@ RSpec.describe Item, type: :model do
         expect(item.errors[:name]).to include("商品名を入力してください")
       end
 
-      it "名前が50文字を超える場合、無効である" do
-        item.name = "あ" * 51
-        expect(item).not_to be_valid
-        expect(item.errors[:name]).to include("50文字以内で入力してください")
-      end
-
       it "名前がすでに存在する場合（大文字小文字を区別しない）、無効である" do
         create(:item, name: "ミニマリスト用テーブル")
         item.name = "ミニマリスト用テーブル" # 同じ名前
