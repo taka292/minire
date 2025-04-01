@@ -116,16 +116,24 @@ RSpec.describe "レビュー投稿機能", type: :system do
       expect(page).to have_content(review.content)
     end
 
-    it "レビューを編集できる" do
+    it "レビューを編集して内容が更新される" do
+      review.releasable_items.create!(name: "古い手放せるもの")
+
       visit edit_review_path(review)
 
       fill_in "review[title]", with: "編集タイトル"
       fill_in "review[content]", with: "編集内容"
+
+      fill_in "review[releasable_items_attributes][0][name]", with: "新しい手放せるもの"
+
       click_button "更新する"
 
       expect(page).to have_content("レビューを更新しました！")
       expect(page).to have_content("編集タイトル")
+      expect(page).to have_content("編集内容")
+      expect(page).to have_content("新しい手放せるもの")
     end
+
 
     it "レビューを削除できる" do
       visit review_path(review)
@@ -133,6 +141,77 @@ RSpec.describe "レビュー投稿機能", type: :system do
 
       expect(page).to have_content("レビューを削除しました。")
       expect(current_path).to eq(reviews_path)
+      expect(page).not_to have_content(review.title)
+    end
+
+    it "レビュー編集画面で手放せるものを削除できる" do
+      review.releasable_items.create!(name: "削除予定のアイテム")
+
+      visit edit_review_path(review)
+
+      expect(page).to have_field("review[releasable_items_attributes][0][name]", with: "削除予定のアイテム")
+
+      # 手放せるものを空にする
+      fill_in "review[releasable_items_attributes][0][name]", with: ""
+      click_button "更新する"
+      expect(page).to have_content("レビューを更新しました！")
+      expect(page).not_to have_content("削除予定のアイテム")
+    end
+
+    it "編集画面で画像を削除できる" do
+      visit edit_review_path(review)
+
+      attach_file "review[images][]", [
+        Rails.root.join("spec/fixtures/sample1.jpg"),
+        Rails.root.join("spec/fixtures/sample2.jpg")
+      ], make_visible: true
+
+      click_button "更新する"
+
+      expect(page).to have_content("レビューを更新しました！")
+      visit edit_review_path(review)
+
+      # 画像が2つ表示されていることを確認
+      expect(page).to have_css("img[src*='sample1.jpg']")
+      expect(page).to have_css("img[src*='sample2.jpg']")
+
+      # 「×」ボタンを押して画像を削除する（最初の画像）
+      all("button", text: "×").first.click
+
+      click_button "更新する"
+
+      expect(page).to have_content("レビューを更新しました！")
+
+      # どちらか一方の画像が残っている（両方削除するなら2つともnot_to）
+      expect(page).not_to have_css("img[src*='sample1.jpg']")
+    end
+
+    it "編集画面で画像を追加アップロードできる" do
+      visit edit_review_path(review)
+
+      attach_file "review[images][]", [
+        Rails.root.join("spec/fixtures/sample1.jpg")
+      ], make_visible: true
+
+      click_button "更新する"
+
+      expect(page).to have_content("レビューを更新しました！")
+
+      visit edit_review_path(review)
+
+      # すでに1つ表示されていることを確認
+      expect(page).to have_css("img[src*='sample1.jpg']")
+
+      # 新しい画像を追加アップロード
+      attach_file "review[images][]", [
+        Rails.root.join("spec/fixtures/sample2.jpg")
+      ], make_visible: true
+
+      click_button "更新する"
+
+      expect(page).to have_content("レビューを更新しました！")
+      expect(page).to have_css("img[src*='sample1.jpg']")
+      expect(page).to have_css("img[src*='sample2.jpg']")
     end
   end
 
@@ -150,7 +229,7 @@ RSpec.describe "レビュー投稿機能", type: :system do
 
     it "並び替えが正しく動作する" do
       visit reviews_path(sort: "oldest")
-      expect(page).to have_selector(".card", count: Review.count)
+      expect(page.text.index("テストタイトル")).to be < page.text.index("手放せるテスト")
     end
 
     it "カテゴリで絞り込める" do
