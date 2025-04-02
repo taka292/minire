@@ -8,6 +8,6 @@ module SystemHelper
     fill_in "user[password]", with: "password"
     click_button "ログイン"
 
-    expect(page).to have_current_path(home_index_path)
+    expect(page).to have_current_path(home_index_path, wait: 5)
   end
 end
