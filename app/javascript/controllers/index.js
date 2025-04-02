@@ -22,8 +22,9 @@ application.register("releasable-items", ReleasableItemsController)
 import ImagePreviewController from "./image_preview_controller";
 application.register("image-preview", ImagePreviewController);
 
-import NotificationsController from "./notifications_controller";
-application.register("notifications", NotificationsController);
+// ユーザー側で一括既読するように変更のためコメントアウト
+// import NotificationsController from "./notifications_controller";
+// application.register("notifications", NotificationsController);
 
 import SearchToggleController from "./search_toggle_controller"
 application.register("search-toggle", SearchToggleController)
