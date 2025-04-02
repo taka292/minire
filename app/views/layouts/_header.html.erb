@@ -24,10 +24,9 @@
       <% end %>
 
       <% if user_signed_in? %>
-        <%= link_to likes_profile_path(current_user), class: "flex items-center justify-center", title: "いいねしたレビュー" do %>
+        <%= link_to likes_profile_path(current_user, anchor: "likes"), class: "flex items-center justify-center", title: "いいねしたレビュー" do %>
           <span class="material-icons text-gray-600 text-3xl">favorite_border</span>
         <% end %>
-        
         <!-- 通知アイコン -->
         <%= link_to notifications_path, class: "relative flex items-center justify-center", title: "通知" do %>
           <span class="material-symbols-outlined text-gray-600 text-3xl">notifications</span>
@@ -71,7 +70,7 @@
         <% end %>
 
         <% if user_signed_in? %>
-          <%= link_to likes_profile_path(current_user), class: "flex items-center justify-center", title: "いいねしたレビュー" do %>
+          <%= link_to likes_profile_path(current_user, anchor: "likes"), class: "flex items-center justify-center", title: "いいねしたレビュー" do %>
             <span class="material-icons text-gray-600 text-3xl">favorite_border</span>
           <% end %>
 

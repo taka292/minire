@@ -46,8 +46,8 @@
     <% end %>
   </div>
 
-  <!-- レビュー切り替え -->
-  <div class="card bg-white shadow-lg rounded-lg p-6">
+  <!-- レビュー切り替え(いいね一覧への遷移先のため、id指定) -->
+  <div class="card bg-white shadow-lg rounded-lg p-6" id="likes">
     <div class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4 mb-4">
       <%= link_to "過去のレビュー", 
             profile_path(@user), 
