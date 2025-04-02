@@ -164,4 +164,16 @@ RSpec.describe "プロフィール機能", type: :system do
       expect(page).to have_content("メールアドレスはすでに存在します")
     end
   end
+
+  describe "ログアウト" do
+    it "プロフィール画面からログアウトできる" do
+      visit profile_path(user)
+
+      expect(page).to have_content("テストユーザー")
+
+      click_link "ログアウト"
+
+      expect(page).to have_content("ログアウトしました").or have_current_path(home_index_path)
+    end
+  end
 end

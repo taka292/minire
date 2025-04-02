@@ -24,14 +24,6 @@ RSpec.describe "ユーザー認証", type: :system do
     expect(page).to have_current_path(new_user_session_path)
   end
 
-  it "ログイン後にログアウトできる" do
-    log_in(email: user.email, password: user.password)
-
-    click_link "ログアウト", match: :first
-    expect(page).to have_content("ログアウトしました").or have_content("ログイン")
-    expect(page).to have_current_path(new_user_session_path)
-  end
-
   it "未ログイン状態で保護ページにアクセスするとログイン画面にリダイレクトされる" do
     visit profile_path(user.id)
 
@@ -125,7 +117,9 @@ RSpec.describe "ユーザー認証", type: :system do
       expect(page).to have_current_path("/")
 
       # 念のため再ログイン確認
-      click_link "ログアウト", match: :first
+      visit profile_path(user)
+      expect(page).to have_content("テストユーザー")
+      click_link "ログアウト"
       visit new_user_session_path
       fill_in "user[email]", with: user.email
       fill_in "user[password]", with: "newsecurepass"

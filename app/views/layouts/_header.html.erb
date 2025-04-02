@@ -27,11 +27,7 @@
         <%= link_to likes_profile_path(current_user), class: "flex items-center justify-center", title: "いいねしたレビュー" do %>
           <span class="material-icons text-gray-600 text-3xl">favorite_border</span>
         <% end %>
-
-        <%= link_to destroy_user_session_path, method: :delete, data: { turbo_method: :delete }, class: "flex items-center justify-center", title: "ログアウト" do %>
-          <span class="material-icons text-gray-600 text-3xl">logout</span>
-        <% end %>
-
+        
         <!-- 通知アイコン -->
         <%= link_to notifications_path, class: "relative flex items-center justify-center", title: "通知" do %>
           <span class="material-symbols-outlined text-gray-600 text-3xl">notifications</span>
@@ -77,10 +73,6 @@
         <% if user_signed_in? %>
           <%= link_to likes_profile_path(current_user), class: "flex items-center justify-center", title: "いいねしたレビュー" do %>
             <span class="material-icons text-gray-600 text-3xl">favorite_border</span>
-          <% end %>
-
-          <%= link_to destroy_user_session_path, method: :delete, data: { turbo_method: :delete }, class: "flex items-center justify-center", title: "ログアウト" do %>
-            <span class="material-icons text-gray-600 text-3xl">logout</span>
           <% end %>
 
           <!-- 通知アイコン -->
