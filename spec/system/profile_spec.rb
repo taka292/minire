@@ -28,7 +28,8 @@ RSpec.describe "プロフィール機能", type: :system do
       attach_file "user[avatar]", Rails.root.join("spec/fixtures/test_avatar.jpg")
       click_button "更新する"
 
-      expect(page).to have_current_path(profile_path(user))
+      # 遷移エラーを防ぐために、wait: 5を指定
+      expect(page).to have_current_path(profile_path(user), wait: 5)
       expect(page).to have_selector("img[src*='test_avatar.jpg']")
     end
 
