@@ -61,5 +61,17 @@ RSpec.describe "いいね機能", type: :system do
         expect(page).to have_content("2")
       end
     end
+
+    it "プロフィールのいいね一覧が、いいねした順（新しい順）で表示される" do
+      old_review = create(:review, title: "古いいいねレビュー")
+      new_review = create(:review, title: "新しいいいねレビュー")
+
+      create(:like, user: user, review: old_review, created_at: 1.day.ago)
+      create(:like, user: user, review: new_review, created_at: Time.current)
+
+      visit likes_profile_path(user)
+
+      expect(page.text.index("新しいいいねレビュー")).to be < page.text.index("古いいいねレビュー")
+    end
   end
 end
