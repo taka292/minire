@@ -98,7 +98,7 @@
           <% if @review.item.name.present? %>
             <p class="text-md text-gray-800 font-medium"><%= @review.item.name %></p>
           <% end %>
-          <!--amazonの商品画像が使えないため、一時的に下記で詳細ページへ遷移を示す-->
+          <!-- 商品の詳細リンク -->
           <% if @review.item.name.present? %>
             <p class="text-md text-gray-800 font-medium underline"><%= "#{@review.item.name}の詳細" %></p>
           <% end %>
