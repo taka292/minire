@@ -168,6 +168,8 @@ RSpec.describe "レビュー投稿機能", type: :system do
 
       click_button "更新する"
 
+      # 画像がアップロードされたことを確認
+      expect(page).to have_current_path(edit_review_path(review), wait: 5)
       expect(page).to have_content("レビューを更新しました！")
       visit edit_review_path(review)
 
@@ -180,6 +182,8 @@ RSpec.describe "レビュー投稿機能", type: :system do
 
       click_button "更新する"
 
+      # 画像が削除されたことを確認
+      expect(page).to have_current_path(review_path(review), wait: 5)
       expect(page).to have_content("レビューを更新しました！")
 
       # どちらか一方の画像が残っている（両方削除するなら2つともnot_to）
