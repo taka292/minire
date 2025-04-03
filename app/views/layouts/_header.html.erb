@@ -19,10 +19,19 @@
 
     <!-- 右側：アイコン -->
     <div class="flex gap-2 flex-shrink-0 h-16 items-center">
+      <!-- 管理者用のアイコン -->
+      <% if user_signed_in? && current_user.admin? %>
+        <%= link_to admin_items_path, class: "flex items-center justify-center", title: "管理画面" do %>
+          <span class="material-symbols-outlined text-gray-600 text-3xl">admin_panel_settings</span>
+        <% end %>
+      <% end %>
+
+      <!-- レビュー一覧 -->
       <%= link_to reviews_path, class: "flex items-center justify-center", title: "レビュー 一覧" do %>
         <span class="material-symbols-outlined text-gray-600 text-3xl">quick_reference_all</span>
       <% end %>
 
+      <!-- いいねしたレビュー -->
       <% if user_signed_in? %>
         <%= link_to likes_profile_path(current_user, anchor: "likes"), class: "flex items-center justify-center", title: "いいねしたレビュー" do %>
           <span class="material-icons text-gray-600 text-3xl">favorite_border</span>
@@ -36,7 +45,7 @@
             </span>
           <% end %>
         <% end %>
-
+        <!-- プロフィールアイコン -->
         <%= link_to profile_path(current_user), class: "flex items-center justify-center", title: "プロフィール" do %>
           <% if current_user.avatar.attached? %>
             <%= image_tag current_user.resized_avatar, class: "w-10 h-10 rounded-full object-cover", alt: "アバター画像" %>
@@ -45,6 +54,7 @@
           <% end %>
         <% end %>
       <% else %>
+        <!-- ログインアイコン -->
         <%= link_to new_user_session_path, class: "flex items-center justify-center", title: "ログイン" do %>
           <span class="material-icons text-gray-600 text-3xl">login</span>
         <% end %>
@@ -65,15 +75,21 @@
 
       <!-- 右側：アイコン -->
       <div class="flex gap-2 h-14 items-center">
+        <!-- 管理者用のアイコン -->
+        <% if user_signed_in? && current_user.admin? %>
+          <%= link_to admin_items_path, class: "flex items-center justify-center", title: "管理画面" do %>
+            <span class="material-symbols-outlined text-gray-600 text-3xl">admin_panel_settings</span>
+          <% end %>
+        <% end %>
+        <!-- レビュー一覧 -->
         <%= link_to reviews_path, class: "flex items-center justify-center", title: "レビュー 一覧" do %>
           <span class="material-symbols-outlined text-gray-600 text-3xl">quick_reference_all</span>
         <% end %>
-
         <% if user_signed_in? %>
+          <!-- いいねしたレビュー -->
           <%= link_to likes_profile_path(current_user, anchor: "likes"), class: "flex items-center justify-center", title: "いいねしたレビュー" do %>
             <span class="material-icons text-gray-600 text-3xl">favorite_border</span>
           <% end %>
-
           <!-- 通知アイコン -->
           <%= link_to notifications_path, class: "relative flex items-center justify-center", title: "通知" do %>
             <span class="material-symbols-outlined text-gray-600 text-3xl">notifications</span>
@@ -83,7 +99,7 @@
               </span>
             <% end %>
           <% end %>
-
+          <!-- プロフィールアイコン -->
           <%= link_to profile_path(current_user), class: "flex items-center justify-center", title: "プロフィール" do %>
             <% if current_user.avatar.attached? %>
               <%= image_tag current_user.resized_avatar, class: "w-10 h-10 rounded-full object-cover", alt: "アバター画像" %>
@@ -92,6 +108,7 @@
             <% end %>
           <% end %>
         <% else %>
+          <!-- ログインアイコン -->
           <%= link_to new_user_session_path, class: "flex items-center justify-center", title: "ログイン" do %>
             <span class="material-icons text-gray-600 text-3xl">login</span>
           <% end %>
