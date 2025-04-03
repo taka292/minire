@@ -36,10 +36,10 @@ Rails.application.routes.draw do
   get "/privacy_policy", to: "static_pages#privacy_policy"
 
   namespace :admin do
-  resources :items, only: [ :index, :edit, :update ] do
-    post :fetch_amazon_info, on: :member
+    resources :items, only: [ :index, :edit, :update ] do
+      post :fetch_amazon_info, on: :member
+    end
   end
-end
 
   if Rails.env.development?
     mount LetterOpenerWeb::Engine, at: "/letter_opener"

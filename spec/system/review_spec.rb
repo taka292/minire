@@ -258,4 +258,30 @@ RSpec.describe "レビュー投稿機能", type: :system do
       expect(page).to have_content("これは生活用品")
     end
   end
+
+  describe "レビュー一覧・詳細での商品情報表示（画像以外）" do
+    let!(:item) do
+      create(:item,
+        name: "ミニマリスト用テーブル",
+        manufacturer: "abc株式会社",
+        amazon_url: "https://www.amazon.co.jp/dp/B08XYZ1234",
+      )
+    end
+
+    let!(:review_with_item) { create(:review, title: "テーブルレビュー", content: "とても気に入ってます", item:) }
+
+    it "レビュー一覧に商品情報が表示される" do
+      visit reviews_path
+
+      expect(page).to have_content("ミニマリスト用テーブル")
+      expect(page).to have_content("abc株式会社")
+    end
+
+    it "レビュー詳細に商品情報が表示される" do
+      visit review_path(review_with_item)
+
+      expect(page).to have_content("ミニマリスト用テーブル")
+      expect(page).to have_content("abc株式会社")
+    end
+  end
 end

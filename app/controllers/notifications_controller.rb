@@ -2,7 +2,7 @@ class NotificationsController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    @unchecked_notifications = current_user.passive_notifications.where(checked: false).order(created_at: :desc)
+    # @unchecked_notifications = current_user.passive_notifications.where(checked: false).order(created_at: :desc)
     @checked_notifications = current_user.passive_notifications.where(checked: true).order(created_at: :desc).limit(20)
 
     # 全通知を既読にする
@@ -14,6 +14,6 @@ class NotificationsController < ApplicationController
 
   def update_checked
     current_user.passive_notifications.update_all(checked: true)
-    head :no_content
+    redirect_to notifications_path, notice: "通知をすべて既読にしました"
   end
 end

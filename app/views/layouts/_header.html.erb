@@ -24,20 +24,15 @@
       <% end %>
 
       <% if user_signed_in? %>
-        <%= link_to likes_profile_path(current_user), class: "flex items-center justify-center", title: "いいねしたレビュー" do %>
+        <%= link_to likes_profile_path(current_user, anchor: "likes"), class: "flex items-center justify-center", title: "いいねしたレビュー" do %>
           <span class="material-icons text-gray-600 text-3xl">favorite_border</span>
         <% end %>
-
-        <%= link_to destroy_user_session_path, method: :delete, data: { turbo_method: :delete }, class: "flex items-center justify-center", title: "ログアウト" do %>
-          <span class="material-icons text-gray-600 text-3xl">logout</span>
-        <% end %>
-
         <!-- 通知アイコン -->
         <%= link_to notifications_path, class: "relative flex items-center justify-center", title: "通知" do %>
           <span class="material-symbols-outlined text-gray-600 text-3xl">notifications</span>
-          <% if unchecked_notifications.any? %>
+          <% if @unchecked_notifications.any? %>
             <span class="absolute -top-1 -right-2 bg-red-500 text-white text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full">
-              <%= unchecked_notifications.count %>
+              <%= @unchecked_notifications.count %>
             </span>
           <% end %>
         <% end %>
@@ -75,20 +70,16 @@
         <% end %>
 
         <% if user_signed_in? %>
-          <%= link_to likes_profile_path(current_user), class: "flex items-center justify-center", title: "いいねしたレビュー" do %>
+          <%= link_to likes_profile_path(current_user, anchor: "likes"), class: "flex items-center justify-center", title: "いいねしたレビュー" do %>
             <span class="material-icons text-gray-600 text-3xl">favorite_border</span>
-          <% end %>
-
-          <%= link_to destroy_user_session_path, method: :delete, data: { turbo_method: :delete }, class: "flex items-center justify-center", title: "ログアウト" do %>
-            <span class="material-icons text-gray-600 text-3xl">logout</span>
           <% end %>
 
           <!-- 通知アイコン -->
           <%= link_to notifications_path, class: "relative flex items-center justify-center", title: "通知" do %>
             <span class="material-symbols-outlined text-gray-600 text-3xl">notifications</span>
-            <% if unchecked_notifications.any? %>
+            <% if @unchecked_notifications.any? %>
               <span class="absolute -top-1 -right-2 bg-red-500 text-white text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full">
-                <%= unchecked_notifications.count %>
+                <%= @unchecked_notifications.count %>
               </span>
             <% end %>
           <% end %>

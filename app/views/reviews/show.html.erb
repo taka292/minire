@@ -82,27 +82,23 @@
     <!-- 商品情報 -->
     <div class="flex items-center mt-6">
       <%= link_to item_path(@review.item), class: "flex items-center w-full hover:bg-gray-100 p-2 rounded-md" do %>
-        <!-- 商品画像
+        <!-- 商品画像 -->
         <% if @review.item.images.attached? %>
           <%= image_tag @review.item.resized_images.first,
                         alt: "商品画像",
                         class: "w-16 h-16 object-cover rounded-md" %>
-        <% else %>
-          <%= image_tag "logo.png", alt: "MiniRe", class: "w-16 h-16 object-cover" %>
         <% end %>
-         -->
         <!-- 商品情報 -->
         <div class="ml-4">
           <!-- ブランド名 -->
           <% if @review.item.manufacturer.present? %>
             <p class="text-sm text-gray-500"><%= @review.item.manufacturer %></p>
           <% end %>
-          <!-- 商品名
+          <!-- 商品名 -->
           <% if @review.item.name.present? %>
             <p class="text-md text-gray-800 font-medium"><%= @review.item.name %></p>
           <% end %>
-           -->
-          <!--amazonの商品画像が使えないため、一時的に下記で詳細ページへ遷移を示す-->
+          <!-- 商品の詳細リンク -->
           <% if @review.item.name.present? %>
             <p class="text-md text-gray-800 font-medium underline"><%= "#{@review.item.name}の詳細" %></p>
           <% end %>
