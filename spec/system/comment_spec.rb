@@ -1,6 +1,8 @@
 require 'rails_helper'
 
-RSpec.describe "コメントといいね機能", type: :system do
+require 'rails_helper'
+
+RSpec.describe "コメント機能", type: :system do
   let!(:review) { create(:review) }
   let!(:user) { review.user }
 
@@ -9,7 +11,7 @@ RSpec.describe "コメントといいね機能", type: :system do
     visit review_path(review)
   end
 
-  describe "コメント機能", js: true do
+  describe "非同期のコメント機能のテスト" , js: true do
     it "コメントを非同期で投稿できる" do
       fill_in "comment_content", with: "これはテストコメントです"
       click_button "コメント"
@@ -73,61 +75,6 @@ RSpec.describe "コメントといいね機能", type: :system do
 
       expect(page).not_to have_selector("form#new_comment")
       expect(page).to have_content("ログインしてコメントする")
-    end
-  end
-
-  describe "いいね機能", js: true do
-    it "レビューにいいねできる" do
-      within("#like_button_#{review.id}") do
-        click_button
-      end
-
-      expect(page).to have_selector("span", text: "favorite")
-      within("#likes_count_#{review.id}") do
-        expect(page).to have_content("1")
-      end
-    end
-
-    it "レビューのいいねを取り消せる" do
-      review.likes.create!(user: user)
-      visit current_path
-
-      within("#like_button_#{review.id}") do
-        click_button
-      end
-
-      expect(page).to have_selector("span", text: "favorite_border")
-      within("#likes_count_#{review.id}") do
-        expect(page).to have_content("0")
-      end
-    end
-
-    it "ログアウト状態ではいいねできない" do
-      logout
-      visit review_path(review)
-
-      within("#like_button_#{review.id}") do
-        expect(page).to have_selector("span.material-icons", text: "favorite_border")
-        expect(page).to have_css(".cursor-not-allowed")
-      end
-    end
-
-    it "他のユーザーがいいねした場合にも数が正しく反映される" do
-      create(:like, user: create(:user), review: review)
-      visit current_path
-
-      within("#likes_count_#{review.id}") do
-        expect(page).to have_content("1")
-      end
-
-      # 自分がさらにいいね
-      within("#like_button_#{review.id}") do
-        click_button
-      end
-
-      within("#likes_count_#{review.id}") do
-        expect(page).to have_content("2")
-      end
     end
   end
 end
