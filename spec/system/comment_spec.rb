@@ -11,7 +11,7 @@ RSpec.describe "コメント機能", type: :system do
     visit review_path(review)
   end
 
-  describe "非同期のコメント機能のテスト" , js: true do
+  describe "非同期のコメント機能のテスト", js: true do
     it "コメントを非同期で投稿できる" do
       fill_in "comment_content", with: "これはテストコメントです"
       click_button "コメント"
