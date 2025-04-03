@@ -50,7 +50,12 @@ class ProfilesController < ApplicationController
   end
 
   def likes
-    @liked_reviews = @user.liked_reviews.includes(:user, images_attachments: :blob).order(created_at: :desc)
+    # @userがいいねしたレビューをいいねした日時の降順で取得
+    # includesメソッドを使用して、関連するユーザーと画像を事前に読み込む
+    @liked_reviews = @user.likes
+                      .includes(review: [ :user, { images_attachments: :blob } ])
+                      .order(created_at: :desc)
+                      .map(&:review)
     @active_tab = "likes"
     render :show
   end
