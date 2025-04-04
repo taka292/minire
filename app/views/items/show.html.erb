@@ -42,10 +42,16 @@
             </p>
           </div>
 
+          <!-- 価格を乗せる場合、取得日時等も合わせて乗せる必要があるため、現状コメントアウト -->
           <% if @item.price.present? %>
             <div class="bg-gray-50 border-l-4 border-blue-300 px-4 py-2 rounded">
               <p class="text-sm text-gray-500 font-semibold">価格</p>
-              <p class="text-lg font-bold text-gray-900"><%= @item.price.present? ? "¥#{number_to_currency(@item.price, unit: '', delimiter: ',')}" : '情報がありません' %></p>
+              <p class="text-lg font-bold text-gray-900">
+                <%= "¥#{number_to_currency(@item.price, unit: '', delimiter: ',')}" %>（<%= @item.updated_at.strftime('%Y年%m月%d日 %H:%M') %> 時点）
+              </p>
+              <small class="text-xs text-gray-500">
+                価格および発送可能時期は表示された日付/時刻の時点のものであり、変更される場合があります。本商品の購入においては、購入時点でAmazon.co.jpに表示されている情報が適用されます。
+              </small>
             </div>
           <% end %>
 
