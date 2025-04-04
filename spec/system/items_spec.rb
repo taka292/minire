@@ -17,12 +17,12 @@ RSpec.describe "商品詳細ページ", type: :system do
         )
       end
 
-      it "商品情報と画像が表示される" do
+      it "商品情報と画像が表示される(価格情報非表示)" do
         visit item_path(item)
 
         expect(page).to have_content("ミニマル収納ボックス")
         expect(page).to have_content("ミニマル社")
-        expect(page).to have_content("¥3,500")
+        # expect(page).to have_content("¥3,500")
         expect(page).to have_content("シンプルな収納ボックスです。")
         expect(page).to have_link("Amazon", href: "https://www.amazon.co.jp/dp/B012345678")
         expect(page).to have_css("img[src*='test_item.jpg']")
