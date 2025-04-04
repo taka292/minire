@@ -8,57 +8,102 @@ class ReviewsController < ApplicationController
     3.times { @review.releasable_items.build }
   end
 
+  # AmazonAPIが一時的に使用できないため、暫定で下記で実装
   def create
-  result = ActiveRecord::Base.transaction do
-    @review = current_user.reviews.build(review_params)
+    result = ActiveRecord::Base.transaction do
+      # レビューを初期化
+      @review = current_user.reviews.build(review_params)
 
-    case params[:search_method]
-    when "amazon"
-      asin = params[:asin]&.strip
-      item_name = params[:amazon_item_name]&.strip
-
-      # ASINか商品名が空ならエラー(手入力した場合、asinが空になって弾く)
-      if asin.blank? || item_name.blank?
-        @review.errors.add(:amazon_item_name, "Amazonの商品を選択してください")
-        raise ActiveRecord::Rollback
-      end
-
-      item = Item.find_or_initialize_by(asin: asin) do |new_item|
-        new_item.name = item_name
-      end
-
-    when "minire"
-      item_name = params[:item_name]&.strip
-
-      if item_name.blank?
+      # 商品名が空の場合のエラーハンドリング
+      if params[:item_name].blank?
         @review.errors.add(:item_name, "商品名を入力してください")
         raise ActiveRecord::Rollback
       end
 
+      # 商品を検索または作成
+      item_name = params[:item_name].strip
+      # 商品名を指定して初めの1件を取得し1件もなければ作成
       item = Item.find_or_initialize_by(name: item_name)
+      unless item.save
+        @review.errors.add(:item_name, item.errors.full_messages.join(", "))
+        raise ActiveRecord::Rollback
+      end
 
-    else
-      @review.errors.add(:item_name, "商品名を入力してください")
-      raise ActiveRecord::Rollback
+      # 商品を関連付けてレビューを保存
+      @review.item = item
+      if @review.save
+        # 該当商品の画像が空の場合、レビューの画像1枚目を商品に添付
+        if item.images.blank? && @review.images.attached?
+          item.images.attach(@review.images.first.blob)
+        end
+
+        redirect_to reviews_path, notice: "レビューを投稿しました！"
+      else
+        raise ActiveRecord::Rollback
+      end
     end
 
-    unless item.save
-      @review.errors.add(:item_name, item.errors.full_messages.join(", "))
-      raise ActiveRecord::Rollback
-    end
-
-    @review.item = item
-    if @review.save
-      redirect_to reviews_path, notice: "レビューを投稿しました！"
-    else
-      raise ActiveRecord::Rollback
+    unless result
+      render :new, status: :unprocessable_entity
     end
   end
 
-  unless result
-    render :new, status: :unprocessable_entity
-  end
-end
+  # AmazonAPIが一時的に使用できないため、暫定でコメントアウト(使用可能になり次第、editのコードもamzon検索対応要)
+  #   def create
+  #     result = ActiveRecord::Base.transaction do
+  #       @review = current_user.reviews.build(review_params)
+  #
+  #       case params[:search_method]
+  #       when "amazon"
+  #         asin = params[:asin]&.strip
+  #         item_name = params[:amazon_item_name]&.strip
+  #
+  #         # ASINか商品名が空ならエラー(手入力した場合、asinが空になって弾く)
+  #         if asin.blank? || item_name.blank?
+  #           @review.errors.add(:amazon_item_name, "Amazonの商品を選択してください")
+  #           raise ActiveRecord::Rollback
+  #         end
+  #
+  #         item = Item.find_or_initialize_by(asin: asin) do |new_item|
+  #           new_item.name = item_name
+  #         end
+  #
+  #       when "minire"
+  #         item_name = params[:item_name]&.strip
+  #
+  #         if item_name.blank?
+  #           @review.errors.add(:item_name, "商品名を入力してください")
+  #           raise ActiveRecord::Rollback
+  #         end
+  #
+  #         item = Item.find_or_initialize_by(name: item_name)
+  #
+  #       else
+  #         @review.errors.add(:item_name, "商品名を入力してください")
+  #         raise ActiveRecord::Rollback
+  #       end
+  #
+  #       unless item.save
+  #         @review.errors.add(:item_name, item.errors.full_messages.join(", "))
+  #         raise ActiveRecord::Rollback
+  #       end
+  #
+  #       @review.item = item
+  #       if @review.save
+  #         if item.images.blank? && @review.images.attached?
+  #           item.images.attach(@review.images.first.blob)
+  #         end
+  #
+  #         redirect_to reviews_path, notice: "レビューを投稿しました！"
+  #       else
+  #         raise ActiveRecord::Rollback
+  #       end
+  #     end
+  #
+  #     unless result
+  #       render :new, status: :unprocessable_entity
+  #     end
+  #   end
 
 
 

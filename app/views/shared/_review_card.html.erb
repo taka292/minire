@@ -62,7 +62,6 @@
           <% if review.item.manufacturer.present? %>
             <p class="text-sm text-gray-500"><%= review.item.manufacturer %></p>
           <% end %>
-          <!--amazonの商品画像が使えないため、一時的に下記で詳細ページへ遷移を示す-->
           <% if review.item.name.present? %>
             <p class="text-md text-gray-800 font-medium underline"><%= "#{review.item.name}の詳細" %></p>
           <% end %>
