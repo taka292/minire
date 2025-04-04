@@ -226,6 +226,17 @@ https://github.com/user-attachments/assets/6f87b749-668d-4b16-898b-d2f8877e5cb0
 - フォロー機能（ユーザー間のつながり）
 - 投稿ポイント・バッジシステム（ユーザー活性化施策）
 
+## 技術スタック
+| カテゴリ | 技術スタック |
+| --- | --- |
+| フロントエンド | Rails 7.2.2 (Hotwire/Turbo/Stimulus), JavaScript, Tailwind CSS, daisyUI |
+| バックエンド | Rails 7.1.3.4 (Ruby 3.2.8) |
+| データベース | PostgreSQL |
+| インフラ | Render.com, Amazon S3 |
+| 開発環境 | Docker、GitHub Actions（CI）  |
+| 認証 | Devise |
+| API | Amazon Product Advertising API(PA-API） |
+| その他 | Rubocop（コード整形）、RSpec / FactoryBot（テスト）、kaminari（ページネーション）、ransack（検索）、ActiveStorage（画像アップロード）、letter_opener / letter_opener_web（開発環境でのメール確認）、gretel（パンくずリスト） |
 
 ### 画面遷移図
 Figma：https://www.figma.com/design/rGVi89qGF02sY6Ht7tkSOW/minia%E7%94%BB%E9%9D%A2%E9%81%B7%E7%A7%BB%E5%9B%B3?node-id=0-1&t=dep5IccCoAIknCke-1
