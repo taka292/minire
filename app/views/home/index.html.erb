@@ -31,24 +31,27 @@
         気になる商品ページへもアクセス可能です。
       </p>
 
-      <!-- 動画1（レビュー一覧） -->
-      <div class="flex flex-col items-center mt-8">
-        <h4 class="text-xl font-semibold mb-2">1. レビュー一覧をチェック</h4>
-        <video class="w-full max-w-4xl rounded-lg shadow-lg" autoplay loop muted playsinline>
-          <source src="/videos/review_display.mov" type="video/mp4">
-          お使いのブラウザは動画をサポートしていません。
-        </video>
-        <p class="text-gray-700 text-center mt-2">レビューを自由に閲覧できます。</p>
-      </div>
+      <!-- 横スライド：登録前機能 -->
+      <div class="overflow-x-auto snap-x snap-mandatory flex gap-8 py-4 px-2 scroll-pl-6 max-w-full">
+        <!-- 動画1 -->
+        <div class="snap-start shrink-0 w-full sm:w-[80%] max-w-md">
+          <h4 class="text-xl font-semibold mb-2 text-center">1. レビュー一覧をチェック</h4>
+          <video class="w-full rounded-lg shadow-lg" autoplay loop muted playsinline>
+            <source src="/videos/review_display.mov" type="video/mp4">
+            お使いのブラウザは動画をサポートしていません。
+          </video>
+          <p class="text-gray-700 text-center mt-2">レビューを自由に閲覧できます。</p>
+        </div>
 
-      <!-- 動画2（商品ページ閲覧） -->
-      <div class="flex flex-col items-center mt-8">
-        <h4 class="text-xl font-semibold mb-2">2. 商品情報を閲覧</h4>
-        <video class="w-full max-w-4xl rounded-lg shadow-lg" autoplay loop muted playsinline>
-          <source src="/videos/item_show.mov" type="video/mp4">
-          お使いのブラウザは動画をサポートしていません。
-        </video>
-        <p class="text-gray-700 text-center mt-2">商品の詳細情報や関連レビューを確認できます。</p>
+        <!-- 動画2 -->
+        <div class="snap-start shrink-0 w-full sm:w-[80%] max-w-md">
+          <h4 class="text-xl font-semibold mb-2 text-center">2. 商品情報を閲覧</h4>
+          <video class="w-full rounded-lg shadow-lg" autoplay loop muted playsinline>
+            <source src="/videos/item_show.mov" type="video/mp4">
+            お使いのブラウザは動画をサポートしていません。
+          </video>
+          <p class="text-gray-700 text-center mt-2">商品の詳細情報や関連レビューを確認でき、気になった商品はそのままAmazonで購入できます</p>
+        </div>
       </div>
     </div>
 
@@ -60,34 +63,47 @@
         いいねやコメントで他のミニマリストと交流できます。
       </p>
 
-      <!-- 動画3（レビュー投稿） -->
-      <div class="flex flex-col items-center mt-8">
-        <h4 class="text-xl font-semibold mb-2">3. レビューを投稿</h4>
-        <video class="w-full max-w-4xl rounded-lg shadow-lg" autoplay loop muted playsinline>
-          <source src="/videos/review_post.mov" type="video/mp4">
-          お使いのブラウザは動画をサポートしていません。
-        </video>
-        <p class="text-gray-700 text-center mt-2">あなたの愛用品をシェアできます。</p>
-      </div>
+      <!-- 横スライド：登録後機能 -->
+      <div class="overflow-x-auto snap-x snap-mandatory flex gap-8 py-4 px-2 scroll-pl-6 max-w-full">
+        <!-- 動画3 -->
+        <div class="snap-start shrink-0 w-full sm:w-[80%] max-w-md">
+          <h4 class="text-xl font-semibold mb-2 text-center">3. レビューを投稿</h4>
+          <video class="w-full rounded-lg shadow-lg" autoplay loop muted playsinline>
+            <source src="/videos/review_post.mov" type="video/mp4">
+            お使いのブラウザは動画をサポートしていません。
+          </video>
+          <p class="text-gray-700 text-center mt-2">あなたの愛用品をシェアできます。</p>
+        </div>
 
-      <!-- 動画4（コメント） -->
-      <div class="flex flex-col items-center mt-8">
-        <h4 class="text-xl font-semibold mb-2">4. コメントする</h4>
-        <video class="w-full max-w-4xl rounded-lg shadow-lg" autoplay loop muted playsinline>
-          <source src="/videos/comment.mov" type="video/mp4">
-          お使いのブラウザは動画をサポートしていません。
-        </video>
-        <p class="text-gray-700 text-center mt-2">他のミニマリストと交流できます。</p>
-      </div>
+        <!-- 動画4 -->
+        <div class="snap-start shrink-0 w-full sm:w-[80%] max-w-md">
+          <h4 class="text-xl font-semibold mb-2 text-center">4. コメントする</h4>
+          <video class="w-full rounded-lg shadow-lg" autoplay loop muted playsinline>
+            <source src="/videos/comment.mov" type="video/mp4">
+            お使いのブラウザは動画をサポートしていません。
+          </video>
+          <p class="text-gray-700 text-center mt-2">他のミニマリストと交流できます。</p>
+        </div>
 
-      <!-- 動画5（いいね） -->
-      <div class="flex flex-col items-center mt-8">
-        <h4 class="text-xl font-semibold mb-2">5. いいねする</h4>
-        <video class="w-full max-w-4xl rounded-lg shadow-lg" autoplay loop muted playsinline>
-          <source src="/videos/like_review.mov" type="video/mp4">
-          お使いのブラウザは動画をサポートしていません。
-        </video>
-        <p class="text-gray-700 text-center mt-2">気に入った投稿に「いいね」できます。</p>
+        <!-- 動画5 -->
+        <div class="snap-start shrink-0 w-full sm:w-[80%] max-w-md">
+          <h4 class="text-xl font-semibold mb-2 text-center">5. いいねする</h4>
+          <video class="w-full rounded-lg shadow-lg" autoplay loop muted playsinline>
+            <source src="/videos/like_review.mov" type="video/mp4">
+            お使いのブラウザは動画をサポートしていません。
+          </video>
+          <p class="text-gray-700 text-center mt-2">気に入った投稿に「いいね」できます。</p>
+        </div>
+
+        <!-- 動画6（通知） -->
+        <div class="snap-start shrink-0 w-full sm:w-[80%] max-w-md">
+          <h4 class="text-xl font-semibold mb-2 text-center">6. 通知機能</h4>
+          <video class="w-full rounded-lg shadow-lg" autoplay loop muted playsinline>
+            <source src="/videos/notification.mov" type="video/mp4">
+            お使いのブラウザは動画をサポートしていません。
+          </video>
+          <p class="text-gray-700 text-center mt-2">いいねやコメントの通知を受け取れます。</p>
+        </div>
       </div>
     </div>
   </div>
