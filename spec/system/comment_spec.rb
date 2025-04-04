@@ -69,12 +69,24 @@ RSpec.describe "コメント機能", type: :system do
       expect(page).not_to have_selector("a", id: "button-delete-#{Comment.last.id}")
     end
 
-    it "ログアウト状態ではコメントフォームが表示されない" do
+    #     今後「未ログインでもコメント閲覧OK」にする可能性があるため、一旦コメントアウト。
+    #     投稿はログイン必須のままの場合は、このテストは必要。
+    #     it "ログアウト状態ではコメントフォームが表示されない" do
+    #       logout
+    #       visit review_path(review)
+    #
+    #       expect(page).not_to have_selector("form#new_comment")
+    #       expect(page).to have_content("ログインしてコメントする")
+    #     end
+
+    it "ログアウト状態ではコメント一覧が表示されない" do
+      review.comments.create!(content: "表示されないはずのコメント", user: user)
       logout
       visit review_path(review)
 
-      expect(page).not_to have_selector("form#new_comment")
-      expect(page).to have_content("ログインしてコメントする")
+      expect(page).not_to have_content("表示されないはずのコメント")
+      expect(page).not_to have_selector("#comments")
+      expect(page).to have_content("コメントを見るには")
     end
   end
 end
