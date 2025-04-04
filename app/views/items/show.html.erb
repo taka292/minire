@@ -42,7 +42,7 @@
             </p>
           </div>
 
-          <!-- 価格を乗せる場合、取得日時等も合わせて乗せる必要があるため、現状コメントアウト -->
+          <!-- 価格を乗せる場合、取得日時等も合わせて乗せる必要があり、APIでデータ取得できるまでコメントアウト
           <% if @item.price.present? %>
             <div class="bg-gray-50 border-l-4 border-blue-300 px-4 py-2 rounded">
               <p class="text-sm text-gray-500 font-semibold">価格</p>
@@ -54,6 +54,7 @@
               </small>
             </div>
           <% end %>
+           -->
 
           <% if @item.amazon_url.present? %>
             <%= link_to "Amazon", @item.amazon_url, 
