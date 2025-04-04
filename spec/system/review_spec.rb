@@ -13,7 +13,8 @@ RSpec.describe "レビュー投稿機能", type: :system do
     it "MiniRe検索で正常にレビューを投稿できる" do
       visit new_review_path
 
-      choose "MiniRe検索"
+      # amazonAPI使用ができない状況のため、MiniRe検索は一旦コメントアウト
+      # choose "MiniRe検索"
       fill_in "item_name", with: "テストアイテム"
       select "生活用品", from: "review[category_id]"
       fill_in "review[title]", with: "タイトルテスト"
@@ -54,7 +55,7 @@ RSpec.describe "レビュー投稿機能", type: :system do
     it "手放せるものが空でも投稿できる" do
       visit new_review_path
 
-      choose "MiniRe検索"
+      # choose "MiniRe検索"
       fill_in "item_name", with: "手放せる空"
       select "生活用品", from: "review[category_id]"
       fill_in "review[title]", with: "タイトル"
@@ -68,7 +69,7 @@ RSpec.describe "レビュー投稿機能", type: :system do
     it "手放せるものを複数入力して投稿できる" do
       visit new_review_path
 
-      choose "MiniRe検索"
+      # choose "MiniRe検索"
       fill_in "item_name", with: "手放せる複数"
       select "生活用品", from: "review[category_id]"
       fill_in "review[title]", with: "複数テスト"
@@ -90,7 +91,7 @@ RSpec.describe "レビュー投稿機能", type: :system do
     it "画像を複数アップロードしてレビュー投稿できる" do
       visit new_review_path
 
-      choose "MiniRe検索"
+      # choose "MiniRe検索"
       fill_in "item_name", with: "画像付きアイテム"
       select "生活用品", from: "review[category_id]"
       fill_in "review[title]", with: "画像レビュー"
@@ -103,9 +104,35 @@ RSpec.describe "レビュー投稿機能", type: :system do
 
       click_button "投稿する"
 
-      expect(page).to have_content("レビューを投稿しました！")
+      # 投稿されたことの確認
+      expect(page).to have_content("レビューを投稿しました！", wait: 5)
       expect(page).to have_css("img[src*='sample1.jpg']")
       expect(page).to have_css("img[src*='sample2.jpg']")
+    end
+
+    it "レビュー画像の1枚目が商品画像として登録される" do
+      visit new_review_path
+
+      # choose "MiniRe検索"
+      fill_in "item_name", with: "画像コピーアイテム"
+      select "生活用品", from: "review[category_id]"
+      fill_in "review[title]", with: "商品画像自動登録"
+      fill_in "review[content]", with: "画像1枚目がitemに登録されるテスト"
+
+      attach_file "review[images][]", [
+        Rails.root.join("spec/fixtures/sample1.jpg"),
+        Rails.root.join("spec/fixtures/sample2.jpg")
+      ], make_visible: true
+
+      click_button "投稿する"
+
+      # 投稿されたことを確認
+      expect(page).to have_content("レビューを投稿しました！", wait: 5)
+
+      item = Item.find_by(name: "画像コピーアイテム")
+      expect(item).to be_present
+      expect(item.images.attached?).to be true
+      expect(item.images.first.filename.to_s).to eq("sample1.jpg")
     end
   end
 
@@ -168,7 +195,7 @@ RSpec.describe "レビュー投稿機能", type: :system do
 
       click_button "更新する"
 
-      # 画像がアップロードされたことを確認
+      # 投稿されたことを確認
       expect(page).to have_current_path(edit_review_path(review), wait: 5)
       expect(page).to have_content("レビューを更新しました！")
       visit edit_review_path(review)
@@ -213,7 +240,8 @@ RSpec.describe "レビュー投稿機能", type: :system do
 
       click_button "更新する"
 
-      expect(page).to have_content("レビューを更新しました！")
+      # 投稿されたことの確認
+      expect(page).to have_content("レビューを更新しました！", wait: 5)
       expect(page).to have_css("img[src*='sample1.jpg']")
       expect(page).to have_css("img[src*='sample2.jpg']")
     end
@@ -263,13 +291,15 @@ RSpec.describe "レビュー投稿機能", type: :system do
     end
   end
 
-  describe "レビュー一覧・詳細での商品情報表示（画像以外）" do
+  describe "レビュー一覧・詳細での商品情報表示" do
     let!(:item) do
-      create(:item,
-        name: "ミニマリスト用テーブル",
-        manufacturer: "abc株式会社",
-        amazon_url: "https://www.amazon.co.jp/dp/B08XYZ1234",
+      item = create(:item)
+      item.images.attach(
+        io: File.open(Rails.root.join("spec/fixtures/test_item.jpg")),
+        filename: "test_item.jpg",
+        content_type: "image/jpeg"
       )
+      item
     end
 
     let!(:review_with_item) { create(:review, title: "テーブルレビュー", content: "とても気に入ってます", item:) }
@@ -279,6 +309,7 @@ RSpec.describe "レビュー投稿機能", type: :system do
 
       expect(page).to have_content("ミニマリスト用テーブル")
       expect(page).to have_content("abc株式会社")
+      expect(page).to have_css("img[src*='test_item.jpg']")
     end
 
     it "レビュー詳細に商品情報が表示される" do
@@ -286,6 +317,7 @@ RSpec.describe "レビュー投稿機能", type: :system do
 
       expect(page).to have_content("ミニマリスト用テーブル")
       expect(page).to have_content("abc株式会社")
+      expect(page).to have_css("img[src*='test_item.jpg']")
     end
   end
 end
