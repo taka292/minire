@@ -73,6 +73,11 @@ gem "rails-i18n"
 # deviseのエラーメッセージ日本語化
 gem "devise-i18n"
 
+# SNSログイン
+gem "omniauth"
+gem "omniauth-rails_csrf_protection"
+gem "omniauth-google-oauth2"
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"

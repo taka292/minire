@@ -1,6 +1,7 @@
 class ProfilesController < ApplicationController
   before_action :authenticate_user!
   before_action :set_user
+  before_action :reject_sns_user, only: [ :edit_email, :edit_password ]
 
   def show
     @reviews = @user.reviews.includes(:user, images_attachments: :blob).order(created_at: :desc)
@@ -76,5 +77,12 @@ class ProfilesController < ApplicationController
 
   def password_update_params
     params.require(:user).permit(:current_password, :password, :password_confirmation)
+  end
+
+  # SNSログインユーザーはメールアドレスとパスワードの変更を拒否
+  def reject_sns_user
+    if current_user.provider.present?
+      redirect_to profile_path(current_user), alert: "SNSログインユーザーはこの操作を行えません。"
+    end
   end
 end
