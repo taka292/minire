@@ -128,4 +128,40 @@ RSpec.describe "ユーザー認証", type: :system do
       expect(page).to have_current_path(home_index_path)
     end
   end
+
+  describe "SNS認証（Google）" do
+    before do
+      OmniAuth.config.test_mode = true
+      OmniAuth.config.mock_auth[:google_oauth2] = OmniAuth::AuthHash.new(
+        provider: "google_oauth2",
+        uid: SecureRandom.uuid,
+        info: {
+          email: "snsuser@example.com",
+          name: "SNSユーザー"
+        }
+      )
+    end
+
+    after do
+      OmniAuth.config.mock_auth[:google_oauth2] = nil
+    end
+
+    it "ログイン画面からGoogleログインに成功し、ユーザーが作成・ログインされる" do
+      visit new_user_session_path
+
+      find("form[action='#{user_google_oauth2_omniauth_authorize_path}']").click_button
+
+      expect(page).to have_current_path("/")
+      expect(page).to have_content("Google アカウントによる認証に成功しました")
+    end
+
+    it "新規登録画面からGoogle認証に成功し、ユーザーが作成・ログインされる" do
+      visit new_user_registration_path
+
+      find("form[action='#{user_google_oauth2_omniauth_authorize_path}']").click_button
+
+      expect(page).to have_current_path("/")
+      expect(page).to have_content("Google アカウントによる認証に成功しました")
+    end
+  end
 end
