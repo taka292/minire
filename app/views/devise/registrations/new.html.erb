@@ -14,7 +14,7 @@
         <% if devise_mapping.omniauthable? %>
           <div class="flex justify-center">
             <%= button_to user_google_oauth2_omniauth_authorize_path , method: :post, data: { turbo: false }  do %>
-              <%= image_tag("sign_up_with_google.png", alt: "Googleで登録") %>
+              <%= image_tag("sign_up_with_google.png", alt: "Googleで登録",class: "w-[175px] h-[40px]") %>
             <% end %>
           </div>
         <% end %>
