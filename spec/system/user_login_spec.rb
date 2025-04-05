@@ -163,5 +163,50 @@ RSpec.describe "ユーザー認証", type: :system do
       expect(page).to have_current_path("/")
       expect(page).to have_content("Google アカウントによる認証に成功しました")
     end
+
+    it "通常登録済みのメールアドレスではSNS登録できない" do
+      # 先に通常登録
+      create(:user, email: "duplicate@example.com", password: "password", name: "通常ユーザー")
+
+      # SNSログイン設定
+      OmniAuth.config.test_mode = true
+      OmniAuth.config.mock_auth[:google_oauth2] = OmniAuth::AuthHash.new(
+        provider: "google_oauth2",
+        uid: SecureRandom.uuid,
+        info: {
+          email: "duplicate@example.com",
+          name: "SNSユーザー"
+        }
+      )
+
+      visit new_user_session_path
+
+      find("form[action='#{user_google_oauth2_omniauth_authorize_path}']").click_button
+
+      # 登録できずログイン画面にリダイレクトされていることを確認
+      expect(page).to have_current_path(new_user_session_path)
+      expect(page).to have_content("このメールアドレスは別のログイン方法で既に登録されています。登録時の方法（通常登録またはSNS認証）でログインしてください。") # またはカスタムメッセージ
+    end
+
+    it "SNS認証で既存のメールアドレスを使用した場合はログインできず、案内される" do
+      # 通常登録済みユーザー
+      create(:user, email: "duplicate@example.com")
+
+      # SNSログイン用のモック（同じメール）
+      OmniAuth.config.mock_auth[:google_oauth2] = OmniAuth::AuthHash.new(
+        provider: "google_oauth2",
+        uid: "some-uid",
+        info: {
+          email: "duplicate@example.com",
+          name: "ダブリユーザー"
+        }
+      )
+
+      visit new_user_session_path
+      find("form[action='#{user_google_oauth2_omniauth_authorize_path}']").click_button
+
+      expect(page).to have_current_path(new_user_session_path)
+      expect(page).to have_content("このメールアドレスは別のログイン方法で既に登録されています。登録時の方法（通常登録またはSNS認証）でログインしてください。")
+    end
   end
 end
