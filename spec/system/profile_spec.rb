@@ -90,6 +90,16 @@ RSpec.describe "プロフィール機能", type: :system do
 
       expect(page).to have_content("ユーザー名を入力してください")
     end
+
+    it "SNSログインユーザーにはメール・パスワード変更リンクが表示されない" do
+      sns_user = create(:user, :sns_user)
+      login(sns_user)
+
+      visit profile_path(sns_user)
+
+      expect(page).not_to have_link("メールアドレスの変更")
+      expect(page).not_to have_link("パスワードの変更")
+    end
   end
 
   describe "パスワード変更" do
@@ -124,6 +134,16 @@ RSpec.describe "プロフィール機能", type: :system do
       click_button "パスワードを更新"
 
       expect(page).to have_content("現在のパスワードが正しくありません")
+    end
+
+    it "SNSログインユーザーはパスワード変更ページにアクセスできない" do
+      sns_user = create(:user, :sns_user)
+      login(sns_user)
+
+      visit edit_password_profile_path(sns_user)
+
+      expect(page).to have_current_path(profile_path(sns_user))
+      expect(page).to have_content("SNSログインユーザーはこの操作を行えません。")
     end
   end
 
@@ -163,6 +183,16 @@ RSpec.describe "プロフィール機能", type: :system do
       click_button "確認メールを送信"
 
       expect(page).to have_content("メールアドレスはすでに存在します")
+    end
+
+    it "SNSログインユーザーはメールアドレス変更ページにアクセスできない" do
+      sns_user = create(:user, :sns_user)
+      login(sns_user)
+
+      visit edit_email_profile_path(sns_user)
+
+      expect(page).to have_current_path(profile_path(sns_user))
+      expect(page).to have_content("SNSログインユーザーはこの操作を行えません。")
     end
   end
 

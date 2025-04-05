@@ -2,7 +2,8 @@ class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable, :confirmable
+         :recoverable, :rememberable, :validatable, :confirmable,
+         :omniauthable, omniauth_providers: %i[google_oauth2]
   has_many :reviews, dependent: :destroy
   has_one_attached :avatar
   has_many :comments, dependent: :destroy
@@ -22,6 +23,8 @@ class User < ApplicationRecord
 
   # 新規登録時に自動で確認済みにする
   after_create :auto_confirm_account
+
+  validates :uid, uniqueness: { scope: :provider }, allow_nil: true
 
   def avatar_content_type
     allowed_types = %w[image/jpeg image/png image/gif]
@@ -46,6 +49,15 @@ class User < ApplicationRecord
     return if confirmed?
 
     self.update_columns(confirmed_at: Time.current) # 明示的に確認済み状態に設定
+  end
+
+  # SNS認証用メソッド
+  def self.from_omniauth(auth)
+    where(provider: auth.provider, uid: auth.uid).first_or_create do |user|
+      user.email = auth.info.email
+      user.name = auth.info.name
+      user.password = Devise.friendly_token[0, 20]
+    end
   end
 
   def admin?

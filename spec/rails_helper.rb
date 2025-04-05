@@ -1,5 +1,7 @@
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 require 'spec_helper'
+require 'omniauth'
+OmniAuth.config.test_mode = true
 # ENV['RAILS_ENV'] ||= 'test'
 ENV['RAILS_ENV'] ||= 'test'
 require_relative '../config/environment'

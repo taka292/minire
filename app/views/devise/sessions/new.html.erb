@@ -36,6 +36,14 @@
               <%= f.submit "ログイン", class: "btn bg-customBlue text-white border-0 hover:bg-blue-500 w-full py-3 text-lg" %>
             </div>
         <% end %>
+
+        <% if devise_mapping.omniauthable? %>
+          <div class="flex justify-center mt-6">
+            <%= button_to user_google_oauth2_omniauth_authorize_path , method: :post, data: { turbo: false }  do %>
+              <%= image_tag("sign_in_with_google.png", alt: "Googleでログイン") %>
+            <% end %>
+          </div>
+        <% end %>
       </div>
     </div>
 
