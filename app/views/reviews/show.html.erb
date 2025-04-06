@@ -8,7 +8,7 @@
     <!-- ユーザーアイコン・ユーザー名 -->
     <div class="flex items-center mb-4">
       <%= link_to profile_path(@review.user), class: "flex items-center" do %>
-        <% if @review.user.avatar.attached? %>
+        <% if @review.user.has_valid_avatar? %>
           <%= image_tag @review.user.resized_avatar,
                         class: "w-12 h-12 rounded-full object-cover",
                         alt: "User Avatar" %>

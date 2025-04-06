@@ -20,7 +20,7 @@
         <div class="notification-item flex items-center justify-between border-b border-gray-300 py-2 px-3 bg-gray-100">
           <div class="flex items-center space-x-3">
 
-            <% if notification.visitor.avatar.attached? %>
+            <% if notification.visitor.has_valid_avatar? %>
               <%= image_tag notification.visitor.resized_avatar, class: "w-10 h-10 rounded-full object-cover" %>
             <% else %>
               <span class="material-symbols-outlined text-gray-600 flex items-center justify-center w-10 h-10" style="font-size: 40px;">account_circle</span>
@@ -57,7 +57,7 @@
       <% @checked_notifications.each do |notification| %>
         <div class="notification-item flex items-center justify-between border-b border-gray-300 py-2 px-3">
           <div class="flex items-center space-x-3">
-            <% if notification.visitor.avatar.attached? %>
+            <% if notification.visitor.has_valid_avatar? %>
               <%= image_tag notification.visitor.resized_avatar, class: "w-10 h-10 rounded-full object-cover" %>
             <% else %>
               <span class="material-symbols-outlined text-gray-600 flex items-center justify-center w-10 h-10" style="font-size: 40px;">account_circle</span>

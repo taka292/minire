@@ -57,6 +57,27 @@ RSpec.describe "プロフィール機能", type: :system do
       expect(page).to have_content("いいねした投稿1")
       expect(page).to have_content("いいねした投稿2")
     end
+
+    it "非対応形式（HEIC）をアップロードしてもアバター画像は表示されない" do
+      visit edit_profile_path(user)
+
+      attach_file "user[avatar]", Rails.root.join("spec/fixtures/test_avatar.heic")
+      click_button "更新する"
+
+      expect(page).to have_current_path(edit_profile_path(user), wait: 5)
+      expect(page).to have_content("ファイル形式はJPEG, PNG, GIFのみアップロード可能です。")
+    end
+
+    it "対応形式（JPEG）をアップロードするとアバター画像が表示される" do
+      visit edit_profile_path(user)
+
+      attach_file "user[avatar]", Rails.root.join("spec/fixtures/test_avatar.jpg")
+      click_button "更新する"
+
+      expect(page).to have_current_path(profile_path(user), wait: 5)
+      expect(page).to have_selector("img")
+      expect(page).not_to have_selector("span.material-symbols-outlined", text: "account_circle")
+    end
   end
 
   describe "プロフィール編集" do

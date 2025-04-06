@@ -7,7 +7,7 @@
   <div class="card bg-white shadow-lg rounded-lg p-6 mb-8">
     <!-- ユーザーアイコンと名前 -->
     <div class="flex items-center mb-6">
-      <% if @user.avatar.attached? %>
+      <% if @user.has_valid_avatar? %>
         <%= image_tag @user.avatar.variant(resize_to_fill: [100, 100]), 
                       class: "w-24 h-24 rounded-full object-cover", 
                       alt: "ユーザーアイコン" %>

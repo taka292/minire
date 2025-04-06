@@ -3,7 +3,7 @@
       <!-- ユーザーのアバター -->
       <!-- 通常のページ遷移をしようとすると、遷移先でturbo-frameを探してエラーになるため、通常のページ遷移（リロード）を行うよう明示 -->
       <%= link_to profile_path(comment.user), class: "flex-shrink-0", data: { turbo_frame: "_top" } do %>
-        <% if comment.user.avatar.attached? %>
+        <% if comment.user.has_valid_avatar? %>
           <%= image_tag comment.user.avatar.variant(resize_to_fill: [40, 40]), class: "rounded-full w-10 h-10" %>
         <% else %>
           <span class="material-symbols-outlined text-gray-600 flex items-center justify-center w-10 h-10" style="font-size: 40px;">

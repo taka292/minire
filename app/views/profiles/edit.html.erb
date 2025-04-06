@@ -47,12 +47,12 @@
             <% if @user.errors[:avatar].present? %>
               <p class="text-red-500 text-sm mt-1"><%= @user.errors[:avatar].first %></p>
             <% end %>
-            <% if @user.avatar.attached? %>
+            <% if @user.has_valid_avatar? %>
               <div class="mt-4">
                 <h3 class="text-lg font-semibold text-gray-800 mb-2">現在の画像:</h3>
-                <%= image_tag current_user.resized_avatar, 
-                              class: "w-24 h-24 rounded-full object-cover", 
-                              alt: "現在のアバター画像" %>
+                  <%= image_tag current_user.resized_avatar, 
+                                class: "w-24 h-24 rounded-full object-cover", 
+                                alt: "現在のアバター画像" %>
               </div>
             <% end %>
           </div>
