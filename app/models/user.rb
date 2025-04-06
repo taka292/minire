@@ -27,8 +27,7 @@ class User < ApplicationRecord
   validates :uid, uniqueness: { scope: :provider }, allow_nil: true
 
   def avatar_content_type
-    allowed_types = %w[image/jpeg image/png image/gif]
-    if avatar.attached? && !avatar.content_type.in?(allowed_types)
+    if avatar.attached? && !avatar.content_type.in?(allowed_image_types)
       errors.add(:avatar, "ファイル形式はJPEG, PNG, GIFのみアップロード可能です。")
     end
   end
@@ -41,8 +40,13 @@ class User < ApplicationRecord
 
   # リサイズした画像を返すメソッド
   def resized_avatar
-    return unless avatar.attached? && avatar.blob.present?
+    return unless has_valid_avatar?
     avatar.variant(resize_to_fill: [ 100, 100 ]).processed
+  end
+
+  # アバター画像が有効かどうかを確認するメソッド
+  def has_valid_avatar?
+    avatar.attached? && avatar.blob.present? && allowed_image_types.include?(avatar.content_type)
   end
 
   def auto_confirm_account
@@ -62,5 +66,11 @@ class User < ApplicationRecord
 
   def admin?
     self.admin
+  end
+
+  private
+
+  def allowed_image_types
+    %w[image/jpeg image/png image/gif]
   end
 end

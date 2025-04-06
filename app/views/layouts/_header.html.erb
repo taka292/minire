@@ -47,7 +47,7 @@
         <% end %>
         <!-- プロフィールアイコン -->
         <%= link_to profile_path(current_user), class: "flex items-center justify-center", title: "プロフィール" do %>
-          <% if current_user.avatar.attached? %>
+          <% if current_user.has_valid_avatar? %>
             <%= image_tag current_user.resized_avatar, class: "w-10 h-10 rounded-full object-cover", alt: "アバター画像" %>
           <% else %>
               <span class="material-symbols-outlined text-gray-600 flex items-center justify-center w-10 h-10" style="font-size: 40px;">account_circle</span>
@@ -101,7 +101,7 @@
           <% end %>
           <!-- プロフィールアイコン -->
           <%= link_to profile_path(current_user), class: "flex items-center justify-center", title: "プロフィール" do %>
-            <% if current_user.avatar.attached? %>
+            <% if current_user.has_valid_avatar? %>
               <%= image_tag current_user.resized_avatar, class: "w-10 h-10 rounded-full object-cover", alt: "アバター画像" %>
             <% else %>
               <span class="material-symbols-outlined text-gray-600 flex items-center justify-center w-10 h-10" style="font-size: 40px;">account_circle</span>
