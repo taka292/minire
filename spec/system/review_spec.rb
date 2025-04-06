@@ -13,8 +13,7 @@ RSpec.describe "レビュー投稿機能", type: :system do
     it "MiniRe検索で正常にレビューを投稿できる" do
       visit new_review_path
 
-      # amazonAPI使用ができない状況のため、MiniRe検索は一旦コメントアウト
-      # choose "MiniRe検索"
+      choose "MiniRe検索"
       fill_in "item_name", with: "テストアイテム"
       select "生活用品", from: "review[category_id]"
       fill_in "review[title]", with: "タイトルテスト"
@@ -26,24 +25,24 @@ RSpec.describe "レビュー投稿機能", type: :system do
       expect(page).to have_content("タイトルテスト")
     end
 
-    # Amazon APIが有効になったらこのテストを有効にする
-    #     it "Amazon検索でレビューを投稿できる" do
-    #       visit new_review_path
-    #
-    #       choose "Amazon検索"
-    #       fill_in "amazon_item_name", with: "Amazonテスト商品"
-    #
-    #       find("input[name='asin']", visible: false).set("B000000000")
-    #
-    #       select "生活用品", from: "review[category_id]"
-    #       fill_in "review[title]", with: "Amazonレビュー"
-    #       fill_in "review[content]", with: "Amazon商品についてのレビュー"
-    #       click_button "投稿する"
-    #
-    #       expect(page).to have_current_path(reviews_path)
-    #       expect(page).to have_content("レビューを投稿しました！")
-    #     end
+    it "Amazon検索でレビューを投稿できる" do
+      visit new_review_path
 
+      choose "Amazon検索"
+
+      # 商品名・ASIN 両方をJSで強制セット（display:none でも安心）
+      page.execute_script("document.querySelector(\"input[name='amazon_item_name']\").value = 'Amazonテスト商品'")
+      page.execute_script("document.querySelector(\"input[name='asin']\").value = 'B000000000'")
+
+      select "生活用品", from: "review[category_id]"
+      fill_in "review[title]", with: "Amazonレビュー"
+      fill_in "review[content]", with: "Amazon商品についてのレビュー"
+
+      click_button "投稿する"
+
+      expect(page).to have_current_path(reviews_path)
+      expect(page).to have_content("レビューを投稿しました！")
+    end
 
     it "必須項目未入力でバリデーションエラーが表示される" do
       visit new_review_path
@@ -55,7 +54,7 @@ RSpec.describe "レビュー投稿機能", type: :system do
     it "手放せるものが空でも投稿できる" do
       visit new_review_path
 
-      # choose "MiniRe検索"
+      choose "MiniRe検索"
       fill_in "item_name", with: "手放せる空"
       select "生活用品", from: "review[category_id]"
       fill_in "review[title]", with: "タイトル"
@@ -69,7 +68,7 @@ RSpec.describe "レビュー投稿機能", type: :system do
     it "手放せるものを複数入力して投稿できる" do
       visit new_review_path
 
-      # choose "MiniRe検索"
+      choose "MiniRe検索"
       fill_in "item_name", with: "手放せる複数"
       select "生活用品", from: "review[category_id]"
       fill_in "review[title]", with: "複数テスト"
@@ -91,7 +90,7 @@ RSpec.describe "レビュー投稿機能", type: :system do
     it "画像を複数アップロードしてレビュー投稿できる" do
       visit new_review_path
 
-      # choose "MiniRe検索"
+      choose "MiniRe検索"
       fill_in "item_name", with: "画像付きアイテム"
       select "生活用品", from: "review[category_id]"
       fill_in "review[title]", with: "画像レビュー"
@@ -113,7 +112,7 @@ RSpec.describe "レビュー投稿機能", type: :system do
     it "レビュー画像の1枚目が商品画像として登録される" do
       visit new_review_path
 
-      # choose "MiniRe検索"
+      choose "MiniRe検索"
       fill_in "item_name", with: "画像コピーアイテム"
       select "生活用品", from: "review[category_id]"
       fill_in "review[title]", with: "商品画像自動登録"
@@ -318,6 +317,112 @@ RSpec.describe "レビュー投稿機能", type: :system do
       expect(page).to have_content("ミニマリスト用テーブル")
       expect(page).to have_content("abc株式会社")
       expect(page).to have_css("img[src*='test_item.jpg']")
+    end
+  end
+
+  describe "Amazon検索を使ったレビュー投稿" do
+    it "ASINと商品名が両方ないと投稿できない（バリデーション）" do
+      visit new_review_path
+
+      choose "Amazon検索"
+      # 両方空
+      click_button "投稿する"
+
+      expect(page).to have_content("Amazonの商品を選択してください")
+    end
+
+    it "ASINだけ入力されていても商品名がないと投稿できない" do
+      visit new_review_path
+
+      choose "Amazon検索"
+      page.execute_script("document.querySelector(\"input[name='asin']\").value = 'B00ONLYASIN'")
+      # 商品名は入力しない
+      click_button "投稿する"
+
+      expect(page).to have_content("Amazonの商品を選択してください")
+    end
+
+    it "商品名だけ入力されていてもASINがないと投稿できない" do
+      visit new_review_path
+
+      choose "Amazon検索"
+      page.execute_script("document.querySelector(\"input[name='amazon_item_name']\").value = '名前だけの商品'")
+      # ASINは入力しない
+      click_button "投稿する"
+
+      expect(page).to have_content("Amazonの商品を選択してください")
+    end
+
+    it "ASINと商品名を正しく入力すればレビューを投稿できる" do
+      visit new_review_path
+
+      choose "Amazon検索"
+      page.execute_script("document.querySelector(\"input[name='amazon_item_name']\").value = 'Amazonテスト商品'")
+      page.execute_script("document.querySelector(\"input[name='asin']\").value = 'B000000000'")
+
+      select "生活用品", from: "review[category_id]"
+      fill_in "review[title]", with: "Amazonレビュー"
+      fill_in "review[content]", with: "Amazon商品についてのレビュー"
+      click_button "投稿する"
+
+      expect(page).to have_current_path(reviews_path)
+      expect(page).to have_content("レビューを投稿しました！")
+      expect(Item.find_by(asin: "B000000000")).to be_present
+    end
+
+    it "画像付きAmazonレビューでは、1枚目の画像がitemにコピーされる" do
+      visit new_review_path
+
+      choose "Amazon検索"
+      page.execute_script("document.querySelector(\"input[name='amazon_item_name']\").value = '画像付き商品'")
+      page.execute_script("document.querySelector(\"input[name='asin']\").value = 'B000IMG01'")
+
+      select "生活用品", from: "review[category_id]"
+      fill_in "review[title]", with: "画像付きAmazonレビュー"
+      fill_in "review[content]", with: "画像がitemにコピーされるかテスト"
+
+      attach_file "review[images][]", [
+        Rails.root.join("spec/fixtures/sample1.jpg")
+      ], make_visible: true
+
+      click_button "投稿する"
+
+      expect(page).to have_content("レビューを投稿しました！", wait: 5)
+
+      item = Item.find_by(asin: "B000IMG01")
+      expect(item).to be_present
+      expect(item.images.attached?).to be true
+      expect(item.images.first.filename.to_s).to eq("sample1.jpg")
+    end
+  end
+
+  describe "Amazon検索を使ったレビュー編集" do
+    let!(:editable_review) { create(:review, user:) }
+
+    it "ASINと商品名を正しく指定すればAmazon商品に変更できる" do
+      visit edit_review_path(editable_review)
+
+      choose "Amazon検索"
+      page.execute_script("document.querySelector(\"input[name='amazon_item_name']\").value = '編集Amazon商品'")
+      page.execute_script("document.querySelector(\"input[name='asin']\").value = 'B000EDITED01'")
+
+      fill_in "review[title]", with: "編集後のAmazonレビュー"
+      fill_in "review[content]", with: "編集してAmazon商品に切り替え"
+
+      click_button "更新する"
+
+      expect(page).to have_content("レビューを更新しました！")
+      expect(Item.find_by(asin: "B000EDITED01")).to be_present
+    end
+
+    it "ASINや商品名が未入力だと編集に失敗する" do
+      visit edit_review_path(editable_review)
+
+      choose "Amazon検索"
+      # 両方空で更新
+      click_button "更新する"
+
+      expect(page).to have_content("Amazonの商品を選択してください")
     end
   end
 end

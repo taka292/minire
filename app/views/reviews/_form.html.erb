@@ -1,5 +1,4 @@
 
-<!-- 検索方法の選択 (amazonAPIが現在使用できないため、コメントアウト)
 <div class="form-control mb-6" data-controller="search-toggle">
   <label class="block text-lg font-medium text-gray-700">商品名検索方法</label>
   <div class="flex gap-4 mt-2">
@@ -17,7 +16,6 @@
     ※検索しても商品が見つからない場合は、「MiniRe検索」を選び、商品名の入力をお願いします。
   </p>
 </div>
- -->
 
 <!-- 登録アイテムフォーム -->
 <div id="minire-form" class="form-control mb-6 relative" data-controller="autocomplete" data-autocomplete-url-value="<%= items_path %>"  >
@@ -35,10 +33,10 @@
   <% if form.object.errors[:item_name].any? %>
     <p class="text-red-500 text-sm mt-1"><%= form.object.errors[:item_name].first %></p>
   <% end %>
-  <ul class="list-group bg-white border border-gray-300 rounded-md shadow-md absolute top-full left-0 w-full md:text-sm max-w-max" data-autocomplete-target="results"></ul>
+  <ul class="list-group bg-white border border-gray-300 rounded-md shadow-md absolute top-full left-0 w-full md:text-sm max-w-max  z-50" data-autocomplete-target="results"></ul>
 </div>
 
-<!-- Amazon検索フォーム (amazonAPIが現在使用できないため、コメントアウト)
+<!-- Amazon検索フォーム -->
 <div id="amazon-form" class="form-control mb-6 relative hidden" data-controller="autocomplete" data-autocomplete-url-value="<%= amazon_index_path %>">
   <%= form.label :amazon_item_name, class: "block text-lg font-medium text-gray-700" do %>
     商品名 <span class="text-red-500">*</span>
@@ -58,11 +56,10 @@
     <p class="text-red-500 text-sm mt-1"><%= form.object.errors[:amazon_item_name].first %></p>
   <% end %>
 
-  <ul class="list-group bg-white border border-gray-300 rounded-md shadow-md absolute top-full left-0 w-full md:text-sm max-w-max"
+  <ul class="list-group bg-white border border-gray-300 rounded-md shadow-md absolute top-full left-0 w-full md:text-sm max-w-max z-50"
       data-autocomplete-target="results">
   </ul>
 </div>
- -->
 
 <div class="form-control mb-6">
   <%= form.label :category_id, class: "block text-lg font-medium text-gray-700" do  %>

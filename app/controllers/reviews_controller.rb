@@ -8,31 +8,47 @@ class ReviewsController < ApplicationController
     3.times { @review.releasable_items.build }
   end
 
-  # AmazonAPIが一時的に使用できないため、暫定で下記で実装
   def create
     result = ActiveRecord::Base.transaction do
-      # レビューを初期化
       @review = current_user.reviews.build(review_params)
 
-      # 商品名が空の場合のエラーハンドリング
-      if params[:item_name].blank?
+      case params[:search_method]
+      when "amazon"
+        asin = params[:asin]&.strip
+        item_name = params[:amazon_item_name]&.strip
+
+        # ASINか商品名が空ならエラー(手入力した場合、asinが空になって弾く)
+        if asin.blank? || item_name.blank?
+          @review.errors.add(:amazon_item_name, "Amazonの商品を選択してください")
+          raise ActiveRecord::Rollback
+        end
+
+        item = Item.find_or_initialize_by(asin: asin) do |new_item|
+          new_item.name = item_name
+        end
+
+      when "minire"
+        item_name = params[:item_name]&.strip
+
+        if item_name.blank?
+          @review.errors.add(:item_name, "商品名を入力してください")
+          raise ActiveRecord::Rollback
+        end
+
+        item = Item.find_or_initialize_by(name: item_name)
+
+      else
         @review.errors.add(:item_name, "商品名を入力してください")
         raise ActiveRecord::Rollback
       end
 
-      # 商品を検索または作成
-      item_name = params[:item_name].strip
-      # 商品名を指定して初めの1件を取得し1件もなければ作成
-      item = Item.find_or_initialize_by(name: item_name)
       unless item.save
         @review.errors.add(:item_name, item.errors.full_messages.join(", "))
         raise ActiveRecord::Rollback
       end
 
-      # 商品を関連付けてレビューを保存
       @review.item = item
       if @review.save
-        # 該当商品の画像が空の場合、レビューの画像1枚目を商品に添付
         if item.images.blank? && @review.images.attached?
           item.images.attach(@review.images.first.blob)
         end
@@ -47,65 +63,6 @@ class ReviewsController < ApplicationController
       render :new, status: :unprocessable_entity
     end
   end
-
-  # AmazonAPIが一時的に使用できないため、暫定でコメントアウト(使用可能になり次第、editのコードもamzon検索対応要)
-  #   def create
-  #     result = ActiveRecord::Base.transaction do
-  #       @review = current_user.reviews.build(review_params)
-  #
-  #       case params[:search_method]
-  #       when "amazon"
-  #         asin = params[:asin]&.strip
-  #         item_name = params[:amazon_item_name]&.strip
-  #
-  #         # ASINか商品名が空ならエラー(手入力した場合、asinが空になって弾く)
-  #         if asin.blank? || item_name.blank?
-  #           @review.errors.add(:amazon_item_name, "Amazonの商品を選択してください")
-  #           raise ActiveRecord::Rollback
-  #         end
-  #
-  #         item = Item.find_or_initialize_by(asin: asin) do |new_item|
-  #           new_item.name = item_name
-  #         end
-  #
-  #       when "minire"
-  #         item_name = params[:item_name]&.strip
-  #
-  #         if item_name.blank?
-  #           @review.errors.add(:item_name, "商品名を入力してください")
-  #           raise ActiveRecord::Rollback
-  #         end
-  #
-  #         item = Item.find_or_initialize_by(name: item_name)
-  #
-  #       else
-  #         @review.errors.add(:item_name, "商品名を入力してください")
-  #         raise ActiveRecord::Rollback
-  #       end
-  #
-  #       unless item.save
-  #         @review.errors.add(:item_name, item.errors.full_messages.join(", "))
-  #         raise ActiveRecord::Rollback
-  #       end
-  #
-  #       @review.item = item
-  #       if @review.save
-  #         if item.images.blank? && @review.images.attached?
-  #           item.images.attach(@review.images.first.blob)
-  #         end
-  #
-  #         redirect_to reviews_path, notice: "レビューを投稿しました！"
-  #       else
-  #         raise ActiveRecord::Rollback
-  #       end
-  #     end
-  #
-  #     unless result
-  #       render :new, status: :unprocessable_entity
-  #     end
-  #   end
-
-
 
   def show
     @review = Review.find(params[:id])
@@ -153,47 +110,67 @@ class ReviewsController < ApplicationController
   end
 
   def update
-    result = ActiveRecord::Base.transaction do
-      # 商品を検索または作成
+  result = ActiveRecord::Base.transaction do
+    case params[:search_method]
+    when "amazon"
+      asin = params[:asin]&.strip
+      item_name = params[:amazon_item_name]&.strip
+
+      if asin.blank? || item_name.blank?
+        @review.errors.add(:amazon_item_name, "Amazonの商品を選択してください")
+        raise ActiveRecord::Rollback
+      end
+
+      item = Item.find_or_initialize_by(asin: asin) do |new_item|
+        new_item.name = item_name
+      end
+
+    when "minire"
       item_name = params[:item_name]&.strip
+
       if item_name.blank?
         @review.errors.add(:item_name, "商品名を入力してください")
         raise ActiveRecord::Rollback
       end
 
-      # 商品名を指定して初めの1件を取得し1件もなければ作成
       item = Item.find_or_initialize_by(name: item_name)
-      unless item.save
-        @review.errors.add(:item_name, item.errors.full_messages.join(", "))
-        raise ActiveRecord::Rollback
-      end
 
-      # 商品を関連付けてレビューを更新
-      @review.item = item
+    else
+      @review.errors.add(:item_name, "商品名を入力してください")
+      raise ActiveRecord::Rollback
+    end
 
-      # 削除対象の画像を削除
-      if params[:review][:remove_images].present?
-        params[:review][:remove_images].split(",").each do |image_id|
-          image = @review.images.find_by(id: image_id)
-          image.purge if image
-        end
-      end
+    unless item.save
+      @review.errors.add(:item_name, item.errors.full_messages.join(", "))
+      raise ActiveRecord::Rollback
+    end
 
-      # 新しい画像を添付
-      @review.images.attach(params[:review][:images]) if params[:review][:images].present?
+    @review.item = item
 
-      # 他のレビュー情報を更新
-      if @review.update(review_params.except(:images))
-        redirect_to @review, notice: "レビューを更新しました！"
-      else
-        raise ActiveRecord::Rollback
+    # 画像の削除
+    if params[:review][:remove_images].present?
+      params[:review][:remove_images].split(",").each do |image_id|
+        image = @review.images.find_by(id: image_id)
+        image.purge if image
       end
     end
+
+    # 画像の追加
+    @review.images.attach(params[:review][:images]) if params[:review][:images].present?
+
+    # 他のレビュー情報を更新
+    if @review.update(review_params.except(:images))
+      redirect_to @review, notice: "レビューを更新しました！"
+    else
+      raise ActiveRecord::Rollback
+    end
+  end
   unless result
     set_releasable_items
     render :edit, status: :unprocessable_entity
   end
 end
+
 
   def destroy
     if @review.destroy
