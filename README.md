@@ -61,14 +61,14 @@ https://github.com/user-attachments/assets/1f2f663c-557c-4860-869b-4b4254185737
 </td> <td width="50%">
 商品情報の閲覧
 
-https://github.com/user-attachments/assets/66f89f2f-0945-4774-9bdb-2a8b31681698
+https://github.com/user-attachments/assets/d1678dd2-cb69-4d59-8786-b00735d161f6
 
 </td> </tr> </table>
 ユーザー登録後にできること
 <table> <tr> <td width="50%">
 レビューの投稿
 
-https://github.com/user-attachments/assets/7f60d533-855b-4a70-bea4-18c8499c453e
+https://github.com/user-attachments/assets/9698943e-9396-47e1-944f-8f0b611a10ae
 
 </td> <td width="50%">
 コメント投稿
@@ -212,11 +212,6 @@ https://github.com/user-attachments/assets/6f87b749-668d-4b16-898b-d2f8877e5cb0
 
 - RSpecによるテスト
 - Lintチェック（コード整形・静的解析）
-
-### 現在一時停止中の機能
-
-- Amazon掲載情報の自動取得機能（Amazon Product Advertising API）
-    - ※API使用制限のため現在停止中
 
 ## 今後の追加予定機能
 
