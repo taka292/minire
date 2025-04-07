@@ -5,9 +5,12 @@
     <meta name="description" content="<%= content_for?(:meta_description) ? yield(:meta_description) : '探さない、迷わない。MiniReがあるから。MiniReは、ミニマリストやシンプルライフを目指す人向けのレビューサイトです。厳選されたアイテムのレビューを参考にし、少ないモノで豊かに暮らすヒントを見つけましょう。' %>">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="mobile-web-app-capable" content="yes">
+    <!-- 	フォーム送信時のCSRF対策用トークン -->
     <%= csrf_meta_tags %>
+    <!-- 外部スクリプトの読み込みなどを制限し、不正なスクリプト実行（XSS）を防ぐためのセキュリティ用metaタグ -->
     <%= csp_meta_tag %>
+    <!-- OGP設定 -->
+    <%= display_meta_tags(default_meta_tags) %>
 
     <!-- Google Analytics (gtag.js) のタグ -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-ND1MZMEC14"></script>
