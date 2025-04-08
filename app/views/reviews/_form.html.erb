@@ -4,7 +4,7 @@
   <div class="flex gap-4 mt-2">
     <label class="flex items-center gap-2">
       <%= radio_button_tag :search_method, "amazon", action_name == "new", data: { action: "search-toggle#toggle" } %>
-      Amazon検索
+      Amazon検索(6文字以上)
     </label>
     <label class="flex items-center gap-2">
       <%= radio_button_tag :search_method, "minire", action_name == "edit", data: { action: "search-toggle#toggle" } %>
@@ -24,7 +24,7 @@
   <% end %>
 
   <%= text_field_tag :amazon_item_name, nil,
-      placeholder: "Amazonの商品名を入力してください",
+      placeholder: "6文字以上のAmazonの商品名を入力してください",
       class: "input input-bordered w-full h-12 text-lg placeholder:text-sm #{error_class(@review, :amazon_item_name)}", 
       data: {
         autocomplete_target: "input",
