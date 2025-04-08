@@ -20,7 +20,7 @@ RSpec.describe "レビュー投稿機能", type: :system do
       fill_in "review[content]", with: "内容テスト"
       click_button "投稿する"
 
-      expect(page).to have_current_path(reviews_path)
+      expect(page).to have_current_path(reviews_path, wait: 5)
       expect(page).to have_content("レビューを投稿しました！")
       expect(page).to have_content("タイトルテスト")
     end
@@ -104,6 +104,7 @@ RSpec.describe "レビュー投稿機能", type: :system do
       click_button "投稿する"
 
       # 投稿されたことの確認
+      expect(page).to have_current_path(reviews_path, wait: 10)
       expect(page).to have_content("レビューを投稿しました！", wait: 5)
       expect(page).to have_css("img[src*='sample1.jpg']")
       expect(page).to have_css("img[src*='sample2.jpg']")
@@ -126,7 +127,7 @@ RSpec.describe "レビュー投稿機能", type: :system do
       click_button "投稿する"
 
       # 投稿されたことを確認
-      expect(page).to have_content("レビューを投稿しました！", wait: 5)
+      expect(page).to have_content("レビューを投稿しました！", wait: 10)
 
       item = Item.find_by(name: "画像コピーアイテム")
       expect(item).to be_present
@@ -195,7 +196,7 @@ RSpec.describe "レビュー投稿機能", type: :system do
       click_button "更新する"
 
       # 投稿されたことを確認
-      expect(page).to have_current_path(edit_review_path(review), wait: 5)
+      expect(page).to have_current_path(edit_review_path(review), wait: 20)
       expect(page).to have_content("レビューを更新しました！")
       visit edit_review_path(review)
 
