@@ -4,14 +4,8 @@
 
 import { application } from "./application"
 
-// import AutocompleteController from "./autocomplete_controller"
-// application.register("autocomplete", AutocompleteController)
-
 import Autocomplete from "stimulus-autocomplete"
 application.register("autocomplete", Autocomplete)
-
-// import CommentController from "./comment_controller";
-// application.register("comment", CommentController);
 
 import HelloController from "./hello_controller"
 application.register("hello", HelloController)
@@ -21,10 +15,6 @@ application.register("releasable-items", ReleasableItemsController)
 
 import ImagePreviewController from "./image_preview_controller";
 application.register("image-preview", ImagePreviewController);
-
-// ユーザー側で一括既読するように変更のためコメントアウト
-// import NotificationsController from "./notifications_controller";
-// application.register("notifications", NotificationsController);
 
 import SearchToggleController from "./search_toggle_controller"
 application.register("search-toggle", SearchToggleController)
