@@ -11,17 +11,17 @@ module ApplicationHelper
       separator: "|",
       og: {
         site_name: "MiniRe (ミニレ)",
-        title: "ミニマリスト向けレビューサイト",
-        description: "探さない、迷わない。MiniReがあるから。MiniReは、ミニマリストやシンプルライフを目指す人向けのレビューサイトです。",
+        title: content_for(:og_title) || "ミニマリスト向けレビューサイト",
+        description: content_for(:og_description) || "探さない、迷わない。MiniReがあるから。",
         type: "website",
         url: request.original_url,
-        image: image_url("ogp.png"),
+        image: content_for(:og_image) || image_url("ogp.png"),
         locale: "ja_JP"
       },
       twitter: {
         card: "summary_large_image",
         site: "@MiniRe_minimal",
-        image: image_url("ogp.png")
+        image: content_for(:og_image) || image_url("ogp.png")
       }
     }
   end
