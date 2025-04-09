@@ -1,7 +1,8 @@
 <!-- X投稿内容(stripで行末の改行を削除) -->
 <% tweet_text = <<~EOF.strip
-  【レビュー紹介】
-  〜#{@review.title}〜
+  【MiniReレビュー紹介】
+
+  「#{@review.title}」
   #{truncate(@review.content, length: 50, omission: "…")}
 
   詳細のレビューはこちら↓
