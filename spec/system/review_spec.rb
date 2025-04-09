@@ -319,6 +319,26 @@ RSpec.describe "レビュー投稿機能", type: :system do
       expect(page).to have_content("abc株式会社")
       expect(page).to have_css("img[src*='test_item.jpg']")
     end
+
+    it "レビュー詳細にXシェアボタンが表示され、内容が含まれている" do
+      review_with_image = create(:review, :with_images, user:)
+      visit review_path(review_with_image)
+
+      # シェアボタンが表示されていることを確認
+      expect(page).to have_selector("a", text: "シェア")
+
+      # OGP画像のmetaタグが含まれているか確認（head内を見るための裏技）
+      og_image_tag = page.find("meta[property='og:image']", visible: false)
+      expect(og_image_tag[:content]).to have_content("sample1.jpg")
+
+      # intentリンクが含まれているか
+      link = find("a", text: "シェア")[:href]
+      expect(link).to include("https://twitter.com/intent/tweet")
+      expect(link).to include(CGI.escape(review_with_image.title))
+      include_text = CGI.escape(ActionController::Base.helpers.truncate(review_with_image.content, length: 50))
+      expect(link).to include(include_text)
+      expect(link).to include("minire")
+    end
   end
 
   describe "Amazon検索を使ったレビュー投稿" do
