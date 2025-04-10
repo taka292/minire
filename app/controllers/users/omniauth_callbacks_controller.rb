@@ -11,8 +11,8 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
     @user = User.from_omniauth(auth)
 
     if @user.persisted?
+      flash[:notice] = "Google認証成功しました！さっそくレビューを投稿してみませんか？" unless @user.has_reviews?
       sign_in_and_redirect @user, event: :authentication
-      set_flash_message(:notice, :success, kind: provider.to_s.titleize) if is_navigational_format?
     else
       if User.exists?(email: auth.info.email)
         # 同じメールで登録済み → 通常ログインを案内

@@ -64,6 +64,10 @@ class User < ApplicationRecord
     end
   end
 
+  def has_reviews?
+    reviews.exists?
+  end
+
   def admin?
     self.admin
   end
