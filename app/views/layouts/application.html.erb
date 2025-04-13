@@ -34,12 +34,13 @@
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= stylesheet_link_tag 'https://fonts.googleapis.com/icon?family=Material+Icons', media: 'all' %>
     <%= stylesheet_link_tag 'https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined', media: 'all' %>
+    <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <!-- JavaScript -->
     <link rel="preload" href="/assets/application-33583849.js" as="script" crossorigin="anonymous">
     <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module", defer: true, crossorigin: "anonymous" %>
   </head>
-  <body>
+  <body class="font-sans">
     <div class="bg-[#F5F5F5] border-b border-black shadow-md  sticky top-0 z-50">
       <%= render 'layouts/header' %>
     </div>
@@ -67,6 +68,16 @@
     <%= link_to new_review_path, class: "fixed flex items-center justify-center bottom-4 right-4 bg-white text-gray-800 border border-gray-300 w-14 h-14 rounded-full shadow-md hover:bg-gray-100 transition md:w-12 md:h-12 md:bottom-6 md:right-6", title: "レビュー投稿"  do %>
       <span class="material-icons text-3xl" aria-label="レビュー">rate_review</span>
     <% end %>
+
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <script>
+      AOS.init({
+        duration: 900,
+        easing: 'ease-in-out',
+        once: true,
+        offset: 60
+      });
+    </script>
 
   </body>
 </html>
