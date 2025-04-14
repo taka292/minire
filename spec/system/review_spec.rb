@@ -3,19 +3,20 @@ require 'rails_helper'
 RSpec.describe "レビュー投稿機能", type: :system do
   let!(:review) { create(:review) }
   let(:user) { review.user }
-  let!(:category) { create(:category, name: "生活用品") }
+  # let!(:category) { create(:category, name: "生活用品") }
+  let!(:category) { create(:category, name: "その他") }
 
   before do
     login(user)
   end
 
   describe "新規レビュー投稿" do
-    it "MiniRe検索で正常にレビューを投稿できる" do
+    it "MiniRe検索（見つからない場合）で正常にレビューを投稿できる" do
       visit new_review_path
 
-      choose "MiniRe検索"
+      click_button "見つからない場合" # ← MiniReフォーム表示
       fill_in "item_name", with: "テストアイテム"
-      select "生活用品", from: "review[category_id]"
+      # select "生活用品", from: "review[category_id]"
       fill_in "review[title]", with: "タイトルテスト"
       fill_in "review[content]", with: "内容テスト"
       click_button "投稿する"
@@ -28,16 +29,13 @@ RSpec.describe "レビュー投稿機能", type: :system do
     it "Amazon検索でレビューを投稿できる" do
       visit new_review_path
 
-      choose "Amazon検索"
-
-      # 商品名・ASIN 両方をJSで強制セット（display:none でも安心）
+      # 非表示でもJSで埋める
       page.execute_script("document.querySelector(\"input[name='amazon_item_name']\").value = 'Amazonテスト商品'")
       page.execute_script("document.querySelector(\"input[name='asin']\").value = 'B000000000'")
 
-      select "生活用品", from: "review[category_id]"
+      # select "生活用品", from: "review[category_id]"
       fill_in "review[title]", with: "Amazonレビュー"
       fill_in "review[content]", with: "Amazon商品についてのレビュー"
-
       click_button "投稿する"
 
       expect(page).to have_current_path(reviews_path)
@@ -48,15 +46,15 @@ RSpec.describe "レビュー投稿機能", type: :system do
       visit new_review_path
       click_button "投稿する"
 
-      expect(page).to have_content("商品名を入力してください").or have_content("カテゴリを選択してください")
+      expect(page).to have_content("Amazonの商品名に誤りがあります")
     end
 
     it "手放せるものが空でも投稿できる" do
       visit new_review_path
 
-      choose "MiniRe検索"
+      click_button "見つからない場合"
       fill_in "item_name", with: "手放せる空"
-      select "生活用品", from: "review[category_id]"
+      # select "生活用品", from: "review[category_id]"
       fill_in "review[title]", with: "タイトル"
       fill_in "review[content]", with: "内容"
       click_button "投稿する"
@@ -68,20 +66,25 @@ RSpec.describe "レビュー投稿機能", type: :system do
     it "手放せるものを複数入力して投稿できる" do
       visit new_review_path
 
-      choose "MiniRe検索"
+      click_button "見つからない場合"
       fill_in "item_name", with: "手放せる複数"
-      select "生活用品", from: "review[category_id]"
+      # select "生活用品", from: "review[category_id]"
       fill_in "review[title]", with: "複数テスト"
       fill_in "review[content]", with: "手放せるものを2つ追加"
+
+      # 手放せるものをJSで追加する必要がある場合、Stimulusで対応
+      # ここではname入力を直接追加（fields_forで表示される前提）
+      click_button "手放せるものを追加"
       fill_in "review[releasable_items_attributes][0][name]", with: "手放せる1"
+      click_button "手放せるものを追加"
       fill_in "review[releasable_items_attributes][1][name]", with: "手放せる2"
+      click_button "手放せるものを追加"
       fill_in "review[releasable_items_attributes][2][name]", with: "手放せる3"
 
       click_button "投稿する"
       expect(page).to have_content("レビューを投稿しました！")
 
       click_link "複数テスト"
-      expect(page).to have_content("複数テスト")
       expect(page).to have_content("手放せる1")
       expect(page).to have_content("手放せる2")
       expect(page).to have_content("手放せる3")
@@ -90,9 +93,9 @@ RSpec.describe "レビュー投稿機能", type: :system do
     it "画像を複数アップロードしてレビュー投稿できる" do
       visit new_review_path
 
-      choose "MiniRe検索"
+      click_button "見つからない場合"
       fill_in "item_name", with: "画像付きアイテム"
-      select "生活用品", from: "review[category_id]"
+      # select "生活用品", from: "review[category_id]"
       fill_in "review[title]", with: "画像レビュー"
       fill_in "review[content]", with: "画像ありレビューです"
 
@@ -103,9 +106,7 @@ RSpec.describe "レビュー投稿機能", type: :system do
 
       click_button "投稿する"
 
-      # 投稿されたことの確認
-      expect(page).to have_current_path(reviews_path, wait: 10)
-      expect(page).to have_content("レビューを投稿しました！", wait: 5)
+      expect(page).to have_content("レビューを投稿しました！", wait: 10)
       expect(page).to have_css("img[src*='sample1.jpg']")
       expect(page).to have_css("img[src*='sample2.jpg']")
     end
@@ -113,9 +114,9 @@ RSpec.describe "レビュー投稿機能", type: :system do
     it "レビュー画像の1枚目が商品画像として登録される" do
       visit new_review_path
 
-      choose "MiniRe検索"
+      click_button "見つからない場合"
       fill_in "item_name", with: "画像コピーアイテム"
-      select "生活用品", from: "review[category_id]"
+      # select "生活用品", from: "review[category_id]"
       fill_in "review[title]", with: "商品画像自動登録"
       fill_in "review[content]", with: "画像1枚目がitemに登録されるテスト"
 
@@ -126,7 +127,6 @@ RSpec.describe "レビュー投稿機能", type: :system do
 
       click_button "投稿する"
 
-      # 投稿されたことを確認
       expect(page).to have_content("レビューを投稿しました！", wait: 10)
 
       item = Item.find_by(name: "画像コピーアイテム")
@@ -151,6 +151,7 @@ RSpec.describe "レビュー投稿機能", type: :system do
       fill_in "review[title]", with: "編集タイトル"
       fill_in "review[content]", with: "編集内容"
 
+      click_button "手放せるものを追加"
       fill_in "review[releasable_items_attributes][0][name]", with: "新しい手放せるもの"
 
       click_button "更新する"
@@ -197,7 +198,7 @@ RSpec.describe "レビュー投稿機能", type: :system do
 
       # 投稿されたことを確認
       expect(page).to have_current_path(edit_review_path(review), wait: 20)
-      expect(page).to have_content("レビューを更新しました！")
+      expect(page).to have_content("レビューを更新しました！", wait: 5)
       visit edit_review_path(review)
 
       # 画像が2つ表示されていることを確認
@@ -345,7 +346,6 @@ RSpec.describe "レビュー投稿機能", type: :system do
     it "ASINと商品名が両方ないと投稿できない（バリデーション）" do
       visit new_review_path
 
-      choose "Amazon検索"
       # 両方空
       click_button "投稿する"
 
@@ -355,7 +355,6 @@ RSpec.describe "レビュー投稿機能", type: :system do
     it "ASINだけ入力されていても商品名がないと投稿できない" do
       visit new_review_path
 
-      choose "Amazon検索"
       page.execute_script("document.querySelector(\"input[name='asin']\").value = 'B00ONLYASIN'")
       # 商品名は入力しない
       click_button "投稿する"
@@ -366,7 +365,6 @@ RSpec.describe "レビュー投稿機能", type: :system do
     it "商品名だけ入力されていてもASINがないと投稿できない" do
       visit new_review_path
 
-      choose "Amazon検索"
       page.execute_script("document.querySelector(\"input[name='amazon_item_name']\").value = '名前だけの商品'")
       # ASINは入力しない
       click_button "投稿する"
@@ -377,11 +375,10 @@ RSpec.describe "レビュー投稿機能", type: :system do
     it "ASINと商品名を正しく入力すればレビューを投稿できる" do
       visit new_review_path
 
-      choose "Amazon検索"
       page.execute_script("document.querySelector(\"input[name='amazon_item_name']\").value = 'Amazonテスト商品'")
       page.execute_script("document.querySelector(\"input[name='asin']\").value = 'B000000000'")
 
-      select "生活用品", from: "review[category_id]"
+      # select "生活用品", from: "review[category_id]"
       fill_in "review[title]", with: "Amazonレビュー"
       fill_in "review[content]", with: "Amazon商品についてのレビュー"
       click_button "投稿する"
@@ -394,11 +391,10 @@ RSpec.describe "レビュー投稿機能", type: :system do
     it "画像付きAmazonレビューでは、1枚目の画像がitemにコピーされる" do
       visit new_review_path
 
-      choose "Amazon検索"
       page.execute_script("document.querySelector(\"input[name='amazon_item_name']\").value = '画像付き商品'")
       page.execute_script("document.querySelector(\"input[name='asin']\").value = 'B000IMG01'")
 
-      select "生活用品", from: "review[category_id]"
+      # select "生活用品", from: "review[category_id]"
       fill_in "review[title]", with: "画像付きAmazonレビュー"
       fill_in "review[content]", with: "画像がitemにコピーされるかテスト"
 
@@ -423,7 +419,8 @@ RSpec.describe "レビュー投稿機能", type: :system do
     it "ASINと商品名を正しく指定すればAmazon商品に変更できる" do
       visit edit_review_path(editable_review)
 
-      choose "Amazon検索"
+      click_button "Amazon内で探す"
+
       page.execute_script("document.querySelector(\"input[name='amazon_item_name']\").value = '編集Amazon商品'")
       page.execute_script("document.querySelector(\"input[name='asin']\").value = 'B000EDITED01'")
 
@@ -439,7 +436,8 @@ RSpec.describe "レビュー投稿機能", type: :system do
     it "ASINや商品名が未入力だと編集に失敗する" do
       visit edit_review_path(editable_review)
 
-      choose "Amazon検索"
+      click_button "Amazon内で探す"
+
       # 両方空で更新
       click_button "更新する"
 

@@ -1,27 +1,25 @@
 
-<div class="form-control mb-6" data-controller="search-toggle">
-  <label class="block text-lg font-medium text-gray-700">商品名検索方法</label>
-  <div class="flex gap-4 mt-2">
-    <label class="flex items-center gap-2">
-      <%= radio_button_tag :search_method, "amazon", action_name == "new", data: { action: "search-toggle#toggle" } %>
-      Amazon検索(6文字以上)
-    </label>
-    <label class="flex items-center gap-2">
-      <%= radio_button_tag :search_method, "minire", action_name == "edit", data: { action: "search-toggle#toggle" } %>
-      MiniRe検索・登録
-    </label>
-  </div>
-
-  <p class="text-sm text-gray-600 mt-2">
-    ※Amazon検索で見つからない場合は、「MiniRe検索・登録」を選び、商品名の登録をお願いします。
-  </p>
-</div>
+<!-- 検索方法の状態を明示的に伝える hidden フィールド -->
+<div data-controller="search-toggle">
+  <!-- hidden_field_tag :search_method もここでOK -->
+  <%= hidden_field_tag :search_method, params[:search_method] || (action_name == 'edit' ? 'minire' : 'amazon'), id: "search_method" %>
 
 <!-- Amazon検索フォーム -->
-<div id="amazon-form" class="form-control mb-6 relative <%= 'hidden' if action_name == 'edit' %>" data-controller="autocomplete" data-autocomplete-url-value="<%= amazon_index_path %>">
-  <%= form.label :amazon_item_name, class: "block text-lg font-medium text-gray-700" do %>
+<div id="amazon-form" class="form-control mb-6 relative" data-controller="autocomplete" data-autocomplete-url-value="<%= amazon_index_path %>">
+<!-- 商品名ラベルとMiniReボタンを横並びに -->
+<div class="flex items-center justify-between mb-1">
+  <%= form.label :amazon_item_name, class: "text-lg font-medium text-gray-700" do %>
     商品名 <span class="text-red-500">*</span>
   <% end %>
+
+  <div class="mb-4">
+      <button type="button"
+              class="text-sm text-blue-600 underline"
+              data-action="click->search-toggle#showMinire">
+        見つからない場合
+      </button>
+  </div>
+</div>
 
   <%= text_field_tag :amazon_item_name, nil,
       placeholder: "6文字以上のAmazonの商品名を入力してください",
@@ -43,24 +41,43 @@
 </div>
 
 <!-- 登録アイテムフォーム -->
-<div id="minire-form" class="form-control mb-6 relative hidden <%= 'hidden' if action_name == 'new' %>" data-controller="autocomplete" data-autocomplete-url-value="<%= items_path %>"  >
-  <%= form.label :item_name, class: "block text-lg font-medium text-gray-700" do %>
-    商品名 <span class="text-red-500">*</span>
-  <% end %>
+<div id="minire-form" class="form-control mb-6 relative" data-controller="autocomplete" data-autocomplete-url-value="<%= items_path %>">
+
+  <!-- 商品名ラベルとAmazonボタンを横並びに -->
+  <div class="flex items-center justify-between mb-1">
+    <%= form.label :item_name, class: "text-lg font-medium text-gray-700" do %>
+      商品名 <span class="text-red-500">*</span>
+    <% end %>
+
+    <div>
+      <button type="button"
+              class="text-sm text-blue-600 underline"
+              data-action="click->search-toggle#showAmazon">
+        Amazon内で探す
+      </button>
+    </div>
+  </div>
+
   <%= text_field_tag :item_name, @review.item&.name,
-      placeholder: "商品名を入力してください", 
+      placeholder: "商品名を登録してください", 
       class: "input input-bordered w-full h-12 text-lg placeholder:text-sm #{error_class(@review, :item_name)}", 
       data: { 
         autocomplete_target: "input", 
         autocomplete_url: items_path
       } %>
+
   <%= form.hidden_field :name, data: { autocomplete_target: 'hidden' } %>
+
   <% if form.object.errors[:item_name].any? %>
     <p class="text-red-500 text-sm mt-1"><%= form.object.errors[:item_name].first %></p>
   <% end %>
-  <ul class="list-group bg-white border border-gray-300 rounded-md shadow-md absolute top-full left-0 w-full md:text-sm max-w-max  z-50" data-autocomplete-target="results"></ul>
+
+  <ul class="list-group bg-white border border-gray-300 rounded-md shadow-md absolute top-full left-0 w-full md:text-sm max-w-max z-50" data-autocomplete-target="results"></ul>
+</div>
 </div>
 
+<!-- レビュー投稿簡略化のため、一時的にコメントアウト -->
+<!--
 <div class="form-control mb-6">
   <%= form.label :category_id, class: "block text-lg font-medium text-gray-700" do  %>
     カテゴリ <span class="text-red-500">*</span>
@@ -72,6 +89,7 @@
   <p class="text-red-500 text-sm mt-1">カテゴリを選択してください</p>
 <% end %>
 </div>
+-->
 
 <div class="form-control mb-6">
   <%= form.label :title, class: "block text-lg font-medium text-gray-700" do  %>
@@ -83,15 +101,33 @@
   <% end %>
 </div>
 
-<div class="form-control mb-6">
-  <%= form.label :content, class: "block text-lg font-medium text-gray-700" do  %>
-    内容 <span class="text-red-500">*</span>
-  <% end %>
-  <%= form.text_area :content, rows: 8, class: "textarea textarea-bordered w-full text-lg placeholder:text-sm #{error_class(@review, :content)}", placeholder: "レビュー内容を入力してください" %>
+<div class="form-control mb-6" data-controller="template">
+  <div class="flex items-center justify-between mb-1">
+    <%= form.label :content, class: "text-lg font-medium text-gray-700" do %>
+      内容 <span class="text-red-500">*</span>
+    <% end %>
+
+    <button type="button" class="btn btn-outline btn-sm" data-action="click->template#insert">
+      テンプレートを挿入
+    </button>
+  </div>
+
+  <%= form.text_area :content,
+      rows: 3,
+      class: "textarea textarea-bordered w-full text-lg resize-y placeholder:text-sm #{error_class(@review, :content)}",
+      placeholder: "レビュー内容を入力してください",
+      data: {
+        controller: "autosize",
+        action: "input->autosize#resize",
+        template_target: "textarea"
+      } %>
+
   <% if form.object.errors[:content].any? %>
-    <p class="text-red-500 text-sm mt-1 "><%= form.object.errors[:content].first %></p>
+    <p class="text-red-500 text-sm mt-1"><%= form.object.errors[:content].first %></p>
   <% end %>
 </div>
+
+
 
 <!-- 画像アップロード -->
 <div class="form-control mb-6" data-controller="image-preview">
@@ -121,21 +157,26 @@
   </div>
 </div>
 
-<div class="form-control mb-6">
-  <h3 class="block text-lg font-medium text-gray-700">手放せるもの（未入力でも可）</h3>
-  <div data-controller="releasable-items">
-    <% @review.releasable_items.each_with_index do |item, index| %>
-      <%= form.fields_for :releasable_items, item do |item_fields| %>
-        <%= render "reviews/releasable_items_form", item_fields: item_fields, index: index %>
-        <% if item_fields.object.errors.any? %>
-          <ul class="text-red-500 text-sm mt-1">
-            <% item_fields.object.errors.full_messages.each do |message| %>
-              <li><%= message %></li>
-            <% end %>
-          </ul>
-        <% end %>
+<div data-controller="releasable-items">
+
+  <!-- タイトル：最初は hidden にしておく -->
+  <%= form.label :releasable_items, "手放せるもの（任意・最大3つまで）", class: "block text-lg font-medium text-gray-700 mb-2 hidden", data: { releasable_items_target: "title" } %>
+
+  <% 3.times do |i| %>
+    <% value_present = @review.releasable_items[i]&.name.present? %>
+    <div data-releasable-items-target="item" class="<%= 'hidden' unless value_present %>">
+      <%= form.fields_for :releasable_items, @review.releasable_items[i] || ReleasableItem.new, child_index: i do |item_fields| %>
+        <%= render "reviews/releasable_items_form", item_fields: item_fields, index: i %>
       <% end %>
-    <% end %>
+    </div>
+  <% end %>
+
+  <div class="mt-4 text-right">
+    <button type="button"
+            class="btn btn-outline btn-sm"
+            data-action="click->releasable-items#add">
+      手放せるものを追加
+    </button>
   </div>
 </div>
 

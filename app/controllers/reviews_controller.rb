@@ -4,13 +4,13 @@ class ReviewsController < ApplicationController
 
   def new
     @review = Review.new
-    # レビューの新規作成時に、手放せるものリストのフォームを3つ表示
-    3.times { @review.releasable_items.build }
   end
 
   def create
     result = ActiveRecord::Base.transaction do
       @review = current_user.reviews.build(review_params)
+      # レビュー簡略化のため、カテゴリを一時的に自動振り分け
+      @review.category_id ||= Category.find_by(name: "その他")&.id
 
       case params[:search_method]
       when "amazon"
@@ -64,6 +64,7 @@ class ReviewsController < ApplicationController
     end
   end
 
+
   def show
     @review = Review.find(params[:id])
     @comments = @review.comments.includes(:user)
@@ -106,7 +107,7 @@ class ReviewsController < ApplicationController
 
   def edit
       @review = current_user.reviews.find(params[:id])
-      set_releasable_items
+    # set_releasable_items
   end
 
   def update
@@ -170,7 +171,6 @@ class ReviewsController < ApplicationController
     render :edit, status: :unprocessable_entity
   end
 end
-
 
   def destroy
     if @review.destroy

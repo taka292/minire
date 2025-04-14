@@ -18,3 +18,9 @@ application.register("image-preview", ImagePreviewController);
 
 import SearchToggleController from "./search_toggle_controller"
 application.register("search-toggle", SearchToggleController)
+
+import TemplateController from "./template_controller"
+application.register("template", TemplateController)
+
+import AutosizeController from "./autosize_controller"
+application.register("autosize", AutosizeController)
