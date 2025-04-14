@@ -9,10 +9,16 @@
     <!-- Footer Copy -->
     <div class="flex items-center gap-4 mt-4 md:mt-0">
       <!-- SNS Icons -->
-      <!--
-      <i class="fa-brands fa-instagram text-2xl"></i>
-      <i class="fa-brands fa-twitter text-2xl"></i>
-      -->
+      <!-- X（画像アイコン） -->
+      <%= link_to 'https://x.com/MiniRe_minimal', target: '_blank', rel: 'noopener noreferrer', class: 'hover:opacity-80' do %>
+        <%= image_tag 'share-icon.png', alt: 'X（旧Twitter）', class: 'w-[1.2rem] h-[1.2rem] object-contain' %>
+      <% end %>
+
+      <!-- Instagram -->
+      <%= link_to 'https://www.instagram.com/minire_minimal/', target: '_blank', rel: 'noopener noreferrer', class: 'hover:text-gray-800' do %>
+        <i class="fa-brands fa-instagram text-2xl"></i>
+      <% end %>
+      <!-- GitHub -->
       <%= link_to 'https://github.com/taka292/minire', target: '_blank', rel: 'noopener noreferrer', class: 'text-gray-600 hover:text-gray-800' do %>
         <i class="fa-brands fa-github text-2xl"></i>
       <% end %>
