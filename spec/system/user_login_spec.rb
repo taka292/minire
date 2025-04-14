@@ -10,11 +10,19 @@ RSpec.describe "ユーザー認証", type: :system do
     click_button "ログイン"
   end
 
-  it "正しい情報でログインできる" do
+  it "正しい情報でログインできる(レビュー投稿無し)" do
     log_in(email: user.email, password: user.password)
 
     expect(page).to have_current_path(home_index_path)
-    expect(page).to have_content("ログイン")
+    expect(page).to have_content("ログインしました！さっそくレビューを投稿してみませんか？")
+  end
+
+  it "正しい情報でログインできる(レビュー投稿あり)" do
+    log_in(email: user.email, password: user.password)
+    create(:review, user: user)
+
+    expect(page).to have_current_path(home_index_path)
+    expect(page).to have_content("ログインしました！")
   end
 
   it "間違ったパスワードではログインに失敗する" do
@@ -49,7 +57,7 @@ RSpec.describe "ユーザー認証", type: :system do
     click_button "登録する"
 
     expect(page).to have_current_path(home_index_path)
-    expect(page).to have_content("新規登録が完了しました")
+    expect(page).to have_content("登録ありがとうございます！さっそくレビューを投稿してみませんか？")
   end
 
   it "メールアドレス未入力では登録できない" do
@@ -152,7 +160,7 @@ RSpec.describe "ユーザー認証", type: :system do
       find("form[action='#{user_google_oauth2_omniauth_authorize_path}']").click_button
 
       expect(page).to have_current_path("/")
-      expect(page).to have_content("Google アカウントによる認証に成功しました")
+      expect(page).to have_content("Google認証成功しました！さっそくレビューを投稿してみませんか？")
     end
 
     it "新規登録画面からGoogle認証に成功し、ユーザーが作成・ログインされる" do
@@ -161,7 +169,7 @@ RSpec.describe "ユーザー認証", type: :system do
       find("form[action='#{user_google_oauth2_omniauth_authorize_path}']").click_button
 
       expect(page).to have_current_path("/")
-      expect(page).to have_content("Google アカウントによる認証に成功しました")
+      expect(page).to have_content("Google認証成功しました！さっそくレビューを投稿してみませんか？")
     end
 
     it "通常登録済みのメールアドレスではSNS登録できない" do

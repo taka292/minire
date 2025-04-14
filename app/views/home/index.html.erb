@@ -1,125 +1,125 @@
 <% content_for :title, "MiniRe (ミニレ) - ミニマリスト向けのレビューサイト" %>
 <% content_for :meta_description, "MiniReは、ミニマリスト向けのレビューサイトです。厳選されたアイテムのレビューを参考に、少ないモノで豊かに暮らしましょう。" %>
-<% breadcrumb :root %>
 
-<div class="min-h-screen bg-base-200 flex flex-col items-center justify-center text-center px-6">
+<div class="min-h-screen bg-white px-4 sm:px-6 lg:px-8 py-16 sm:py-24 text-gray-800 font-sans">
   <!-- Hero セクション -->
-  <h1 class="text-4xl font-bold mb-6 mt-10 text-gray-900 leading-tight">
-    探さない、迷わない。<br>MiniReがあるから。
-  </h1>
-  <p class="text-xl text-gray-700 max-w-2xl leading-relaxed mt-4">
-    「MiniRe (ミニレ)」は、少ないモノで豊かな暮らしを目指す、<br>
-    ミニマリストのためのレビューサイトです。<br>
-    シンプルな選択を、あなたの毎日に。
-  </p>
+  <section class="text-center max-w-7xl mx-auto space-y-10" data-aos="fade-down">
+    <h1 class="text-3xl sm:text-4xl md:text-6xl font-extrabold leading-snug tracking-tight text-gray-900 break-words">
+      探さない、迷わない。<br><span class="text-customBlue">MiniRe</span>があるから。
+    </h1>
 
-  <!-- CTAボタン -->
-  <div class="mt-12 flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-6">
-    <%= link_to "レビューを見る", reviews_path, class: "inline-flex items-center justify-center w-full md:w-auto bg-customBlue text-white px-8 py-4 text-lg rounded-lg shadow-md hover:scale-105 transition-transform" %>
-    <%= link_to "新規登録", new_user_registration_path, class: "inline-flex items-center justify-center w-full md:w-auto bg-customBlue text-white px-8 py-4 text-lg rounded-lg shadow-md hover:scale-105 transition-transform" %>
-  </div>
+    <p class="text-base sm:text-lg md:text-2xl text-gray-600 leading-relaxed max-w-3xl mx-auto" data-aos="fade-up" data-aos-delay="200">
+      「MiniRe (ミニレ)」は、少ないモノで豊かな暮らしを目指す、<br>
+      ミニマリスト向けのレビューサイトです。<br>
+      シンプルな選択を、あなたの毎日に。
+    </p>
 
-  <!-- 使い方セクション -->
-  <div class="mt-12 space-y-16 max-w-4xl text-left">
-    <h2 class="text-3xl font-semibold text-center border-b-4 border-gray-300 pb-4">MiniReの使い方</h2>
+    <div class="mt-8 sm:mt-10 flex justify-center gap-4 flex-col sm:flex-row" data-aos="fade-up" data-aos-delay="300">
+      <%= link_to "レビューを見る", reviews_path, class: "btn btn-outline px-4 sm:px-6 h-12 sm:h-14 rounded-full text-sm sm:text-base border-gray-800 text-gray-800 hover:bg-gray-800 hover:text-white transition" %>
 
-    <!-- 登録前の利用（グレー背景） -->
-    <div class="bg-gray-100 py-10 px-6 rounded-lg shadow-lg">
-      <h3 class="text-2xl font-semibold text-gray-800 text-center mb-6">🔍 登録なしで使える機能</h3>
-      <p class="text-gray-700 leading-relaxed text-center max-w-3xl mx-auto mb-6">
-        MiniReでは、登録しなくてもレビューを自由に閲覧できます。<br>
-        気になる商品ページへもアクセス可能です。 <br>
-        <span class="text-sm text-gray-500">※横にスクロールできます →</span>
-      </p>
+      <% if user_signed_in? %>
+        <%= link_to "レビュー投稿", new_review_path, class: "btn bg-black text-white px-4 sm:px-6 h-12 sm:h-14 rounded-full text-sm sm:text-base hover:opacity-90 transition" %>
+      <% else %>
+        <%= link_to "新規登録して投稿する", new_user_registration_path, class: "btn bg-black text-white px-4 sm:px-6 h-12 sm:h-14 rounded-full text-sm sm:text-base hover:opacity-90 transition" %>
+      <% end %>
+    </div>
+  </section>
 
-      <!-- 横スライド：登録前機能 -->
-      <div class="overflow-x-auto snap-x snap-mandatory flex gap-8 py-4 px-2 scroll-pl-6 max-w-full">
-        <!-- 動画1 -->
-        <div class="snap-start shrink-0 w-full sm:w-[80%] max-w-md">
-          <h4 class="text-xl font-semibold mb-2 text-center">1. レビュー一覧をチェック</h4>
-          <video class="w-full rounded-lg shadow-lg" autoplay loop muted playsinline>
-            <source src="/videos/review_display.mov" type="video/mp4">
-            お使いのブラウザは動画をサポートしていません。
-          </video>
-          <p class="text-gray-700 text-center mt-2">レビューを自由に閲覧できます。</p>
-        </div>
+  <!-- Before/After セクション -->
+  <section class="py-16 sm:py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto" data-aos="fade-up">
+    <div class="flex flex-col md:flex-row items-center justify-between gap-12">
+      <!-- Before -->
+      <div class="flex-1 bg-gray-100 p-6 sm:p-8 rounded-2xl shadow-inner text-center" data-aos="fade-right">
+        <%= image_tag 'concern.png', alt: '悩みのイラスト', class: "w-24 h-24 sm:w-32 sm:h-32 mx-auto mb-6" %>
+        <h2 class="text-lg sm:text-xl font-bold text-gray-800 mb-4">MiniReを使う前の悩み…</h2>
+        <ul class="text-gray-600 text-sm sm:text-base space-y-3 text-left max-w-xs mx-auto">
+          <li>・モノ、ネットの情報が多すぎて、何が本当に必要かわからなかった。</li>
+          <li>・実際に使っている人のリアルな声が見つからなかった。</li>
+          <li>・買ったけれど、結局使わなかったモノが増えていった。</li>
+          <li>・ミニマリスト向けのプラットフォームがなかった。</li>
+        </ul>
+      </div>
 
-        <!-- 動画2 -->
-        <div class="snap-start shrink-0 w-full sm:w-[80%] max-w-md">
-          <h4 class="text-xl font-semibold mb-2 text-center">2. 商品情報を閲覧</h4>
-          <video class="w-full rounded-lg shadow-lg" autoplay loop muted playsinline>
-            <source src="/videos/item_show.mov" type="video/mp4">
-            お使いのブラウザは動画をサポートしていません。
-          </video>
-          <p class="text-gray-700 text-center mt-2">商品の詳細情報や関連レビューを確認でき、気になった商品はそのままAmazonで購入できます
-          </p>
-        </div>
+      <!-- 矢印 -->
+      <div class="text-3xl sm:text-4xl md:text-6xl text-gray-400 font-light" data-aos="zoom-in">
+        <span class="block md:hidden">↓</span>
+        <span class="hidden md:block">→</span>
+      </div>
+
+      <!-- After -->
+      <div class="flex-1 bg-blue-50 p-6 sm:p-8 rounded-2xl shadow text-center" data-aos="fade-left">
+        <%= image_tag 'flash.png', alt: 'ひらめきのイラスト', class: "w-24 h-24 sm:w-32 sm:h-32 mx-auto mb-6" %>
+        <h2 class="text-lg sm:text-xl font-bold text-gray-800 mb-4">MiniReを使うと!✨️</h2>
+        <ul class="text-gray-600 text-sm sm:text-base space-y-3 text-left max-w-xs mx-auto">
+          <li>・実際に使っている人のレビューで、必要なモノが見えてくる!</li>
+          <li>・価値観の近い人の声を参考に、選択がしやすくなる!</li>
+          <li>・モノとの付き合い方を見直し、暮らしが整う!</li>
+          <li>・ミニマリスト同士の交流で、新たな気づきが得られる!</li>
+        </ul>
       </div>
     </div>
+  </section>
 
-    <!-- 登録後の利用（白背景） -->
-    <div class="py-10 px-6 rounded-lg shadow-lg">
-      <h3 class="text-2xl font-semibold text-gray-800 text-center mb-6">✏️ 登録するとできること</h3>
-      <p class="text-gray-700 leading-relaxed text-center max-w-3xl mx-auto mb-6">
-        ユーザー登録すると、あなたの愛用品を投稿したり、<br>
-        いいねやコメントで他のミニマリストと交流できます。<br>
-        <span class="text-sm text-gray-500">※横にスクロールできます →</span>
-      </p>
-
-      <!-- 横スライド：登録後機能 -->
-      <div class="overflow-x-auto snap-x snap-mandatory flex gap-8 py-4 px-2 scroll-pl-6 max-w-full">
-        <!-- 動画3 -->
-        <div class="snap-start shrink-0 w-full sm:w-[80%] max-w-md">
-          <h4 class="text-xl font-semibold mb-2 text-center">3. レビューを投稿</h4>
-          <video class="w-full rounded-lg shadow-lg" autoplay loop muted playsinline>
-            <source src="/videos/review_post.mov" type="video/mp4">
-            お使いのブラウザは動画をサポートしていません。
-          </video>
-          <p class="text-gray-700 text-center mt-2">
-            レビュー投稿では、商品名の登録ができます。<br>
-            〜商品名の登録方法〜 <br>
-            ① Amazon検索で商品名を入力し、表示された商品をクリックすれば登録完了。
-            <br>
-            ② 商品が見つからない場合は「MiniRe検索・登録」を選んで、商品名を自由に入力できます。
-          </p>
-        </div>
-
-        <!-- 動画4 -->
-        <div class="snap-start shrink-0 w-full sm:w-[80%] max-w-md">
-          <h4 class="text-xl font-semibold mb-2 text-center">4. コメントする</h4>
-          <video class="w-full rounded-lg shadow-lg" autoplay loop muted playsinline>
-            <source src="/videos/comment.mov" type="video/mp4">
-            お使いのブラウザは動画をサポートしていません。
-          </video>
-          <p class="text-gray-700 text-center mt-2">他のミニマリストと交流できます。</p>
-        </div>
-
-        <!-- 動画5 -->
-        <div class="snap-start shrink-0 w-full sm:w-[80%] max-w-md">
-          <h4 class="text-xl font-semibold mb-2 text-center">5. いいねする</h4>
-          <video class="w-full rounded-lg shadow-lg" autoplay loop muted playsinline>
-            <source src="/videos/like_review.mov" type="video/mp4">
-            お使いのブラウザは動画をサポートしていません。
-          </video>
-          <p class="text-gray-700 text-center mt-2">気に入った投稿に「いいね」できます。</p>
-        </div>
-
-        <!-- 動画6（通知） -->
-        <div class="snap-start shrink-0 w-full sm:w-[80%] max-w-md">
-          <h4 class="text-xl font-semibold mb-2 text-center">6. 通知機能</h4>
-          <video class="w-full rounded-lg shadow-lg" autoplay loop muted playsinline>
-            <source src="/videos/notification.mov" type="video/mp4">
-            お使いのブラウザは動画をサポートしていません。
-          </video>
-          <p class="text-gray-700 text-center mt-2">いいねやコメントの通知を受け取れます。</p>
-        </div>
+  <!-- MiniReの特徴 -->
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16" data-aos="fade-up">
+    <div class="text-center" data-aos="fade-up" data-aos-delay="100">
+      <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 tracking-tight">MiniReが選ばれる理由</h2>
+    </div>
+    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-10 sm:gap-12">
+      <%# カード共通化のため繰り返しブロックなども可能 %>
+      <div class="transition-transform hover:scale-105 bg-gray-50 p-6 rounded-xl shadow-sm text-center">
+        <%= image_tag 'right.png', alt: '価値観レビュー', class: "w-20 h-20 mx-auto mb-4" %>
+        <h3 class="text-lg sm:text-xl font-semibold text-gray-900 mb-2">価値観の近いレビューが見つかる</h3>
+        <p class="text-sm sm:text-base text-gray-600">探しものに悩まない。ミニマリスト目線で選ばれたアイテムが揃っています。</p>
+      </div>
+      <div class="transition-transform hover:scale-105 bg-gray-50 p-6 rounded-xl shadow-sm text-center">
+        <%= image_tag 'review.png', alt: 'レビュー投稿', class: "w-20 h-20 mx-auto mb-4" %>
+        <h3 class="text-lg sm:text-xl font-semibold text-gray-900 mb-2">必要なモノが見えてくる</h3>
+        <p class="text-sm sm:text-base text-gray-600">レビューを書くことで、自分にとって本当に必要なモノを見直すきっかけに。</p>
+      </div>
+      <div class="transition-transform hover:scale-105 bg-gray-50 p-6 rounded-xl shadow-sm text-center">
+        <%= image_tag 'amazon.png', alt: 'Amazon連携', class: "w-20 h-20 mx-auto mb-4" %>
+        <h3 class="text-lg sm:text-xl font-semibold text-gray-900 mb-2">Amazonでそのままチェック</h3>
+        <p class="text-sm sm:text-base text-gray-600">
+          ワンクリックでAmazonページにアクセス可能。<br>
+          気になったアイテムをそのまま確認・購入できます。
+        </p>
+        <p class="text-xs text-gray-500 mt-1">※情報が登録されているアイテムに限ります。</p>
+      </div>
+      <div class="transition-transform hover:scale-105 bg-gray-50 p-6 rounded-xl shadow-sm text-center">
+        <%= image_tag 'communication.png', alt: '共感つながり', class: "w-20 h-20 mx-auto mb-4" %>
+        <h3 class="text-lg sm:text-xl font-semibold text-gray-900 mb-2">共感とつながり</h3>
+        <p class="text-sm sm:text-base text-gray-600">コメントを通じて、モノ選びの背景や暮らし方に共感できる仲間が見つかります。</p>
       </div>
     </div>
-  </div>
+  </section>
 
-  <!-- CTAボタン -->
-  <div class="mt-12 flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-6">
-    <%= link_to "レビューを見る", reviews_path, class: "inline-flex items-center justify-center w-full md:w-auto bg-customBlue text-white px-8 py-4 text-lg rounded-lg shadow-md hover:scale-105 transition-transform" %>
-    <%= link_to "新規登録", new_user_registration_path, class: "inline-flex items-center justify-center w-full md:w-auto bg-customBlue text-white px-8 py-4 text-lg rounded-lg shadow-md hover:scale-105 transition-transform" %>
-  </div>
+  <!-- 投稿ステップ -->
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-10" data-aos="fade-up">
+    <h2 class="text-2xl sm:text-3xl font-semibold text-center text-gray-900">投稿のステップ</h2>
+    <div class="space-y-8">
+      <div class="border-l-4 border-gray-800 pl-4">
+        <h3 class="text-base sm:text-lg font-semibold text-gray-800">ステップ1：アイテムを選ぶ</h3>
+        <p class="text-sm sm:text-base text-gray-600">Amazon検索または自由入力で、投稿するアイテムを登録します。</p>
+      </div>
+      <div class="border-l-4 border-gray-800 pl-4">
+        <h3 class="text-base sm:text-lg font-semibold text-gray-800">ステップ2：おすすめ理由を書く</h3>
+        <p class="text-sm sm:text-base text-gray-600">使っている理由や手放せない魅力を記載します。</p>
+      </div>
+      <div class="border-l-4 border-gray-800 pl-4">
+        <h3 class="text-base sm:text-lg font-semibold text-gray-800">ステップ3：投稿する</h3>
+        <p class="text-sm sm:text-base text-gray-600">画像なしでもOK。気軽に数分で投稿できます。</p>
+      </div>
+    </div>
+    <div class="text-center mt-10">
+      <%= link_to "レビューを投稿する", new_review_path, class: "btn bg-black text-white btn-lg px-6 h-14 rounded-full text-base sm:text-lg hover:opacity-90 transition" %>
+    </div>
+  </section>
+
+  <!-- レビューへ誘導 -->
+  <section class="bg-gray-100 py-16 sm:py-20 px-4 sm:px-6 lg:px-8 text-center rounded-2xl max-w-7xl mx-auto" data-aos="fade-up" data-aos-delay="200">
+    <h2 class="text-xl sm:text-2xl md:text-3xl font-semibold text-gray-800 mb-6 tracking-tight">あなたにぴったりのアイテムが、きっと見つかる。</h2>
+    <p class="text-sm sm:text-base text-gray-600 mb-8">今すぐレビューを見て、モノ選びのヒントを探してみませんか？</p>
+    <%= link_to "レビュー一覧を見る", reviews_path, class: "btn bg-black text-white btn-lg px-6 h-14 rounded-full text-base sm:text-lg hover:opacity-90 transition" %>
+  </section>
 </div>

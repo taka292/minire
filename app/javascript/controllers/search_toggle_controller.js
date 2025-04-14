@@ -1,17 +1,32 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  toggle(event) {
-    const selected = event.target.value
-    const minire = document.getElementById("minire-form")
-    const amazon = document.getElementById("amazon-form")
+  connect() {
+    const method = document.getElementById("search_method")?.value || "amazon"
+    this.toggle(method)
+  }
 
-    if (selected === "minire") {
-      minire.classList.remove("hidden")
-      amazon.classList.add("hidden")
+  toggle(method) {
+    const amazonForm = document.getElementById("amazon-form")
+    const minireForm = document.getElementById("minire-form")
+    const methodField = document.getElementById("search_method")
+
+    if (method === "minire") {
+      amazonForm?.classList.add("hidden")
+      minireForm?.classList.remove("hidden")
     } else {
-      amazon.classList.remove("hidden")
-      minire.classList.add("hidden")
+      amazonForm?.classList.remove("hidden")
+      minireForm?.classList.add("hidden")
     }
+
+    if (methodField) methodField.value = method
+  }
+
+  showMinire() {
+    this.toggle("minire")
+  }
+
+  showAmazon() {
+    this.toggle("amazon")
   }
 }

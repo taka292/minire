@@ -3,10 +3,10 @@ ja:
     failure:
       invalid: メールアドレスまたはパスワードが正しくありません。
     sessions:
-      signed_in: "ログインに成功しました。"
+      signed_in: "ログインしました!"
       signed_out: "ログアウトしました。"
     registrations:
-      signed_up: "新規登録が完了しました。"
+      signed_up: "登録ありがとうございます！さっそくレビューを投稿してみませんか？"
       failure: 'アカウントの登録に失敗しました。入力内容を確認してください。'
     passwords:
       send_instructions: "パスワード再設定のためのメールを送信しました。"

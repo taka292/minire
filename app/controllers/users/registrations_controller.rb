@@ -12,7 +12,9 @@ class Users::RegistrationsController < Devise::RegistrationsController
   # POST /resource
   def create
     super do |resource|
-      if resource.errors.any? # もしエラーがあれば
+      if resource.persisted?
+        flash[:notice] = "登録ありがとうございます！さっそくレビューを投稿してみませんか？"
+      elsif resource.errors.any? # もしエラーがあれば
         flash[:alert] = I18n.t("devise.registrations.failure") # カスタムメッセージを設定
       end
     end

@@ -19,11 +19,18 @@
           </div>
         <% end %>
 
+        <!-- 区切り線 -->
+        <div class="flex items-center my-4">
+          <div class="flex-grow border-t border-gray-300"></div>
+          <span class="mx-4 text-gray-500">　OR　</span>
+          <div class="flex-grow border-t border-gray-300"></div>
+        </div>
+
         <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
           <div class="form-control mb-4">
             <label class="label">
               <span class="label-text text-base font-medium">
-                名前 <span class="text-red-500">*</span>
+                ユーザー名 <span class="text-red-500">*</span>
               </span>
             </label>
             <%= f.text_field :name, autofocus: true, placeholder: "ユーザー名を入力してください", class: "input input-bordered w-full h-14 text-base placeholder:text-sm #{error_class(resource, :name)}" %>
@@ -62,25 +69,6 @@
             <%= f.password_field :password_confirmation, autocomplete: "new-password", placeholder: "パスワードを再入力してください", class: "input input-bordered w-full h-14 text-base placeholder:text-sm #{error_class(resource, :password_confirmation)}" %>
             <% if resource.errors[:password_confirmation].present? %>
               <p class="text-red-500 text-sm mt-1"><%= resource.errors[:password_confirmation].first %></p>
-            <% end %>
-          </div>
-          <div class="form-control mb-4">
-            <label class="label">
-              <span class="label-text text-base font-medium">自己紹介</span>
-            </label>
-            <%= f.text_area :introduction, placeholder: "簡単な自己紹介を入力してください", class: "textarea textarea-bordered w-full h-28 text-base placeholder:text-sm #{error_class(resource, :introduction)}" %>
-            <% if resource.errors[:introduction].present? %>
-              <p class="text-red-500 text-sm mt-1"><%= resource.errors[:introduction].first %></p>
-            <% end %>
-          </div>
-          <!-- アバター画像 -->
-          <div class="form-control mb-4">
-            <label class="label">
-              <span class="label-text text-base font-medium">アバター画像</span>
-            </label>
-            <%= f.file_field :avatar, class: "file-input file-input-bordered w-full #{error_class(resource, :avatar)}" %>
-            <% if resource.errors[:avatar].present? %>
-              <p class="text-red-500 text-sm mt-1"><%= resource.errors[:avatar].first %></p>
             <% end %>
           </div>
 
