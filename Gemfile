@@ -109,7 +109,7 @@ group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
   gem "capybara"
   gem "selenium-webdriver"
-  gem "webdrivers", require: !ENV['CI']
+  gem "webdrivers", require: !ENV["CI"]
 end
 
 group :production do

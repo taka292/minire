@@ -13,14 +13,14 @@ RSpec.describe "管理者アクセス", type: :system do
 
   it "管理者ユーザーはヘッダーに管理画面リンクが表示される" do
     log_in(email: admin_user.email, password: admin_user.password)
-    expect(page).to have_content("ログインに成功しました")
+    expect(page).to have_content("ログインしました")
 
     expect(page).to have_selector("a[title='管理画面']")
   end
 
   it "一般ユーザーには管理画面リンクが表示されない" do
     log_in(email: general_user.email, password: general_user.password)
-    expect(page).to have_content("ログインに成功しました")
+    expect(page).to have_content("ログインしました")
 
     expect(page).not_to have_selector("a[title='管理画面']")
   end
@@ -39,7 +39,7 @@ RSpec.describe "管理者アクセス", type: :system do
 
   it "一般ユーザーが管理画面にアクセスするとリダイレクトされる" do
     log_in(email: general_user.email, password: general_user.password)
-    expect(page).to have_content("ログインに成功しました")
+    expect(page).to have_content("ログインしました")
 
     visit admin_items_path
     expect(current_path).to eq root_path
