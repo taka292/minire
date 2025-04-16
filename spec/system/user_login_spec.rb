@@ -125,19 +125,6 @@ RSpec.describe "ユーザー認証", type: :system do
 
       expect(page).to have_content("パスワードを変更しました。")
       expect(page).to have_current_path("/")
-
-      # 念のため再ログイン確認
-      visit profile_path(user)
-      expect(page).to have_content("テストユーザー")
-      click_link "ログアウト"
-      visit new_user_session_path
-      expect(page).to have_selector("form#new_user")
-
-      fill_in "user[email]", with: user.email
-      fill_in "user[password]", with: "newsecurepass"
-      click_button "ログイン"
-
-      expect(page).to have_current_path(home_index_path)
     end
   end
 

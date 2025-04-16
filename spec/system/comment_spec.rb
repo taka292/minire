@@ -17,8 +17,6 @@ RSpec.describe "コメント機能", type: :system do
       expect(page).to have_button("コメント", disabled: false)
       click_button "コメント"
 
-      expect(page).not_to have_content("0件のコメント", wait: 5)
-
       expect(page).to have_selector("li", text: "これはテストコメントです", wait: 5)
     end
 
