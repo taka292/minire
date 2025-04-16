@@ -17,7 +17,11 @@ RSpec.describe "コメント機能", type: :system do
       expect(page).to have_button("コメント", disabled: false)
       click_button "コメント"
 
-      expect(page).to have_selector("li", text: "これはテストコメントです", wait: 5)
+      # Turboで追加されたturbo-frameに絞って確認する
+      expect(page).to have_selector("turbo-frame[id^='comment_']", wait: 10)
+      # turbo-frame 内に正しくテキストが表示されているかを確認
+      frame = find("turbo-frame[id^='comment_']", text: "これはテストコメントです", wait: 10)
+      expect(frame).to have_text("これはテストコメントです")
     end
 
     it "自分のコメントを非同期で削除できる" do
