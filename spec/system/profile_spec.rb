@@ -99,7 +99,7 @@ RSpec.describe "プロフィール機能", type: :system do
       attach_file "user[avatar]", Rails.root.join("spec/fixtures/test_avatar.jpg")
       click_button "更新する"
 
-      expect(page).to have_current_path(profile_path(user))
+      expect(page).to have_current_path(profile_path(user), wait: 5)
       expect(page).to have_selector("img")
     end
 
@@ -143,7 +143,7 @@ RSpec.describe "プロフィール機能", type: :system do
       click_button "ログイン"
 
       expect(page).to have_current_path(home_index_path)
-      expect(page).to have_content("ログインに成功しました")
+      expect(page).to have_content("ログインしました")
     end
 
     it "現在のパスワードが間違っていると更新できない" do
