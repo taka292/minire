@@ -8,6 +8,16 @@ RSpec.describe "レビュー投稿機能", type: :system do
 
   before do
     login(user)
+
+    imported_item = Item.create!(
+      asin: "B000000000",
+      name: "Amazonテスト商品",
+      last_updated_at: Time.current
+    )
+
+    allow(AmazonItemImporter).to receive(:new).and_return(
+      double(import!: imported_item)
+    )
   end
 
   describe "新規レビュー投稿" do
@@ -391,10 +401,9 @@ RSpec.describe "レビュー投稿機能", type: :system do
     it "画像付きAmazonレビューでは、1枚目の画像がitemにコピーされる" do
       visit new_review_path
 
-      page.execute_script("document.querySelector(\"input[name='amazon_item_name']\").value = '画像付き商品'")
-      page.execute_script("document.querySelector(\"input[name='asin']\").value = 'B000IMG01'")
+      page.execute_script("document.querySelector(\"input[name='amazon_item_name']\").value = 'Amazonテスト商品'")
+      page.execute_script("document.querySelector(\"input[name='asin']\").value = 'B000000000'")
 
-      # select "生活用品", from: "review[category_id]"
       fill_in "review[title]", with: "画像付きAmazonレビュー"
       fill_in "review[content]", with: "画像がitemにコピーされるかテスト"
 
@@ -406,10 +415,36 @@ RSpec.describe "レビュー投稿機能", type: :system do
 
       expect(page).to have_content("レビューを投稿しました！", wait: 5)
 
-      item = Item.find_by(asin: "B000IMG01")
+      item = Item.find_by(asin: "B000000000")
       expect(item).to be_present
       expect(item.images.attached?).to be true
       expect(item.images.first.filename.to_s).to eq("sample1.jpg")
+    end
+
+
+    it "AmazonItemImporterから取得した商品にlast_updated_atがセットされる" do
+      asin = "B000DUMMY01"
+
+      # ダミーItem（importerの戻り値として使う）
+      imported_item = Item.new(asin:, name: "ダミー商品", last_updated_at: Time.current)
+      allow(imported_item).to receive(:save!).and_return(true)
+
+      # importerをstubして戻り値を差し替え
+      expect(AmazonItemImporter).to receive(:new).with(asin).and_return(
+        instance_double(AmazonItemImporter, import!: imported_item)
+      )
+
+      visit new_review_path
+
+      page.execute_script("document.querySelector(\"input[name='amazon_item_name']\").value = 'ダミー商品'")
+      page.execute_script("document.querySelector(\"input[name='asin']\").value = '#{asin}'")
+
+      fill_in "review[title]", with: "ダミー確認テスト"
+      fill_in "review[content]", with: "インポート処理が呼ばれたかを簡易確認"
+
+      click_button "投稿する"
+
+      expect(page).to have_content("レビューを投稿しました！")
     end
   end
 
@@ -421,8 +456,8 @@ RSpec.describe "レビュー投稿機能", type: :system do
 
       click_button "Amazon内で探す"
 
-      page.execute_script("document.querySelector(\"input[name='amazon_item_name']\").value = '編集Amazon商品'")
-      page.execute_script("document.querySelector(\"input[name='asin']\").value = 'B000EDITED01'")
+      page.execute_script("document.querySelector(\"input[name='amazon_item_name']\").value = 'Amazonテスト商品'")
+      page.execute_script("document.querySelector(\"input[name='asin']\").value = 'B000000000'")
 
       fill_in "review[title]", with: "編集後のAmazonレビュー"
       fill_in "review[content]", with: "編集してAmazon商品に切り替え"
@@ -430,7 +465,7 @@ RSpec.describe "レビュー投稿機能", type: :system do
       click_button "更新する"
 
       expect(page).to have_content("レビューを更新しました！")
-      expect(Item.find_by(asin: "B000EDITED01")).to be_present
+      expect(Item.find_by(asin: "B000000000")).to be_present
     end
 
     it "ASINや商品名が未入力だと編集に失敗する" do
@@ -442,6 +477,21 @@ RSpec.describe "レビュー投稿機能", type: :system do
       click_button "更新する"
 
       expect(page).to have_content("Amazonの商品を選択してください")
+    end
+
+    it "AmazonItemImporterから取得した商品にlast_updated_atがセットされる（編集時）" do
+      visit edit_review_path(editable_review)
+      click_button "Amazon内で探す"
+
+      page.execute_script("document.querySelector(\"input[name='amazon_item_name']\").value = '編集ダミー商品'")
+      page.execute_script("document.querySelector(\"input[name='asin']\").value = 'B000000000'")
+
+      fill_in "review[title]", with: "編集インポート確認"
+      fill_in "review[content]", with: "編集でインポートが呼ばれるか確認"
+
+      click_button "更新する"
+
+      expect(page).to have_content("レビューを更新しました！")
     end
   end
 end
