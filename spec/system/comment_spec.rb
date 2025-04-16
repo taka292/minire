@@ -14,9 +14,11 @@ RSpec.describe "コメント機能", type: :system do
   describe "非同期のコメント機能のテスト", js: true do
     it "コメントを非同期で投稿できる" do
       fill_in "comment_content", with: "これはテストコメントです"
+      expect(page).to have_button("コメント", disabled: false)
       click_button "コメント"
 
-      expect(page).to have_content("これはテストコメントです", wait: 5)
+      expect(page).not_to have_content("0件のコメント", wait: 5)
+
       expect(page).to have_selector("li", text: "これはテストコメントです", wait: 5)
     end
 
