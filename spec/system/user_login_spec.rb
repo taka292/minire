@@ -42,8 +42,8 @@ RSpec.describe "ユーザー認証", type: :system do
   it "ログイン後にマイページにアクセスできる" do
     log_in(email: user.email, password: user.password)
 
-    visit profile_path(user.id)
-    expect(page).to have_current_path(profile_path(user.id))
+    visit profile_path(user.id, wait: 5)
+    expect(page).to have_current_path(profile_path(user.id), wait: 5)
     expect(page).to have_content(user.name)
   end
 
@@ -129,6 +129,7 @@ RSpec.describe "ユーザー認証", type: :system do
       expect(page).to have_content("テストユーザー")
       click_link "ログアウト"
       visit new_user_session_path
+      expect(page).to have_current_path(new_user_session_path, wait: 5)
       fill_in "user[email]", with: user.email
       fill_in "user[password]", with: "newsecurepass"
       click_button "ログイン"

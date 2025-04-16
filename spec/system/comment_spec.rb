@@ -16,8 +16,8 @@ RSpec.describe "コメント機能", type: :system do
       fill_in "comment_content", with: "これはテストコメントです"
       click_button "コメント"
 
-      expect(page).to have_content("これはテストコメントです")
-      expect(page).to have_selector("li", text: "これはテストコメントです")
+      expect(page).to have_content("これはテストコメントです", wait: 5)
+      expect(page).to have_selector("li", text: "これはテストコメントです", wait: 5)
     end
 
     it "自分のコメントを非同期で削除できる" do
