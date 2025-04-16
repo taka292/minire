@@ -38,7 +38,7 @@ RSpec.describe "通知機能", type: :system do
 
         click_link "通知送信者", match: :first
         expect(page).to have_current_path(profile_path(sender))
-        expect(page).to have_content("通知送信者 さんのプロフィール")
+        expect(page).to have_content("通知送信者さんのプロフィール")
       end
 
       it "通知内のレビューリンクからレビュー詳細へ遷移できる" do
@@ -78,7 +78,7 @@ RSpec.describe "通知機能", type: :system do
 
         click_link "通知送信者", match: :first
         expect(page).to have_current_path(profile_path(sender))
-        expect(page).to have_content("通知送信者 さんのプロフィール")
+        expect(page).to have_content("通知送信者さんのプロフィール")
       end
 
       it "通知内のレビューリンクからレビュー詳細へ遷移できる" do
