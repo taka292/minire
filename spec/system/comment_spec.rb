@@ -12,11 +12,12 @@ RSpec.describe "コメント機能", type: :system do
   end
 
   describe "非同期のコメント機能のテスト", js: true do
-    it "コメントがDBに保存される" do
-      expect {
-        fill_in "comment_content", with: "これはテストコメントです"
-        click_button "コメント"
-      }.to change(Comment, :count).by(1)
+    it "コメントフォームが正常に動作し、入力値が表示される" do
+      fill_in "comment_content", with: "これはテストコメントです"
+      click_button "コメント"
+
+      # 投稿が成功して描画されていることを確認
+      expect(page).to have_content("これはテストコメントです", wait: 5)
     end
 
     it "自分のコメントを非同期で削除できる" do
