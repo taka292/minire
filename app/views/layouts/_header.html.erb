@@ -1,4 +1,4 @@
-<header class="w-full px-4 sm:px-10 py-2 ">
+<header class="w-full px-4 sm:px-10 py-2">
   <!-- PC時 (1段表示) -->
   <div class="hidden md:flex items-center justify-between w-full h-16">
     <!-- 左側：ロゴ -->
@@ -18,45 +18,47 @@
     </div>
 
     <!-- 右側：アイコン -->
-    <div class="flex gap-2 flex-shrink-0 h-16 items-center">
-      <!-- 管理者用のアイコン -->
+    <div class="flex gap-4 flex-shrink-0 h-16 items-center text-[10px] sm:text-xs">
       <% if user_signed_in? && current_user.admin? %>
-        <%= link_to admin_items_path, class: "flex items-center justify-center", title: "管理画面" do %>
-          <span class="material-symbols-outlined text-gray-600 text-3xl">admin_panel_settings</span>
+        <%= link_to admin_items_path, class: "flex flex-col items-center justify-center text-gray-600", title: "管理画面" do %>
+          <span class="material-symbols-outlined text-3xl leading-none">admin_panel_settings</span>
+          <span class="mt-0.5">管理</span>
         <% end %>
       <% end %>
 
-      <!-- レビュー一覧 -->
-      <%= link_to reviews_path, class: "flex items-center justify-center", title: "レビュー 一覧" do %>
-        <span class="material-symbols-outlined text-gray-600 text-3xl">quick_reference_all</span>
+      <%= link_to reviews_path, class: "flex flex-col items-center justify-center text-gray-600", title: "レビュー 一覧" do %>
+        <span class="material-symbols-outlined text-3xl leading-none">quick_reference_all</span>
+        <span class="mt-0.5">投稿一覧</span>
       <% end %>
 
-      <!-- いいねしたレビュー -->
       <% if user_signed_in? %>
-        <%= link_to likes_profile_path(current_user, anchor: "likes"), class: "flex items-center justify-center", title: "いいねしたレビュー" do %>
-          <span class="material-icons text-gray-600 text-3xl">favorite_border</span>
+        <%= link_to likes_profile_path(current_user, anchor: "likes"), class: "flex flex-col items-center justify-center text-gray-600", title: "いいねしたレビュー" do %>
+          <span class="material-icons text-3xl leading-none">favorite_border</span>
+          <span class="mt-0.5">いいね一覧</span>
         <% end %>
-        <!-- 通知アイコン -->
-        <%= link_to notifications_path, class: "relative flex items-center justify-center", title: "通知" do %>
-          <span class="material-symbols-outlined text-gray-600 text-3xl">notifications</span>
+
+        <%= link_to notifications_path, class: "relative flex flex-col items-center justify-center text-gray-600", title: "通知" do %>
+          <span class="material-symbols-outlined text-3xl leading-none">notifications</span>
+          <span class="mt-0.5">通知</span>
           <% if @unchecked_notifications.any? %>
-            <span class="absolute -top-1 -right-2 bg-red-500 text-white text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full">
+            <span class="absolute -top-1 right-0 bg-red-500 text-white text-xs font-bold w-4 h-4 flex items-center justify-center rounded-full">
               <%= @unchecked_notifications.count %>
             </span>
           <% end %>
         <% end %>
-        <!-- プロフィールアイコン -->
-        <%= link_to profile_path(current_user), class: "flex items-center justify-center", title: "プロフィール" do %>
+
+        <%= link_to profile_path(current_user), class: "flex flex-col items-center justify-center text-gray-600", title: "プロフィール" do %>
           <% if current_user.has_valid_avatar? %>
-            <%= image_tag current_user.resized_avatar, class: "w-10 h-10 rounded-full object-cover", alt: "アバター画像" %>
+            <%= image_tag current_user.resized_avatar, class: "w-8 h-8 rounded-full object-cover", alt: "アバター画像" %>
           <% else %>
-              <span class="material-symbols-outlined text-gray-600 flex items-center justify-center w-10 h-10" style="font-size: 40px;">account_circle</span>
+            <span class="material-symbols-outlined text-4xl leading-none">account_circle</span>
           <% end %>
+          <span class="mt-0.5">プロフィール</span>
         <% end %>
       <% else %>
-        <!-- ログインアイコン -->
-        <%= link_to new_user_session_path, class: "flex items-center justify-center", title: "ログイン" do %>
-          <span class="material-icons text-gray-600 text-3xl">login</span>
+        <%= link_to new_user_session_path, class: "flex flex-col items-center justify-center text-gray-600", title: "ログイン" do %>
+          <span class="material-icons text-3xl leading-none">login</span>
+          <span class="mt-0.5">ログイン</span>
         <% end %>
       <% end %>
     </div>
@@ -69,48 +71,52 @@
       <!-- 左側：ロゴ -->
       <div class="flex flex-shrink-0 h-14 items-center">
         <%= link_to root_path, class: "flex items-center" do %>
-          <%= image_tag "logo.png", alt: "MiniRe", class: "h-14 w-auto" %>
+          <%= image_tag "logo.png", alt: "MiniRe", class: "h-10 w-auto max-w-[96px] sm:max-w-none" %>
         <% end %>
       </div>
 
       <!-- 右側：アイコン -->
-      <div class="flex gap-2 h-14 items-center">
-        <!-- 管理者用のアイコン -->
+      <div class="flex gap-2 h-14 items-center text-[10px] sm:text-xs">
         <% if user_signed_in? && current_user.admin? %>
-          <%= link_to admin_items_path, class: "flex items-center justify-center", title: "管理画面" do %>
-            <span class="material-symbols-outlined text-gray-600 text-3xl">admin_panel_settings</span>
+          <%= link_to admin_items_path, class: "flex flex-col items-center justify-center text-gray-600", title: "管理画面" do %>
+            <span class="material-symbols-outlined text-3xl leading-none">admin_panel_settings</span>
+            <span class="mt-0.5">管理</span>
           <% end %>
         <% end %>
-        <!-- レビュー一覧 -->
-        <%= link_to reviews_path, class: "flex items-center justify-center", title: "レビュー 一覧" do %>
-          <span class="material-symbols-outlined text-gray-600 text-3xl">quick_reference_all</span>
+
+        <%= link_to reviews_path, class: "flex flex-col items-center justify-center text-gray-600", title: "レビュー 一覧" do %>
+          <span class="material-symbols-outlined text-3xl leading-none">quick_reference_all</span>
+          <span class="mt-0.5">投稿一覧</span>
         <% end %>
+
         <% if user_signed_in? %>
-          <!-- いいねしたレビュー -->
-          <%= link_to likes_profile_path(current_user, anchor: "likes"), class: "flex items-center justify-center", title: "いいねしたレビュー" do %>
-            <span class="material-icons text-gray-600 text-3xl">favorite_border</span>
+          <%= link_to likes_profile_path(current_user, anchor: "likes"), class: "flex flex-col items-center justify-center text-gray-600", title: "いいねしたレビュー" do %>
+            <span class="material-icons text-3xl leading-none">favorite_border</span>
+            <span class="mt-0.5">いいね一覧</span>
           <% end %>
-          <!-- 通知アイコン -->
-          <%= link_to notifications_path, class: "relative flex items-center justify-center", title: "通知" do %>
-            <span class="material-symbols-outlined text-gray-600 text-3xl">notifications</span>
+
+          <%= link_to notifications_path, class: "relative flex flex-col items-center justify-center text-gray-600", title: "通知" do %>
+            <span class="material-symbols-outlined text-3xl leading-none">notifications</span>
+            <span class="mt-0.5">通知</span>
             <% if @unchecked_notifications.any? %>
-              <span class="absolute -top-1 -right-2 bg-red-500 text-white text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full">
+              <span class="absolute -top-1 right-0 bg-red-500 text-white text-xs font-bold w-4 h-4 flex items-center justify-center rounded-full">
                 <%= @unchecked_notifications.count %>
               </span>
             <% end %>
           <% end %>
-          <!-- プロフィールアイコン -->
-          <%= link_to profile_path(current_user), class: "flex items-center justify-center", title: "プロフィール" do %>
+
+          <%= link_to profile_path(current_user), class: "flex flex-col items-center justify-center text-gray-600", title: "プロフィール" do %>
             <% if current_user.has_valid_avatar? %>
-              <%= image_tag current_user.resized_avatar, class: "w-10 h-10 rounded-full object-cover", alt: "アバター画像" %>
+              <%= image_tag current_user.resized_avatar, class: "w-8 h-8 rounded-full object-cover", alt: "アバター画像" %>
             <% else %>
-              <span class="material-symbols-outlined text-gray-600 flex items-center justify-center w-10 h-10" style="font-size: 40px;">account_circle</span>
+              <span class="material-symbols-outlined text-4xl leading-none">account_circle</span>
             <% end %>
+            <span class="mt-0.5">プロフィール</span>
           <% end %>
         <% else %>
-          <!-- ログインアイコン -->
-          <%= link_to new_user_session_path, class: "flex items-center justify-center", title: "ログイン" do %>
-            <span class="material-icons text-gray-600 text-3xl">login</span>
+          <%= link_to new_user_session_path, class: "flex flex-col items-center justify-center text-gray-600", title: "ログイン" do %>
+            <span class="material-icons text-3xl leading-none">login</span>
+            <span class="mt-0.5">ログイン</span>
           <% end %>
         <% end %>
       </div>

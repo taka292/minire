@@ -62,8 +62,9 @@
           <% if review.item.manufacturer.present? %>
             <p class="text-sm text-gray-500"><%= review.item.manufacturer %></p>
           <% end %>
+          <!-- 商品名(長過ぎる名前もあるため、70文字まで表示) -->
           <% if review.item.name.present? %>
-            <p class="text-md text-gray-800 font-medium underline"><%= review.item.name %></p>
+            <p class="text-md text-gray-800 font-medium underline"><%= truncate(review.item.name, length: 70) %></p>
           <% end %>
         </div>
       <% end %>

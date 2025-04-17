@@ -45,7 +45,7 @@ export default class extends Controller {
       // 画像削除ボタンを作成
       const removeBtn = document.createElement("button");
       removeBtn.innerText = "×";
-      removeBtn.classList.add("ml-2", "text-red-500", "cursor-pointer");
+      removeBtn.classList.add("ml-2", "text-red-500", "cursor-pointer", "text-lg", "font-bold", "w-6", "h-6","flex", "items-center", "justify-center","absolute", "top-0", "right-0",  "bg-white", "rounded-full", "shadow" )
       removeBtn.onclick = () => this.removeImage(index);
 
       if (file instanceof File) {
