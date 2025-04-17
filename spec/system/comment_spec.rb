@@ -1,7 +1,5 @@
 require 'rails_helper'
 
-require 'rails_helper'
-
 RSpec.describe "コメント機能", type: :system do
   let!(:review) { create(:review) }
   let!(:user) { review.user }
@@ -15,10 +13,8 @@ RSpec.describe "コメント機能", type: :system do
     it "コメントフォームが正常に動作し、入力値が表示される" do
       fill_in "comment_content", with: "これはテストコメントです"
       click_button "コメント"
-
       visit current_path
-
-      # 投稿が成功して描画されていることを確認
+      expect(page).to have_selector("turbo-frame[id^='comment_']", wait: 10)
       expect(page).to have_content("これはテストコメントです", wait: 5)
     end
 
