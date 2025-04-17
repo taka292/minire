@@ -16,6 +16,8 @@ RSpec.describe "コメント機能", type: :system do
       fill_in "comment_content", with: "これはテストコメントです"
       click_button "コメント"
 
+      visit current_path
+
       # 投稿が成功して描画されていることを確認
       expect(page).to have_content("これはテストコメントです", wait: 5)
     end
