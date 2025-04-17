@@ -23,9 +23,15 @@ class ReviewsController < ApplicationController
           raise ActiveRecord::Rollback
         end
 
-        item = Item.find_or_initialize_by(asin: asin) do |new_item|
-          new_item.name = item_name
+        # ASINから商品情報を取得
+        item = fetch_amazon_info_if_needed(Item.find_or_initialize_by(asin: asin))
+
+        if item.name.blank?
+          @review.errors.add(:amazon_item_name, "商品情報の取得に失敗しました。もう一度お試しください")
+          raise ActiveRecord::Rollback
         end
+
+        @review.item = item
 
       when "minire"
         item_name = params[:item_name]&.strip
@@ -107,7 +113,6 @@ class ReviewsController < ApplicationController
 
   def edit
       @review = current_user.reviews.find(params[:id])
-    # set_releasable_items
   end
 
   def update
@@ -122,10 +127,14 @@ class ReviewsController < ApplicationController
         raise ActiveRecord::Rollback
       end
 
-      item = Item.find_or_initialize_by(asin: asin) do |new_item|
-        new_item.name = item_name
+      item = fetch_amazon_info_if_needed(Item.find_or_initialize_by(asin: asin))
+
+      if item.name.blank?
+        @review.errors.add(:amazon_item_name, "商品情報の取得に失敗しました。もう一度お試しください")
+        raise ActiveRecord::Rollback
       end
 
+      @review.item = item
     when "minire"
       item_name = params[:item_name]&.strip
 
@@ -197,5 +206,14 @@ end
   def set_releasable_items
     remaining_slots = [ 3 - @review.releasable_items.size, 0 ].max
     remaining_slots.times { @review.releasable_items.build }
+  end
+
+  # Amazon検索で取得したItemがまだ詳細情報を持っていない場合のみ、Amazon APIから取得して補完する
+  def fetch_amazon_info_if_needed(item)
+    if item.asin.present? && item.last_updated_at.blank?
+      imported_item = AmazonItemImporter.new(item.asin).import!
+      return imported_item if imported_item.present?
+    end
+    item
   end
 end
