@@ -350,6 +350,16 @@ RSpec.describe "レビュー投稿機能", type: :system do
       expect(link).to include(include_text)
       expect(link).to include("minire")
     end
+
+    it "レビュー一覧にAmazonリンクが表示される" do
+      visit reviews_path
+      expect(page).to have_link(href: item.amazon_url)
+    end
+
+    it "レビュー詳細にAmazonリンクが表示される" do
+      visit review_path(review)
+      expect(page).to have_link(href: item.amazon_url)
+    end
   end
 
   describe "Amazon検索を使ったレビュー投稿" do
