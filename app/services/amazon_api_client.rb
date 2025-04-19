@@ -55,7 +55,8 @@ class AmazonApiClient
         "Images.Variants.Large",
         "ItemInfo.ByLineInfo",
         "ItemInfo.Features",
-        "Offers.Listings.Price"
+        "Offers.Listings.Price",
+        "BrowseNodeInfo.BrowseNodes.Ancestor"
       ]
     }
 
