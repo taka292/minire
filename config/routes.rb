@@ -37,7 +37,7 @@ Rails.application.routes.draw do
   get "/privacy_policy", to: "static_pages#privacy_policy"
 
   namespace :admin do
-    resources :items, only: [ :index, :edit, :update ] do
+    resources :items, only: [ :index, :edit, :update, :destroy ] do
       post :fetch_amazon_info, on: :member
     end
   end

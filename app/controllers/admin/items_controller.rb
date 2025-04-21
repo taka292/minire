@@ -2,7 +2,7 @@ class Admin::ItemsController < ApplicationController
   before_action :authenticate_admin!
 
   def index
-    @items = Item.order(created_at: :desc)
+    @items = Item.includes(:category, :reviews).order(created_at: :desc).page(params[:page])
   end
 
   def edit
@@ -33,6 +33,17 @@ class Admin::ItemsController < ApplicationController
     else
       flash.now[:alert] = "更新に失敗しました"
       render :edit
+    end
+  end
+
+  def destroy
+    @item = Item.find(params[:id])
+
+    if @item.reviews.exists?
+      redirect_to edit_admin_item_path(@item), alert: "レビューが存在するため、削除できません"
+    else
+      @item.destroy
+      redirect_to admin_items_path, notice: "商品を削除しました"
     end
   end
 

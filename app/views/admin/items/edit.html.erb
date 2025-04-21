@@ -29,6 +29,12 @@
       <%= f.label :description, "商品説明", class: "block text-sm font-medium text-gray-700" %>
       <%= f.text_area :description, class: "input input-bordered w-full h-32 text-lg" %>
     </div>
+
+    <div class="mb-4">
+      <%= f.label :category_id, "カテゴリ", class: "block text-sm font-medium text-gray-700" %>
+      <%= f.collection_select :category_id, Category.all, :id, :name, { include_blank: true }, class: "select select-bordered w-full h-12 text-lg" %>
+    </div>
+
     <!-- 商品画像の編集 -->
     <div class="mb-4">
       <h2 class="text-lg font-medium text-gray-700">商品画像</h2>
@@ -54,5 +60,17 @@
     <div class="text-center">
       <%= f.submit "更新", class: "btn bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-500" %>
     </div>
+
+    <% unless @item.reviews.exists? %>
+      <div class="text-center mt-6">
+        <%= link_to admin_item_path(@item),
+                    method: :delete,
+                    data: { turbo_method: :delete, turbo_confirm: "本当に削除しますか？" },
+                    class: "btn bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-500" do %>
+          <span class="material-symbols-outlined align-middle mr-1">delete</span>
+          商品を削除する
+        <% end %>
+      </div>
+    <% end %>
   <% end %>
 </div>
