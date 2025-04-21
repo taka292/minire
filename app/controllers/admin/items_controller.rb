@@ -2,7 +2,7 @@ class Admin::ItemsController < ApplicationController
   before_action :authenticate_admin!
 
   def index
-    @items = Item.all
+    @items = Item.order(created_at: :desc)
   end
 
   def edit
@@ -48,7 +48,7 @@ class Admin::ItemsController < ApplicationController
   private
 
   def item_params
-    params.require(:item).permit(:name, :manufacturer, :price, :amazon_url, :asin, :description, images: [], remove_images: [])
+    params.require(:item).permit(:name, :manufacturer, :price, :amazon_url, :asin, :description, :category_id,  images: [], remove_images: [])
   end
 
   def authenticate_admin!

@@ -1,6 +1,7 @@
 class Item < ApplicationRecord
   has_many :reviews
   has_many_attached :images
+  belongs_to :category, optional: true  # カテゴリが未設定の既存Itemに対応
   # 空文字を許可せず、大文字小文字を区別せず、一意性を保証。
   validates :name, presence: true, uniqueness: { case_sensitive: false }
   validates :name, length: { minimum: 1 }

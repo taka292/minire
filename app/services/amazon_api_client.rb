@@ -56,6 +56,7 @@ class AmazonApiClient
         "ItemInfo.ByLineInfo",
         "ItemInfo.Features",
         "Offers.Listings.Price",
+        # 商品カテゴリ情報
         "BrowseNodeInfo.BrowseNodes.Ancestor"
       ]
     }

@@ -9,8 +9,6 @@ class ReviewsController < ApplicationController
   def create
     result = ActiveRecord::Base.transaction do
       @review = current_user.reviews.build(review_params)
-      # レビュー簡略化のため、カテゴリを一時的に自動振り分け
-      @review.category_id ||= Category.find_by(name: "その他")&.id
 
       case params[:search_method]
       when "amazon"
@@ -42,6 +40,8 @@ class ReviewsController < ApplicationController
         end
 
         item = Item.find_or_initialize_by(name: item_name)
+
+        item.category ||= Category.find_by(name: "その他")
 
       else
         @review.errors.add(:item_name, "商品名を入力してください")
@@ -92,7 +92,7 @@ class ReviewsController < ApplicationController
     if params[:filter_type].present?
       @reviews = case params[:filter_type]
       when /^category_(\d+)$/
-        @reviews.by_category($1.to_i)
+        reviews = @reviews.joins(:item).where(items: { category_id: $1.to_i })
       when "releasable"
         @reviews.releasable
       else
@@ -144,6 +144,8 @@ class ReviewsController < ApplicationController
       end
 
       item = Item.find_or_initialize_by(name: item_name)
+
+      item.category ||= Category.find_by(name: "その他")
 
     else
       @review.errors.add(:item_name, "商品名を入力してください")
