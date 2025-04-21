@@ -3,16 +3,18 @@ require 'rails_helper'
 RSpec.describe "レビュー投稿機能", type: :system do
   let!(:review) { create(:review) }
   let(:user) { review.user }
-  # let!(:category) { create(:category, name: "生活用品") }
   let!(:category) { create(:category, name: "その他") }
 
   before do
     login(user)
 
+    category = create(:category, name: "ガジェット・家電")
+
     imported_item = Item.create!(
       asin: "B000000000",
       name: "Amazonテスト商品",
-      last_updated_at: Time.current
+      last_updated_at: Time.current,
+      category: category
     )
 
     allow(AmazonItemImporter).to receive(:new).and_return(
@@ -26,7 +28,6 @@ RSpec.describe "レビュー投稿機能", type: :system do
 
       click_button "見つからない場合" # ← MiniReフォーム表示
       fill_in "item_name", with: "テストアイテム"
-      # select "生活用品", from: "review[category_id]"
       fill_in "review[title]", with: "タイトルテスト"
       fill_in "review[content]", with: "内容テスト"
       click_button "投稿する"
@@ -34,6 +35,11 @@ RSpec.describe "レビュー投稿機能", type: :system do
       expect(page).to have_current_path(reviews_path, wait: 5)
       expect(page).to have_content("レビューを投稿しました！")
       expect(page).to have_content("タイトルテスト")
+
+      # 投稿されたレビューを取得してカテゴリ確認
+      created_review = Review.find_by(title: "タイトルテスト")
+      expect(created_review).to be_present
+      expect(created_review.item.category.name).to eq("その他")
     end
 
     it "Amazon検索でレビューを投稿できる" do
@@ -43,7 +49,6 @@ RSpec.describe "レビュー投稿機能", type: :system do
       page.execute_script("document.querySelector(\"input[name='amazon_item_name']\").value = 'Amazonテスト商品'")
       page.execute_script("document.querySelector(\"input[name='asin']\").value = 'B000000000'")
 
-      # select "生活用品", from: "review[category_id]"
       fill_in "review[title]", with: "Amazonレビュー"
       fill_in "review[content]", with: "Amazon商品についてのレビュー"
       click_button "投稿する"
@@ -64,7 +69,6 @@ RSpec.describe "レビュー投稿機能", type: :system do
 
       click_button "見つからない場合"
       fill_in "item_name", with: "手放せる空"
-      # select "生活用品", from: "review[category_id]"
       fill_in "review[title]", with: "タイトル"
       fill_in "review[content]", with: "内容"
       click_button "投稿する"
@@ -78,7 +82,6 @@ RSpec.describe "レビュー投稿機能", type: :system do
 
       click_button "見つからない場合"
       fill_in "item_name", with: "手放せる複数"
-      # select "生活用品", from: "review[category_id]"
       fill_in "review[title]", with: "複数テスト"
       fill_in "review[content]", with: "手放せるものを2つ追加"
 
@@ -105,7 +108,6 @@ RSpec.describe "レビュー投稿機能", type: :system do
 
       click_button "見つからない場合"
       fill_in "item_name", with: "画像付きアイテム"
-      # select "生活用品", from: "review[category_id]"
       fill_in "review[title]", with: "画像レビュー"
       fill_in "review[content]", with: "画像ありレビューです"
 
@@ -126,7 +128,6 @@ RSpec.describe "レビュー投稿機能", type: :system do
 
       click_button "見つからない場合"
       fill_in "item_name", with: "画像コピーアイテム"
-      # select "生活用品", from: "review[category_id]"
       fill_in "review[title]", with: "商品画像自動登録"
       fill_in "review[content]", with: "画像1枚目がitemに登録されるテスト"
 
@@ -154,6 +155,10 @@ RSpec.describe "レビュー投稿機能", type: :system do
     end
 
     it "レビューを編集して内容が更新される" do
+      other_category = Category.find_or_create_by!(name: "その他")
+      item = create(:item, category: other_category)
+      review = create(:review, user:, item:)
+
       review.releasable_items.create!(name: "古い手放せるもの")
 
       visit edit_review_path(review)
@@ -170,8 +175,11 @@ RSpec.describe "レビュー投稿機能", type: :system do
       expect(page).to have_content("編集タイトル")
       expect(page).to have_content("編集内容")
       expect(page).to have_content("新しい手放せるもの")
-    end
 
+      edited_review = Review.find_by(title: "編集タイトル")
+      expect(edited_review).to be_present
+      expect(edited_review.item.category.name).to eq("その他")
+    end
 
     it "レビューを削除できる" do
       visit review_path(review)
@@ -293,7 +301,8 @@ RSpec.describe "レビュー投稿機能", type: :system do
 
     it "カテゴリ絞り込み + 検索が正しく動作する" do
       # 絞り込みと検索対象になるレビューを作成
-      create(:review, title: "掃除機レビュー", content: "これは生活用品", category:, item: create(:item, name: "スティック掃除機"))
+      item = create(:item, name: "スティック掃除機", category: category)
+      create(:review, title: "掃除機レビュー", content: "これは生活用品", item: item)
 
       visit reviews_path(filter_type: "category_#{category.id}", query: "掃除機")
 
@@ -398,7 +407,6 @@ RSpec.describe "レビュー投稿機能", type: :system do
       page.execute_script("document.querySelector(\"input[name='amazon_item_name']\").value = 'Amazonテスト商品'")
       page.execute_script("document.querySelector(\"input[name='asin']\").value = 'B000000000'")
 
-      # select "生活用品", from: "review[category_id]"
       fill_in "review[title]", with: "Amazonレビュー"
       fill_in "review[content]", with: "Amazon商品についてのレビュー"
       click_button "投稿する"
@@ -455,6 +463,23 @@ RSpec.describe "レビュー投稿機能", type: :system do
       click_button "投稿する"
 
       expect(page).to have_content("レビューを投稿しました！")
+    end
+
+    it "Amazon API経由のレビュー投稿時にカテゴリが自動で設定される" do
+      visit new_review_path
+
+      page.execute_script("document.querySelector(\"input[name='amazon_item_name']\").value = 'Amazonテスト商品'")
+      page.execute_script("document.querySelector(\"input[name='asin']\").value = 'B000000000'")
+
+      fill_in "review[title]", with: "カテゴリ自動設定テスト"
+      fill_in "review[content]", with: "Amazon経由でカテゴリが設定されるかの確認"
+
+      click_button "投稿する"
+
+      expect(page).to have_content("レビューを投稿しました！")
+
+      review = Review.find_by(title: "カテゴリ自動設定テスト")
+      expect(review.item.category.name).to eq("ガジェット・家電")
     end
   end
 

@@ -35,12 +35,12 @@ RSpec.describe Category, type: :model do
 
   describe "アソシエーション" do
     context "関連付け" do
-      it "複数のレビューと関連付けできる" do
-        create(:review, category: category, user: user, item: item)
-        create(:review, category: category, user: user, item: item)
+        it "複数のアイテムと関連付けできる" do
+          create(:item, category: category)
+          create(:item, category: category)
 
-        expect(category.reviews.count).to eq(2)
-      end
+          expect(category.items.count).to eq(2)
+        end
     end
   end
 end
