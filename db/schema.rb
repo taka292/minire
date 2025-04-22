@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_04_21_070413) do
+ActiveRecord::Schema[7.2].define(version: 2025_04_22_003935) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -112,8 +112,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_21_070413) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "item_id"
-    t.integer "category_id"
-    t.index ["category_id"], name: "index_reviews_on_category_id"
     t.index ["item_id"], name: "index_reviews_on_item_id"
     t.index ["user_id"], name: "index_reviews_on_user_id"
   end
@@ -152,7 +150,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_21_070413) do
   add_foreign_key "notifications", "users", column: "visited_id"
   add_foreign_key "notifications", "users", column: "visitor_id"
   add_foreign_key "releasable_items", "reviews"
-  add_foreign_key "reviews", "categories"
   add_foreign_key "reviews", "items"
   add_foreign_key "reviews", "users"
 end
