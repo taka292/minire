@@ -55,7 +55,9 @@ class AmazonApiClient
         "Images.Variants.Large",
         "ItemInfo.ByLineInfo",
         "ItemInfo.Features",
-        "Offers.Listings.Price"
+        "Offers.Listings.Price",
+        # 商品カテゴリ情報
+        "BrowseNodeInfo.BrowseNodes.Ancestor"
       ]
     }
 

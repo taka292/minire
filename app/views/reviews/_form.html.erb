@@ -76,21 +76,6 @@
 </div>
 </div>
 
-<!-- レビュー投稿簡略化のため、一時的にコメントアウト -->
-<!--
-<div class="form-control mb-6">
-  <%= form.label :category_id, class: "block text-lg font-medium text-gray-700" do  %>
-    カテゴリ <span class="text-red-500">*</span>
-  <% end %>
-  <%= form.collection_select :category_id, Category.all, :id, :name,
-        { prompt: "カテゴリを選択してください" },
-        { class: "input input-bordered w-full h-12 text-lg placeholder:text-sm appearance-none pr-10 #{error_class(@review, :category)}" } %>
-<% if form.object.errors[:category].any? %>
-  <p class="text-red-500 text-sm mt-1">カテゴリを選択してください</p>
-<% end %>
-</div>
--->
-
 <div class="form-control mb-6">
   <%= form.label :title, class: "block text-lg font-medium text-gray-700" do  %>
     タイトル <span class="text-red-500">*</span>

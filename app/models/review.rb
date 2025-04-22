@@ -1,7 +1,6 @@
 class Review < ApplicationRecord
   belongs_to :user
   belongs_to :item
-  belongs_to :category
   has_many :comments, dependent: :destroy
   has_many :notifications, dependent: :destroy
 
@@ -18,7 +17,10 @@ class Review < ApplicationRecord
 
   # 絞り込み条件
   # カテゴリ絞り込みスコープ
-  scope :by_category, ->(category_id) { where(category_id: category_id) if category_id.present? }
+  scope :by_category, ->(category_id) {
+    joins(:item).where(items: { category_id: category_id }) if category_id.present?
+  }
+
 
   # 手放せるものの絞り込みスコープ (EXISTS クエリを使用)
   scope :releasable, -> {
@@ -96,7 +98,7 @@ class Review < ApplicationRecord
   def self.search(query)
     return all if query.blank?
 
-    left_outer_joins(:item, :category, :releasable_items).where(
+    left_outer_joins(:item, :releasable_items).where(
       "items.name ILIKE :query OR reviews.title ILIKE :query OR reviews.content ILIKE :query ",
       query: "%#{query}%"
     ).distinct

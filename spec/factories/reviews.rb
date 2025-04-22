@@ -4,7 +4,6 @@ FactoryBot.define do
     content { "テスト内容" }
     association :user
     association :item
-    association :category
   end
 
   trait :with_images do

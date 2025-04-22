@@ -1,26 +1,78 @@
 <% breadcrumb :admin_items %>
-<div class="max-w-6xl mx-auto mt-8">
-  <h1 class="text-2xl font-bold mb-6 text-center">商品一覧</h1>
-  <table class="table-auto w-full border border-gray-300 shadow-md rounded-lg">
-    <thead class="bg-gray-200">
-      <tr>
-        <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">商品名</th>
-        <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">販売元</th>
-        <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">価格</th>
-        <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">編集</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @items.each do |item| %>
-        <tr class="hover:bg-gray-100 border-t">
-          <td class="px-4 py-2 text-sm text-gray-800"><%= item.name %></td>
-          <td class="px-4 py-2 text-sm text-gray-800"><%= item.manufacturer %></td>
-          <td class="px-4 py-2 text-sm text-gray-800"><%= number_to_currency(item.price, unit: "¥", format: "%u%n", precision: 0) %></td>
-          <td class="px-4 py-2">
-            <%= link_to "編集", edit_admin_item_path(item), class: "text-blue-600 hover:underline" %>
-          </td>
+<div class="max-w-7xl mx-auto mt-10 px-4">
+  <h1 class="text-2xl font-bold mb-6 text-center">商品一覧（管理者）</h1>
+
+  <% registered_items, unregistered_items = @items.partition { |item| item.amazon_url.present? && item.asin.present? } %>
+
+  <!-- 🔴 未登録セクション -->
+  <% if unregistered_items.any? %>
+    <div class="bg-red-50 border border-red-300 rounded-md p-4 mb-6 shadow">
+      <h2 class="text-red-600 text-lg font-bold mb-2">Amazon情報が未登録の商品（<%= unregistered_items.count %>件）</h2>
+      <table class="table-auto w-full text-sm border border-gray-300">
+        <thead class="bg-red-100 text-red-800">
+          <tr>
+            <th class="px-4 py-2">商品名</th>
+            <th class="px-4 py-2">カテゴリ</th>
+            <th class="px-4 py-2">レビュー数</th>
+            <th class="px-4 py-2">操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% unregistered_items.each do |item| %>
+            <tr class="border-t hover:bg-red-50">
+              <td class="px-4 py-2"><%= item.name %></td>
+              <td class="px-4 py-2"><%= item.category&.name || "未設定" %></td>
+              <td class="px-4 py-2 text-center"><%= item.reviews.count %></td>
+              <td class="px-4 py-2 text-center">
+                <%= link_to "編集", edit_admin_item_path(item), class: "btn btn-sm bg-red-600 text-white hover:bg-red-500" %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% end %>
+
+  <!-- ✅ 登録済みセクション -->
+  <div class="bg-white border border-gray-300 rounded-md shadow-sm">
+    <h2 class="text-lg font-semibold text-gray-700 p-4 border-b">Amazon情報が登録されている商品（<%= registered_items.count %>件）</h2>
+    <table class="table-auto w-full text-sm">
+      <thead class="bg-gray-100 text-gray-700">
+        <tr>
+          <th class="px-4 py-2">画像</th>
+          <th class="px-4 py-2">商品名</th>
+          <th class="px-4 py-2">販売元</th>
+          <th class="px-4 py-2">価格</th>
+          <th class="px-4 py-2">カテゴリ</th>
+          <th class="px-4 py-2">レビュー数</th>
+          <th class="px-4 py-2">操作</th>
         </tr>
-      <% end %>
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+        <% registered_items.each do |item| %>
+          <tr class="border-t hover:bg-gray-50">
+            <td class="px-4 py-2 text-center">
+              <% if item.images.attached? %>
+                <%= image_tag item.images.first.variant(resize_to_fill: [80, 80]), class: "rounded shadow-sm inline-block" %>
+              <% else %>
+                <span class="text-gray-400 text-xs">なし</span>
+              <% end %>
+            </td>
+            <td class="px-4 py-2"><%= item.name %></td>
+            <td class="px-4 py-2"><%= item.manufacturer %></td>
+            <td class="px-4 py-2"><%= number_to_currency(item.price, unit: "¥", format: "%u%n", precision: 0) %></td>
+            <td class="px-4 py-2"><%= item.category&.name || "未設定" %></td>
+            <td class="px-4 py-2 text-center"><%= item.reviews.count %></td>
+            <td class="px-4 py-2 text-center">
+              <%= link_to "編集", edit_admin_item_path(item), class: "btn btn-sm bg-blue-600 text-white hover:bg-blue-500" %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="mt-6">
+    <%= paginate @items %>
+  </div>
 </div>

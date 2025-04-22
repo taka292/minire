@@ -2,7 +2,7 @@ class Admin::ItemsController < ApplicationController
   before_action :authenticate_admin!
 
   def index
-    @items = Item.all
+    @items = Item.includes(:category, :reviews).order(created_at: :desc).page(params[:page])
   end
 
   def edit
@@ -36,6 +36,17 @@ class Admin::ItemsController < ApplicationController
     end
   end
 
+  def destroy
+    @item = Item.find(params[:id])
+
+    if @item.reviews.exists?
+      redirect_to edit_admin_item_path(@item), alert: "レビューが存在するため、削除できません"
+    else
+      @item.destroy
+      redirect_to admin_items_path, notice: "商品を削除しました"
+    end
+  end
+
   def fetch_amazon_info
     item = AmazonItemImporter.new(params[:asin] || Item.find(params[:id]).asin).import!
     if item
@@ -48,7 +59,7 @@ class Admin::ItemsController < ApplicationController
   private
 
   def item_params
-    params.require(:item).permit(:name, :manufacturer, :price, :amazon_url, :asin, :description, images: [], remove_images: [])
+    params.require(:item).permit(:name, :manufacturer, :price, :amazon_url, :asin, :description, :category_id,  images: [], remove_images: [])
   end
 
   def authenticate_admin!

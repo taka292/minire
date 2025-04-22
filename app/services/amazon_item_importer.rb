@@ -44,6 +44,19 @@ class AmazonItemImporter
       last_updated_at: Time.current                                                   # 最終更新日時を現在時刻で記録
     )
 
+    # Amazonのカテゴリ情報を元に、Itemのカテゴリを設定する処理
+    # 1. ルートカテゴリを取得
+    root_category = extract_root_browse_node(amazon_item)
+
+    # 2. マッピングされたカテゴリ名を取得（対応表にある場合）
+    mapped_name = root_category.present? ? AMAZON_ROOT_CATEGORY_MAP[root_category[:id]] : nil
+
+    # 3. 実際の Category モデルを取得
+    mapped_category = mapped_name.present? ? Category.find_by(name: mapped_name) : nil
+
+    # 4. item にカテゴリをセット（マッピングが見つかればそれを、なければ「その他」）
+    item.category = mapped_category || Category.find_by(name: "その他")
+
     item.save! # Itemを保存（バリデーション失敗時は例外が発生）
 
     item # 最終的に保存したItemを返す
@@ -73,5 +86,19 @@ class AmazonItemImporter
   rescue => e
     # ダウンロードや添付中にエラーがあった場合はログに記録
     Rails.logger.error "[AmazonItemImporter] 画像保存失敗: #{e.message}"
+  end
+
+  # AmazonのBrowseNode情報から最親のカテゴリを抽出する処理
+  def extract_root_browse_node(amazon_item)
+    browse_nodes = amazon_item.dig("BrowseNodeInfo", "BrowseNodes") || []
+
+    browse_nodes.map do |node|
+      current = node
+      current = current["Ancestor"] while current["Ancestor"].present?
+      {
+        id: current["Id"],
+        name: current["DisplayName"]
+      }
+    end.uniq.first
   end
 end
