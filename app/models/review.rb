@@ -89,7 +89,6 @@ class Review < ApplicationRecord
 
   has_many :releasable_items, dependent: :destroy
 
-  # accepts_nested_attributes_for :releasable_items, allow_destroy: true, reject_if: proc { |attributes| attributes['name'].blank? }
   accepts_nested_attributes_for :releasable_items, allow_destroy: true
 
   # 空欄の手放せるものは保存前に削除
