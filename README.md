@@ -300,7 +300,8 @@ Dockerを導入することで、ローカル環境を手軽に構築できる�
 - **letter_opener / letter_opener_web** によって、開発中のメール送信機能をブラウザで確認し、メール内容のデバッグ効率を高めました。
 
 ### 画面遷移図
-Figma：https://www.figma.com/design/rGVi89qGF02sY6Ht7tkSOW/minia%E7%94%BB%E9%9D%A2%E9%81%B7%E7%A7%BB%E5%9B%B3?node-id=0-1&t=dep5IccCoAIknCke-1
+[Figma](https://www.figma.com/design/rGVi89qGF02sY6Ht7tkSOW/minia%E7%94%BB%E9%9D%A2%E9%81%B7%E7%A7%BB%E5%9B%B3?node-id=0-1&t=dep5IccCoAIknCke-1)
 
 ### ER図
-drawio：https://app.diagrams.net/#G1vrzO_N7VQ8i3SQ9dvKd9L3aSS3DjFZle#%7B%22pageId%22%3A%22R2lEEEUBdFMjLlhIrx00%22%7D
+[dbdiagram.io](https://dbdiagram.io/d/MiniRe-6808e3d11ca52373f50bf743)
+![ER](https://github.com/user-attachments/assets/9ecc9764-ba71-4fb8-8919-d3600bf47b2f)
