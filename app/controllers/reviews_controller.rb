@@ -7,67 +7,22 @@ class ReviewsController < ApplicationController
   end
 
   def create
+    @review = current_user.reviews.build(review_params)
+
     result = ActiveRecord::Base.transaction do
-      @review = current_user.reviews.build(review_params)
-
-      case params[:search_method]
-      when "amazon"
-        asin = params[:asin]&.strip
-        item_name = params[:amazon_item_name]&.strip
-
-        # ASINか商品名が空ならエラー(手入力した場合、asinが空になって弾く)
-        if asin.blank? || item_name.blank?
-          @review.errors.add(:amazon_item_name, "Amazonの商品を選択してください")
-          raise ActiveRecord::Rollback
-        end
-
-        # ASINから商品情報を取得
-        item = fetch_amazon_info_if_needed(Item.find_or_initialize_by(asin: asin))
-
-        if item.name.blank?
-          @review.errors.add(:amazon_item_name, "商品情報の取得に失敗しました。もう一度お試しください")
-          raise ActiveRecord::Rollback
-        end
-
-        @review.item = item
-
-      when "minire"
-        item_name = params[:item_name]&.strip
-
-        if item_name.blank?
-          @review.errors.add(:item_name, "商品名を入力してください")
-          raise ActiveRecord::Rollback
-        end
-
-        item = Item.find_or_initialize_by(name: item_name)
-
-        item.category ||= Category.find_by(name: "その他")
-
-      else
-        @review.errors.add(:item_name, "商品名を入力してください")
+      unless assign_item_to_review
         raise ActiveRecord::Rollback
       end
 
-      unless item.save
-        @review.errors.add(:item_name, item.errors.full_messages.join(", "))
-        raise ActiveRecord::Rollback
-      end
-
-      @review.item = item
       if @review.save
-        if item.images.blank? && @review.images.attached?
-          item.images.attach(@review.images.first.blob)
-        end
-
+        attach_image_to_item_if_needed
         redirect_to reviews_path, notice: "レビューを投稿しました！"
       else
         raise ActiveRecord::Rollback
       end
     end
 
-    unless result
-      render :new, status: :unprocessable_entity
-    end
+    render :new, status: :unprocessable_entity unless result
   end
 
 
@@ -112,76 +67,27 @@ class ReviewsController < ApplicationController
   end
 
   def edit
-      @review = current_user.reviews.find(params[:id])
   end
 
   def update
-  result = ActiveRecord::Base.transaction do
-    case params[:search_method]
-    when "amazon"
-      asin = params[:asin]&.strip
-      item_name = params[:amazon_item_name]&.strip
-
-      if asin.blank? || item_name.blank?
-        @review.errors.add(:amazon_item_name, "Amazonの商品を選択してください")
+    result = ActiveRecord::Base.transaction do
+      unless assign_item_to_review
         raise ActiveRecord::Rollback
       end
 
-      item = fetch_amazon_info_if_needed(Item.find_or_initialize_by(asin: asin))
+      handle_image_removal
+      @review.images.attach(params[:review][:images]) if params[:review][:images].present?
 
-      if item.name.blank?
-        @review.errors.add(:amazon_item_name, "商品情報の取得に失敗しました。もう一度お試しください")
+      if @review.update(review_params.except(:images))
+        # attach_image_to_item_if_needed # 画像をitemに添付処理はリファクタリングとは別で対応
+        redirect_to @review, notice: "レビューを更新しました！"
+      else
         raise ActiveRecord::Rollback
       end
-
-      @review.item = item
-    when "minire"
-      item_name = params[:item_name]&.strip
-
-      if item_name.blank?
-        @review.errors.add(:item_name, "商品名を入力してください")
-        raise ActiveRecord::Rollback
-      end
-
-      item = Item.find_or_initialize_by(name: item_name)
-
-      item.category ||= Category.find_by(name: "その他")
-
-    else
-      @review.errors.add(:item_name, "商品名を入力してください")
-      raise ActiveRecord::Rollback
     end
 
-    unless item.save
-      @review.errors.add(:item_name, item.errors.full_messages.join(", "))
-      raise ActiveRecord::Rollback
-    end
-
-    @review.item = item
-
-    # 画像の削除
-    if params[:review][:remove_images].present?
-      params[:review][:remove_images].split(",").each do |image_id|
-        image = @review.images.find_by(id: image_id)
-        image.purge if image
-      end
-    end
-
-    # 画像の追加
-    @review.images.attach(params[:review][:images]) if params[:review][:images].present?
-
-    # 他のレビュー情報を更新
-    if @review.update(review_params.except(:images))
-      redirect_to @review, notice: "レビューを更新しました！"
-    else
-      raise ActiveRecord::Rollback
-    end
+    render :edit, status: :unprocessable_entity unless result
   end
-  unless result
-    set_releasable_items
-    render :edit, status: :unprocessable_entity
-  end
-end
 
   def destroy
     if @review.destroy
@@ -204,12 +110,6 @@ end
     end
   end
 
-  # 手放せるものフォームで、すでに登録されている数を確認し、足りない分だけフォームを追加
-  def set_releasable_items
-    remaining_slots = [ 3 - @review.releasable_items.size, 0 ].max
-    remaining_slots.times { @review.releasable_items.build }
-  end
-
   # Amazon検索で取得したItemがまだ詳細情報を持っていない場合のみ、Amazon APIから取得して補完する
   def fetch_amazon_info_if_needed(item)
     if item.asin.present? && item.last_updated_at.blank?
@@ -217,5 +117,67 @@ end
       return imported_item if imported_item.present?
     end
     item
+  end
+
+  # 商品をレビューに関連付ける
+  def assign_item_to_review
+    # Amazonまたはサイト内検索に応じてItemを取得・登録し、レビューに関連付ける
+    case params[:search_method]
+    when "amazon"  # Amazon商品検索・登録(デフォルト)
+      asin = params[:asin]&.strip # Amazonの商品コード
+      item_name = params[:amazon_item_name]&.strip # Amazon商品名
+
+      if asin.blank? || item_name.blank?
+        @review.errors.add(:amazon_item_name, "Amazonの商品を選択してください")
+        return false
+      end
+
+      item = fetch_amazon_info_if_needed(Item.find_or_initialize_by(asin: asin))
+
+      if item.name.blank?
+        @review.errors.add(:amazon_item_name, "商品情報の取得に失敗しました。もう一度お試しください")
+        return false
+      end
+
+    when "minire" # サイト内商品検索・登録(商品が見つからない場合)
+      item_name = params[:item_name]&.strip
+
+      if item_name.blank?
+        @review.errors.add(:item_name, "商品名を入力してください")
+        return false
+      end
+
+      item = Item.find_or_initialize_by(name: item_name)
+      item.category ||= Category.find_by(name: "その他")
+
+    else
+      @review.errors.add(:item_name, "商品名を入力してください")
+      return false
+    end
+
+    unless item.save
+      @review.errors.add(:item_name, item.errors.full_messages.join(", "))
+      return false
+    end
+
+    @review.item = item
+    true
+  end
+
+  # レビューに関連付けられた商品に画像(1枚目)を添付する
+  def attach_image_to_item_if_needed
+    if @review.item.images.blank? && @review.images.attached?
+      @review.item.images.attach(@review.images.first.blob)
+    end
+  end
+
+  # レビューの画像を削除する
+  def handle_image_removal
+    if params[:review][:remove_images].present?
+      params[:review][:remove_images].split(",").each do |image_id|
+        image = @review.images.find_by(id: image_id)
+        image.purge if image
+      end
+    end
   end
 end
