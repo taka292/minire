@@ -9,17 +9,20 @@ class ReviewItemAssignmentService
   def call
     item = case @params[:search_method] # Amazonまたはサイト内検索に応じてItemを取得・登録
     when "amazon"    # Amazon検索・登録
-             assign_amazon_item
+      assign_amazon_item
     when "minire"    # サイト内検索・登録
-             assign_minire_item
+      assign_minire_item
     else
-             # 想定外の search_method の場合のエラー
-             error!(:item_name, "商品名を入力してください")
+      # 想定外の search_method の場合のエラー
+      return error!(:item_name, "商品名を入力してください")
     end
+
+    # 商品情報が不完全（例：名前がない）場合はエラー
+    return false unless item
 
     # 商品情報の保存に失敗した場合はエラー
     unless item.save
-      error!(:item_name, item.errors.full_messages.join(", "))
+      return error!(:item_name, item.errors.full_messages.join(", "))
     end
 
     # 商品をレビューに関連付け
@@ -36,7 +39,7 @@ class ReviewItemAssignmentService
 
     # Amazonの商品が選択されていない場合はエラー
     if asin.blank? || item_name.blank?
-      error!(:amazon_item_name, "Amazonの商品を選択してください")
+      return error!(:amazon_item_name, "Amazonの商品を選択してください")
     end
 
     # ASINをもとに、必要に応じてAPIで商品情報を取得・作成
@@ -44,7 +47,7 @@ class ReviewItemAssignmentService
 
     # 商品情報が不完全（例：名前がない）場合はエラー
     if item.name.blank?
-      error!(:amazon_item_name, "商品情報の取得に失敗しました。もう一度お試しください")
+      return error!(:amazon_item_name, "商品情報の取得に失敗しました。もう一度お試しください")
     end
 
     item
@@ -56,7 +59,7 @@ class ReviewItemAssignmentService
 
     # 商品名が空の場合はエラー
     if item_name.blank?
-      error!(:item_name, "商品名を入力してください")
+      return error!(:item_name, "商品名を入力してください")
     end
 
     # 名前から商品を初期化し、カテゴリ未設定であれば「その他」に設定
