@@ -9,9 +9,10 @@ class ReviewsController < ApplicationController
   def create
     @review = current_user.reviews.build(review_params)
 
+    # レビューと商品情報を関連付け、どちらかの保存に失敗した場合は、トランザクションをロールバック
     result = ActiveRecord::Base.transaction do
-      unless @review.assign_item_by_params(params)
-        # item関連のエラーが付与されたのでここでリダイレクトしない
+      # 商品情報をパラメータに基づいて取得・作成し、レビューに関連付ける
+      unless ReviewItemAssignmentService.new(@review, params).call
         raise ActiveRecord::Rollback
       end
 
@@ -19,7 +20,9 @@ class ReviewsController < ApplicationController
         raise ActiveRecord::Rollback
       end
 
+      # レビューに関連付けられた商品に画像(1枚目)を添付する
       attach_image_to_item_if_needed
+
       redirect_to reviews_path, notice: "レビューを投稿しました！"
     end
 
@@ -70,8 +73,12 @@ class ReviewsController < ApplicationController
   end
 
   def update
+    # レビューと商品情報を関連付け、どちらかの保存に失敗した場合は、トランザクションをロールバック
     result = ActiveRecord::Base.transaction do
-      raise ActiveRecord::Rollback unless @review.assign_item_by_params(params)
+      # 商品情報をパラメータに基づいて取得・作成し、レビューに関連付ける
+      unless ReviewItemAssignmentService.new(@review, params).call
+        raise ActiveRecord::Rollback
+      end
 
       handle_image_removal
       @review.images.attach(params[:review][:images]) if params[:review][:images].present?
