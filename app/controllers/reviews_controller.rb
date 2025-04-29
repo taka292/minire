@@ -102,7 +102,7 @@ class ReviewsController < ApplicationController
   private
   # accepts_nested_attributes_forで削除するものを_destroyで追加
   def review_params
-    params.require(:review).permit(:title, :content, :category_id,  images: [], releasable_items_attributes: [ :id, :name, :_destroy ])
+    params.require(:review).permit(:title, :content, :category_id, :item_id, images: [], releasable_items_attributes: [ :id, :name, :_destroy ])
   end
 
   def set_review
@@ -121,8 +121,8 @@ class ReviewsController < ApplicationController
 
   # レビューの画像を削除する
   def handle_image_removal
-    if params[:review][:remove_images].present?
-      params[:review][:remove_images].split(",").each do |image_id|
+    if params[:remove_images].present?
+      params[:remove_images].split(",").each do |image_id|
         image = @review.images.find_by(id: image_id)
         image.purge if image
       end
