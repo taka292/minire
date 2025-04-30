@@ -83,7 +83,8 @@ class ReviewsController < ApplicationController
       handle_image_removal
       @review.images.attach(params[:review][:images]) if params[:review][:images].present?
 
-      raise ActiveRecord::Rollback unless @review.update(review_params.except(:images))
+      # レビュー更新 (item_id はservice側で設定済みのため、paramsに含まれる空文字で上書きされるのを防ぐ)
+      raise ActiveRecord::Rollback unless @review.update(review_params.except(:images, :item_id))
       # attach_image_to_item_if_needed # 画像をitemに添付処理はリファクタリングとは別で対応
       redirect_to @review, notice: "レビューを更新しました！"
     end
