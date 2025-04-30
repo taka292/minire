@@ -264,6 +264,29 @@ RSpec.describe "レビュー投稿機能", type: :system do
       expect(page).to have_css("img[src*='sample1.jpg']")
       expect(page).to have_css("img[src*='sample2.jpg']")
     end
+
+    it "MiniRe検索で新しい商品名を入力してレビューを編集できる" do
+      item = create(:item, name: "旧商品")
+      review = create(:review, user:, item:)
+
+      visit edit_review_path(review)
+
+      fill_in "item_name", with: "MiniRe編集商品" # 新しい商品名
+
+      fill_in "review[title]", with: "MiniRe編集後のタイトル"
+      fill_in "review[content]", with: "MiniRe編集後の内容"
+
+      click_button "更新する"
+
+      expect(page).to have_content("レビューを更新しました！")
+      expect(page).to have_content("MiniRe編集後のタイトル")
+      expect(page).to have_content("MiniRe編集後の内容")
+
+      updated_review = Review.find_by(title: "MiniRe編集後のタイトル")
+      expect(updated_review).to be_present
+      expect(updated_review.item.name).to eq("MiniRe編集商品")
+      expect(updated_review.item.category.name).to eq("その他")
+    end
   end
 
   describe "レビュー一覧・並び替え・絞り込み" do
