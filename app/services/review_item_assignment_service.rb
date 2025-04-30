@@ -17,12 +17,14 @@ class ReviewItemAssignmentService
       return error!(:item_name, "商品名を入力してください")
     end
 
-    # 商品情報が不完全（例：名前がない）場合はエラー
+    # 商品情報が不完全（例：名前がない）場合は付与したエラーメッセージをもとにエラーを返す
     return false unless item
 
-    # 商品情報の保存に失敗した場合はエラー
-    unless item.save
-      return error!(:item_name, item.errors.full_messages.join(", "))
+    # 商品情報を保存（新規作成または更新ありの場合）
+    if item.new_record? || item.has_changes_to_save?
+      unless item.save
+        return error!(:item_name, item.errors.full_messages.join(", "))
+      end
     end
 
     # 商品をレビューに関連付け
@@ -68,8 +70,9 @@ class ReviewItemAssignmentService
     end
   end
 
-  # Amazon検索で取得したasinのItemが登録されていない場合のみ、Amazon APIから商品情報取得
+  # Amazon APIから商品情報取得
   def fetch_amazon_info_if_needed(item)
+    # Amazon検索で取得したItemのasinが存在し、まだ一度も更新されていない場合のみ、Amazon APIから商品情報取得
     if item.asin.present? && item.last_updated_at.blank?
       imported_item = AmazonItemImporter.new(item.asin).import!
       return imported_item || item
