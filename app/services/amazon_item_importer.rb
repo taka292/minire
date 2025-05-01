@@ -55,7 +55,7 @@ class AmazonItemImporter
     mapped_category = mapped_name.present? ? Category.find_by(name: mapped_name) : nil
 
     # 4. item にカテゴリをセット（マッピングが見つかればそれを、なければ「その他」）
-    item.category = mapped_category || Category.find_by(name: "その他")
+    item.category = mapped_category || Category.default
 
     item.save! # Itemを保存（バリデーション失敗時は例外が発生）
 
