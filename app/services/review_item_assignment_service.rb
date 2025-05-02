@@ -64,10 +64,8 @@ class ReviewItemAssignmentService
       return error!(:item_name, "商品名を入力してください")
     end
 
-    # 名前から商品を初期化し、カテゴリ未設定であれば「その他」に設定
-    Item.find_or_initialize_by(name: item_name).tap do |i|
-      i.category ||= Category.find_by(name: "その他")
-    end
+    # 商品名をもとに、必要に応じて商品情報を取得・作成
+    Item.find_or_initialize_by(name: item_name)
   end
 
   # Amazon APIから商品情報取得
