@@ -142,7 +142,7 @@ RSpec.describe "プロフィール機能", type: :system do
       fill_in "user[password]", with: "newpassword"
       click_button "ログイン"
 
-      expect(page).to have_current_path(home_index_path)
+      expect(page).to have_current_path(root_path)
       expect(page).to have_content("ログインしました")
     end
 
@@ -225,7 +225,7 @@ RSpec.describe "プロフィール機能", type: :system do
 
       click_link "ログアウト"
 
-      expect(page).to have_content("ログアウトしました").or have_current_path(home_index_path)
+      expect(page).to have_content("ログアウトしました").or have_current_path(root_path)
     end
   end
 

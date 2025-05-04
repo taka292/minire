@@ -13,7 +13,7 @@ RSpec.describe "ユーザー認証", type: :system do
   it "正しい情報でログインできる(レビュー投稿無し)" do
     log_in(email: user.email, password: user.password)
 
-    expect(page).to have_current_path(home_index_path)
+    expect(page).to have_current_path(root_path)
     expect(page).to have_content("ログインしました")
     expect(page).to have_content("さっそくレビューを投稿してみませんか")
   end
@@ -22,7 +22,7 @@ RSpec.describe "ユーザー認証", type: :system do
     log_in(email: user.email, password: user.password)
     create(:review, user: user)
 
-    expect(page).to have_current_path(home_index_path)
+    expect(page).to have_current_path(root_path)
     expect(page).to have_content("ログインしました")
   end
 
@@ -42,7 +42,7 @@ RSpec.describe "ユーザー認証", type: :system do
 
   it "ログイン後にマイページにアクセスできる" do
     log_in(email: user.email, password: user.password)
-    expect(page).to have_current_path(home_index_path)
+    expect(page).to have_current_path(root_path)
 
     visit profile_path(user.id)
     expect(page).to have_current_path(profile_path(user.id))
@@ -58,7 +58,7 @@ RSpec.describe "ユーザー認証", type: :system do
     fill_in "user[password_confirmation]", with: "newpassword"
     click_button "登録する"
 
-    expect(page).to have_current_path(home_index_path)
+    expect(page).to have_current_path(root_path)
     expect(page).to have_content("登録ありがとうございます！さっそくレビューを投稿してみませんか？")
   end
 

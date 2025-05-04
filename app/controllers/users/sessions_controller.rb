@@ -27,7 +27,7 @@ class Users::SessionsController < Devise::SessionsController
 
   def after_sign_in_path_for(resource)
     flash[:notice] = "ログインしました！さっそくレビューを投稿してみませんか？" unless resource.has_reviews?
-    home_index_path
+    root_path
   end
 
   def after_sign_out_path_for(resource_or_scope)
