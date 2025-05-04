@@ -1,6 +1,7 @@
-<!-- 検索方法の状態を明示的に伝える hidden フィールド -->
 <div data-controller="search-toggle">
-  <!-- hidden_field_tag :search_method もここでOK -->
+  <!-- 検索方法の状態を伝える hidden フィールド -->
+  <!-- action_name が edit の場合は 'minire' をデフォルトに -->
+  <!-- それ以外は 'amazon' をデフォルトに -->
   <%= hidden_field_tag :search_method, params[:search_method] || (action_name == 'edit' ? 'minire' : 'amazon'), id: "search_method" %>
 
   <!-- Amazon検索フォーム -->
