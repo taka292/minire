@@ -6,7 +6,6 @@ Rails.application.routes.draw do
     passwords: "users/passwords",
     omniauth_callbacks: "users/omniauth_callbacks"
   }
-  get "home/index"
   root "home#index"
   resources :reviews do
     resources :comments, only: [ :create, :destroy, :edit, :update ]
