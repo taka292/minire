@@ -1,0 +1,10 @@
+<!-- タイトルフォーム -->
+<div class="form-control mb-6">
+  <%= form.label :title, class: "block text-lg font-medium text-gray-700" do  %>
+    タイトル <span class="text-red-500">*</span>
+  <% end %>
+  <%= form.text_field :title, class: "input input-bordered w-full h-12 text-lg placeholder:text-sm #{error_class(@review, :title)}", placeholder: "レビュータイトルを入力してください" %>
+  <% if form.object.errors[:title].any? %>
+    <p class="text-red-500 text-sm mt-1"><%= form.object.errors[:title].first %></p>
+  <% end %>
+</div>
