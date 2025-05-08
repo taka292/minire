@@ -48,7 +48,7 @@ class ReviewItemAssignmentService
     item = fetch_amazon_info_if_needed(Item.find_or_initialize_by(asin: asin))
 
     # 商品情報が不完全（例：名前がない）場合はエラー
-    if item.name.blank?
+    if item.nil?
       return error!(:amazon_item_name, "商品情報の取得に失敗しました。もう一度お試しください")
     end
 
