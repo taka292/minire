@@ -57,8 +57,6 @@ class AmazonItemImporter
     # 4. item にカテゴリをセット（マッピングが見つかればそれを、なければ「その他」）
     item.category = mapped_category || Category.default
 
-    item.save! # Itemを保存（バリデーション失敗時は例外が発生）
-
     item # 最終的に保存したItemを返す
   rescue => e
     # 何らかのエラーが発生した場合はログに出力してnilを返す
