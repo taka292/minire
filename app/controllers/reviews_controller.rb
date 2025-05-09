@@ -44,7 +44,7 @@ class ReviewsController < ApplicationController
       @reviews = Review.includes(:user, :item, :comments, images_attachments: :blob)
     end
 
-    @categories = Category.all
+    @categories = Category.ordered
 
     # 絞り込み処理
     if params[:filter_type].present?

@@ -43,4 +43,19 @@ RSpec.describe Category, type: :model do
         end
     end
   end
+
+  describe "acts_as_list（並び順）" do
+    let!(:cat1) { create(:category, name: "A", position: 1) }
+    let!(:cat2) { create(:category, name: "B", position: 2) }
+
+    it "カテゴリの順序を上に移動できる" do
+      cat2.move_higher
+      expect(Category.order(position: :asc).map(&:name)).to eq([ "B", "A" ])
+    end
+
+    it "カテゴリの順序を下に移動できる" do
+      cat1.move_lower
+      expect(Category.order(position: :asc).map(&:name)).to eq([ "B", "A" ])
+    end
+  end
 end

@@ -1,0 +1,32 @@
+<div class="p-6">
+  <h2 class="text-2xl font-bold mb-4">カテゴリ一覧（並び替え）</h2>
+
+  <div class="overflow-x-auto">
+    <table class="table w-full">
+      <thead>
+        <tr>
+          <th class="bg-base-200 text-left">名前</th>
+          <th class="bg-base-200 text-left">並び順</th>
+          <th class="bg-base-200 text-left">操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @categories.each do |category| %>
+          <tr class="hover">
+            <td><%= category.name %></td>
+            <td><%= category.position %></td>
+            <td class="flex gap-2">
+              <%= link_to move_higher_admin_category_path(category), data: { "turbo-method": :patch }, class: "btn btn-sm btn-outline btn-info" do %>
+                ↑ 上へ
+              <% end %>
+
+              <%= link_to move_lower_admin_category_path(category), data: { "turbo-method": :patch }, class: "btn btn-sm btn-outline btn-info" do %>
+                ↓ 下へ
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
