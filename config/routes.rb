@@ -39,6 +39,13 @@ Rails.application.routes.draw do
     resources :items, only: [ :index, :edit, :update, :destroy ] do
       post :fetch_amazon_info, on: :member
     end
+
+    resources :categories do
+      member do
+        patch :move_higher
+        patch :move_lower
+      end
+    end
   end
 
   if Rails.env.development?

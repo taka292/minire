@@ -72,6 +72,11 @@
     </table>
   </div>
 
+  <!-- カテゴリ一覧への遷移 -->
+  <div class="mt-6">
+    <%= link_to "カテゴリ一覧", admin_categories_path, class: "btn btn-sm bg-green-600 text-white hover:bg-green-500" %>
+  </div>
+
   <div class="mt-6">
     <%= paginate @items %>
   </div>
