@@ -507,6 +507,7 @@ PLATFORMS
 DEPENDENCIES
   acts_as_list
   aws-sdk-s3
+  aws-sigv4
   bootsnap
   brakeman (~> 7.0.2)
   bullet

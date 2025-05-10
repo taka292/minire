@@ -21,6 +21,8 @@ RSpec.describe "カテゴリの並び替え機能", type: :system do
     within(:xpath, "//tr[td[contains(text(), 'B')]]") do
       click_link "上へ"
     end
+
+    expect(page).to have_selector("tbody tr:first-child td", text: "B")
   end
 
   def category_names_from_admin_page
