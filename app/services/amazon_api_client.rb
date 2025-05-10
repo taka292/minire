@@ -4,7 +4,6 @@ require "json"
 require "aws-sigv4"
 
 class AmazonApiClient
-  class AmazonAutocompleteError < StandardError; end
   attr_reader :access_key, :secret_key, :partner_tag, :region, :service, :host
 
   def initialize
@@ -73,8 +72,10 @@ class AmazonApiClient
 
   # Amazon APIにPOSTリクエストを送信するメソッド
   def post_to_amazon_api(path:, target:, payload:)
-    payload_json = payload.to_json                            # JSON形式に変換
-    uri = URI("https://#{host}#{path}")                       # URIオブジェクトを作成
+    # JSON形式に変換
+    payload_json = payload.to_json
+    # リクエストURIを構築
+    uri = URI("https://#{host}#{path}")
 
     # 署名に使用するためのヘッダーを事前に定義
     headers = {
@@ -100,13 +101,13 @@ class AmazonApiClient
       body: payload_json
     )
 
-    # 署名生成後に追加されたヘッダーをrequestに反映
+    # リクエストオブジェクトを生成
     request = Net::HTTP::Post.new(uri)
 
-    # 署名前のヘッダーをrequestに反映
+    # 署名前のヘッダーをrequestに反映(署名後のヘッダーからは抜け落ちてしまう)
     headers.each { |k, v| request[k] = v }
 
-    # 署名後のヘッダーをrequestに反映
+    # 署名後に生成されたヘッダーをrequestに反映
     request["authorization"] = signature.headers["authorization"]
     request["x-amz-date"] = signature.headers["x-amz-date"]
     request["x-amz-content-sha256"] = signature.headers["x-amz-content-sha256"]
@@ -119,9 +120,11 @@ class AmazonApiClient
     # HTTPSを使用
     http.use_ssl = true
 
-    response = http.request(request)                          # 実際にリクエストを送信
-    JSON.parse(response.body)                                 # レスポンスをJSONとして返す
-  rescue JSON::ParserError
-    raise AmazonAutocompleteError, "Amazon API response is not valid JSON: #{response.body}"
+    # 実際にリクエストを送信
+    response = http.request(request)
+    # レスポンスをJSONとして返す
+    JSON.parse(response.body)
+  rescue => e
+    Rails.logger.error("[AmazonApiClient] リクエスト失敗: #{e.class} - #{e.message}")
   end
 end
