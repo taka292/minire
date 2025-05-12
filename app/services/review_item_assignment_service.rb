@@ -10,8 +10,8 @@ class ReviewItemAssignmentService
     item = case @params[:search_method] # Amazonまたはサイト内検索に応じてItemを取得・登録
     when "amazon"    # Amazon検索・登録
       assign_amazon_item
-    when "minire"    # サイト内検索・登録
-      assign_minire_item
+    when "missing_on_amazon"    # サイト内検索・登録
+      assign_missing_amazon_item
     else
       # 想定外の search_method の場合のエラー
       return error!(:item_name, "商品名を入力してください")
@@ -55,8 +55,8 @@ class ReviewItemAssignmentService
     item
   end
 
-  # MiniRe内の検索・商品名入力に基づく商品を取得・作成
-  def assign_minire_item
+  # サイト内の検索・商品名入力に基づく商品を取得・作成
+  def assign_missing_amazon_item
     item_name = @params[:item_name]&.strip  # サイト内検索で指定された商品名
 
     # 商品名が空の場合はエラー
