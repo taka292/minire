@@ -23,10 +23,10 @@ RSpec.describe "レビュー投稿機能", type: :system do
   end
 
   describe "新規レビュー投稿" do
-    it "MiniRe検索（見つからない場合）で正常にレビューを投稿できる" do
+    it "サイト内検索（見つからない場合）で正常にレビューを投稿できる" do
       visit new_review_path
 
-      click_button "見つからない場合" # ← MiniReフォーム表示
+      click_button "見つからない場合" # ← サイト内フォーム表示
       fill_in "item_name", with: "テストアイテム"
       fill_in "review[title]", with: "タイトルテスト"
       fill_in "review[content]", with: "内容テスト"
@@ -265,7 +265,7 @@ RSpec.describe "レビュー投稿機能", type: :system do
       expect(page).to have_css("img[src*='sample2.jpg']")
     end
 
-    it "MiniRe検索で新しい商品名を入力してレビューを編集できる" do
+    it "サイト内検索で新しい商品名を入力してレビューを編集できる" do
       item = create(:item, name: "旧商品")
       review = create(:review, user:, item:)
 

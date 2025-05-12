@@ -1,6 +1,6 @@
 <!-- Amazon検索フォーム -->
 <div id="amazon-form" class="form-control mb-6 relative" data-controller="autocomplete" data-autocomplete-url-value="<%= amazon_index_path %>">
-  <!-- 商品名ラベルとMiniReボタンを横並びに -->
+
   <div class="flex items-center justify-between mb-1">
     <%= form.label :amazon_item_name, class: "text-lg font-medium text-gray-700" do %>
       商品名 <span class="text-red-500">*</span>
@@ -9,7 +9,7 @@
     <div>
       <button type="button"
               class="text-sm text-blue-600 underline"
-              data-action="click->search-toggle#showMinire">
+              data-action="click->search-toggle#showMissingOnAmazon">
         見つからない場合
       </button>
     </div>

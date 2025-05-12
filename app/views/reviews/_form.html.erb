@@ -1,15 +1,15 @@
 <!-- 商品名検索フォーム -->
 <div data-controller="search-toggle">
   <!-- 検索方法の状態を伝える hidden フィールド -->
-  <!-- action_name が edit の場合は 'minire' をデフォルトに -->
-  <!-- それ以外は 'amazon' をデフォルトに -->
-  <%= hidden_field_tag :search_method, params[:search_method] || (action_name == 'edit' ? 'minire' : 'amazon'), id: "search_method" %>
+  <!-- action_name が edit の場合は 'サイト内検索(見つからない場合はこちら)' をデフォルトに -->
+  <!-- それ以外は 'amazon検索' をデフォルトに -->
+  <%= hidden_field_tag :search_method, params[:search_method] || (action_name == 'edit' ? 'missing_on_amazon' : 'amazon'), id: "search_method" %>
 
   <!-- Amazon検索フォーム -->
   <%= render "amazon_search_form", form: form, review: @review %>
 
-  <!-- 登録アイテムフォーム -->
-  <%= render "minire_search_form", form: form, review: @review %>
+  <!-- サイト内検索フォーム -->
+  <%= render "missing_on_amazon_form", form: form, review: @review %>
 </div>
 
 <!-- タイトルフォーム -->
