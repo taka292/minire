@@ -1,26 +1,32 @@
 class Review < ApplicationRecord
+  # アソシエーション
   belongs_to :user
   belongs_to :item
   has_many :comments, dependent: :destroy
   has_many :notifications, dependent: :destroy
+  has_many :likes, dependent: :destroy
+  has_many :releasable_items, dependent: :destroy
+
+  # 画像の添付
+  has_many_attached :images
+
+  # ネストされたフォーム
+  accepts_nested_attributes_for :releasable_items, allow_destroy: true
+
+  # コールバック
+  before_save :mark_empty_items_for_destruction
 
   # バリデーション
   validates :title, presence: true, length: { maximum: 100, message: "100文字以内で入力してください" }
   validates :content, presence: true, length: { maximum: 1000, message: "1000文字以内で入力してください" }
-
-  has_many_attached :images
-
-  has_many :likes, dependent: :destroy
   validate :image_content_type
   validate :image_size
   validate :image_count_within_limit
 
-  # 絞り込み条件
   # カテゴリ絞り込みスコープ
   scope :by_category, ->(category_id) {
     joins(:item).where(items: { category_id: category_id }) if category_id.present?
   }
-
 
   # 手放せるものの絞り込みスコープ (EXISTS クエリを使用)
   scope :releasable, -> {
@@ -35,11 +41,11 @@ class Review < ApplicationRecord
       .select("reviews.*, COUNT(likes.id) AS likes_count")
       .group("reviews.id")
   }
-
   scope :sort_by_most_liked, -> {
     with_likes_count.order(Arel.sql("likes_count DESC NULLS LAST"))
   }
 
+  # ソートパラメータを適用するクラスメソッド
   def self.apply_sort(sort_param)
     case sort_param
     when "newest" then sort_by_newest
@@ -51,48 +57,7 @@ class Review < ApplicationRecord
     end
   end
 
-  # ファイル形式のバリデーション
-  def image_content_type
-    return unless images.attached?
-
-    images.each do |image|
-      unless image.content_type.in?(%w[image/jpeg image/png image/gif])
-        errors.add(:images, "JPEG, PNG, GIF形式のみアップロードできます")
-      end
-    end
-  end
-
-  # ファイルサイズのバリデーション
-  def image_size
-    return unless images.attached?
-
-    images.each do |image|
-      if image.blob.byte_size > 5.megabytes
-        errors.add(:images, "5MB以下のファイルをアップロードしてください")
-      end
-    end
-  end
-
-  # レビュー画像のリサイズ処理
-  def resized_images
-    images.map do |image|
-      image.variant(resize_to_fill: [ 200, 200 ]).processed
-    end
-  end
-
-  def image_count_within_limit
-    if images.size > 5
-      errors.add(:images, "5枚以下でアップロードしてください")
-    end
-  end
-
-  has_many :releasable_items, dependent: :destroy
-
-  accepts_nested_attributes_for :releasable_items, allow_destroy: true
-
-  # 空欄の手放せるものは保存前に削除
-  before_save :mark_empty_items_for_destruction
-
+  # キーワード検索
   def self.search(query)
     return all if query.blank?
 
@@ -100,6 +65,13 @@ class Review < ApplicationRecord
       "items.name ILIKE :query OR reviews.title ILIKE :query OR reviews.content ILIKE :query ",
       query: "%#{query}%"
     ).distinct
+  end
+
+  # レビュー画像のリサイズ処理
+  def resized_images
+    images.map do |image|
+      image.variant(resize_to_fill: [200, 200]).processed
+    end
   end
 
   # reviewへのいいね通知機能
@@ -158,6 +130,35 @@ class Review < ApplicationRecord
   def mark_empty_items_for_destruction
     releasable_items.each do |item|
       item.mark_for_destruction if item.name.blank?
+    end
+  end
+
+  # ファイル形式のバリデーション
+  def image_content_type
+    return unless images.attached?
+
+    images.each do |image|
+      unless image.content_type.in?(%w[image/jpeg image/png image/gif])
+        errors.add(:images, "JPEG, PNG, GIF形式のみアップロードできます")
+      end
+    end
+  end
+
+  # ファイルサイズのバリデーション
+  def image_size
+    return unless images.attached?
+
+    images.each do |image|
+      if image.blob.byte_size > 5.megabytes
+        errors.add(:images, "5MB以下のファイルをアップロードしてください")
+      end
+    end
+  end
+
+  # ファイル枚数のバリデーション
+  def image_count_within_limit
+    if images.size > 5
+      errors.add(:images, "5枚以下でアップロードしてください")
     end
   end
 end
