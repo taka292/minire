@@ -70,7 +70,7 @@ class Review < ApplicationRecord
   # レビュー画像のリサイズ処理
   def resized_images
     images.map do |image|
-      image.variant(resize_to_fill: [200, 200]).processed
+      image.variant(resize_to_fill: [ 200, 200 ]).processed
     end
   end
 
