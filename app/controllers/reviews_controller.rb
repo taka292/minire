@@ -36,37 +36,26 @@ class ReviewsController < ApplicationController
   end
 
   def index
-    @query = params[:query]
+    @reviews = Review.all
 
+    # ソート
     if params[:sort] == "most_liked"
-      @reviews = Review.with_likes_count
+      @reviews = @reviews.with_likes_count
     else
-      @reviews = Review.includes(:user, :item, :comments, images_attachments: :blob)
+      @reviews = @reviews.includes(:user, :item, :comments, images_attachments: :blob)
     end
+
+    # 絞り込み
+    @reviews = filter_reviews(@reviews)
+
+    # 検索
+    @search = @reviews.ransack(params[:q])
+    @reviews = @search.result(distinct: true)
+
+    # 並び替え + ページネーション
+    @reviews = @reviews.apply_sort(params[:sort]).order(created_at: :desc).page(params[:page])
 
     @categories = Category.ordered
-
-    # 絞り込み処理
-    if params[:filter_type].present?
-      @reviews = case params[:filter_type]
-      when /^category_(\d+)$/
-        reviews = @reviews.joins(:item).where(items: { category_id: $1.to_i })
-      when "releasable"
-        @reviews.releasable
-      else
-        @reviews
-      end
-    end
-
-    # 検索条件を適用
-    @reviews = @reviews.search(@query)
-
-    # 並び替え
-    @reviews = @reviews.apply_sort(params[:sort])
-
-
-    # ページネーション
-    @reviews = @reviews.order(created_at: :desc).page(params[:page])
   end
 
   def edit
@@ -110,6 +99,19 @@ class ReviewsController < ApplicationController
     @review = current_user.reviews.find_by(id: params[:id])
     unless @review
       redirect_to reviews_path, alert: "他のユーザーのレビューは編集・削除できません。"
+    end
+  end
+
+  def filter_reviews(reviews)
+    return reviews unless params[:filter_type].present?
+
+    case params[:filter_type]
+    when /^category_(\d+)$/
+      reviews.joins(:item).where(items: { category_id: $1.to_i })
+    when "releasable"
+      reviews.releasable
+    else
+      reviews
     end
   end
 
