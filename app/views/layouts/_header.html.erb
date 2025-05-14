@@ -10,11 +10,13 @@
 
     <!-- 中央：検索フォーム -->
     <div class="hidden md:flex flex-1 ml-8 h-16 items-center">
-      <form action="<%= reviews_path %>" method="get" class="flex md:!w-120 items-center gap-2">
-        <input type="text" name="query" value="<%= params[:query] %>" placeholder="商品名・キーワード"
-          class="input input-bordered md:!w-120 placeholder-gray-400 h-10 text-base px-3 max-w-none" style="width: 320px;">
-        <button type="submit" class="btn h-10 min-h-0 bg-customBlue text-white border-none px-4">検索</button>
-      </form>
+      <%= search_form_for @q, url: reviews_path, method: :get, html: { class: "flex md:w-[400px] items-center gap-2" } do |f| %>
+        <%= f.search_field :title_or_content_or_item_name_cont,
+              placeholder: "商品名・キーワード",
+              class: "input input-bordered md:w-[300px] h-10 px-3 text-base placeholder-gray-400"%>
+
+        <%= f.submit "検索", class: "btn h-10 min-h-0 bg-customBlue text-white border-none px-4" %>
+      <% end %>
     </div>
 
     <!-- 右側：アイコン -->
@@ -124,10 +126,11 @@
 
     <!-- 下段：検索フォーム -->
     <div class="mt-2 h-14 flex items-center">
-      <form class="flex items-center gap-2 w-full">
-        <input type="text" name="query" value="<%= params[:query] %>" placeholder="商品名・キーワード" class="input input-bordered w-full placeholder-gray-400 h-10 text-base px-3">
-        <button type="submit" class="btn min-h-0 h-10 bg-customBlue text-white border-none px-4">検索</button>
-      </form>
+      <%= search_form_for @q, url: reviews_path, method: :get, html: { class: "flex items-center gap-2 w-full" } do |f|%>
+        <%= f.search_field :title_or_content_or_item_name_cont,
+        placeholder: "商品名・キーワード", class: "input input-bordered w-full placeholder-gray-400 h-10 text-base px-3"%>
+        <%= submit_tag "検索", class: "btn min-h-0 h-10 bg-customBlue text-white border-none px-4" %>
+      <% end %>
     </div>
   </div>
 </header>

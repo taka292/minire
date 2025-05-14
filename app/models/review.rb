@@ -57,14 +57,14 @@ class Review < ApplicationRecord
     end
   end
 
-  # キーワード検索
-  def self.search(query)
-    return all if query.blank?
+  # 検索機能で使用するカラムの定義
+  def self.ransackable_attributes(auth_object = nil)
+    %w[title content]
+  end
 
-    left_outer_joins(:item, :releasable_items).where(
-      "items.name ILIKE :query OR reviews.title ILIKE :query OR reviews.content ILIKE :query ",
-      query: "%#{query}%"
-    ).distinct
+  # 検索機能で使用する関連モデルの定義
+  def self.ransackable_associations(auth_object = nil)
+    %w[item releasable_items]
   end
 
   # レビュー画像のリサイズ処理

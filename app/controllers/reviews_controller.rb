@@ -36,8 +36,6 @@ class ReviewsController < ApplicationController
   end
 
   def index
-    @query = params[:query]
-
     if params[:sort] == "most_liked"
       @reviews = Review.with_likes_count
     else
@@ -58,12 +56,14 @@ class ReviewsController < ApplicationController
       end
     end
 
-    # 検索条件を適用
-    @reviews = @reviews.search(@query)
+    # キーワードワード検索条件を適用
+    @search = @reviews.ransack(params[:q])
+
+    # キーワード検索
+    @reviews = @search.result(distinct: true)
 
     # 並び替え
     @reviews = @reviews.apply_sort(params[:sort])
-
 
     # ページネーション
     @reviews = @reviews.order(created_at: :desc).page(params[:page])

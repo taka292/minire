@@ -33,4 +33,11 @@ class Item < ApplicationRecord
   def set_default_category
     self.category ||= Category.default
   end
+
+  # 検索機能の実装
+  def self.ransackable_attributes(auth_object = nil)
+    %w[
+      name
+    ]
+  end
 end
