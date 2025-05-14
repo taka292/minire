@@ -38,6 +38,9 @@ class Item < ApplicationRecord
   def self.ransackable_attributes(auth_object = nil)
     %w[
       name
+      description
+      asin
+      manufacturer
     ]
   end
 end

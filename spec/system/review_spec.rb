@@ -296,12 +296,20 @@ RSpec.describe "レビュー投稿機能", type: :system do
       end
     end
 
+    def search_reviews_with(keyword)
+      visit reviews_path
+      find("input[name='q[title_or_content_or_item_name_or_item_description_or_item_asin_or_item_manufacturer_or_releasable_items_name_cont]']", match: :first).set(keyword)
+      find("input[type='submit'][value='検索']", match: :first).click
+    end
+
     it "レビュー一覧に表示される" do
       visit reviews_path
-      expect(page).to have_content(review.title)
+      expect(page).to have_content(review_with_releasable.title)
     end
 
     it "並び替えが正しく動作する" do
+      create(:review, title: "テストタイトル", created_at: 1.day.ago)
+
       visit reviews_path(sort: "oldest")
       expect(page.text.index("テストタイトル")).to be < page.text.index("手放せるテスト")
     end
@@ -318,19 +326,64 @@ RSpec.describe "レビュー投稿機能", type: :system do
     end
 
     it "検索キーワードで絞り込める" do
-      visit reviews_path(query: review.title)
-      expect(page).to have_content(review.title)
+      search_reviews_with(review_with_releasable.title)
+      expect(page).to have_content(review_with_releasable.title)
     end
 
-    it "カテゴリ絞り込み + 検索が正しく動作する" do
-      # 絞り込みと検索対象になるレビューを作成
+    it "item.description で検索できる" do
+      item = create(:item, description: "高性能スピーカー")
+      create(:review, title: "descriptionでヒットするレビュー", item:)
+
+      search_reviews_with("高性能スピーカー")
+      expect(page).to have_content("descriptionでヒットするレビュー")
+    end
+
+    it "item.asin で検索できる" do
+      item = create(:item, asin: "B000TESTASIN")
+      create(:review, title: "ASINでヒットするレビュー", item:)
+
+      search_reviews_with("B000TESTASIN")
+      expect(page).to have_content("ASINでヒットするレビュー")
+    end
+
+    it "item.manufacturer で検索できる" do
+      item = create(:item, manufacturer: "MinimalTech")
+      create(:review, title: "メーカーでヒットするレビュー", item:)
+
+      search_reviews_with("MinimalTech")
+      expect(page).to have_content("メーカーでヒットするレビュー")
+    end
+
+    it "releasable_items.name で検索できる" do
+      review = create(:review, title: "手放せる名前でヒットするレビュー")
+      review.releasable_items.create!(name: "手放せるレザーケース")
+
+      search_reviews_with("手放せるレザーケース")
+      expect(page).to have_content("手放せる名前でヒットするレビュー")
+    end
+
+    it "検索後にカテゴリ絞り込みといいね順ソートができる" do
       item = create(:item, name: "スティック掃除機", category: category)
-      create(:review, title: "掃除機レビュー", content: "これは生活用品", item: item)
+      review1 = create(:review, title: "掃除機レビュー", content: "新しい掃除機です", item:)
+      review2 = create(:review, title: "旧掃除機レビュー", content: "これは古い掃除機です", item:)
 
-      visit reviews_path(filter_type: "category_#{category.id}", query: "掃除機")
+      # いいね数を変えておく
+      create_list(:like, 3, review: review1)
+      create(:like, review: review2)
 
-      expect(page).to have_content("掃除機レビュー")
-      expect(page).to have_content("これは生活用品")
+      # ステップ①: キーワード検索
+      visit reviews_path
+      find("input[name='q[title_or_content_or_item_name_or_item_description_or_item_asin_or_item_manufacturer_or_releasable_items_name_cont]']", match: :first).set("掃除機")
+      find("input[type='submit'][value='検索']", match: :first).click
+
+      # ステップ②: カテゴリで絞り込み（セレクトボックス）
+      select "カテゴリ: #{category.name}", from: "filter_type"
+
+      # ステップ③: 並び替えを「いいねが多い順」に変更
+      select "いいねが多い順", from: "sort"
+
+      # 確認：いいねが多いレビューが先に表示される
+      expect(page.text.index("掃除機レビュー")).to be < page.text.index("旧掃除機レビュー")
     end
   end
 

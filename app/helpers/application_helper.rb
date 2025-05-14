@@ -26,7 +26,13 @@ module ApplicationHelper
     }
   end
 
+  # フォームでエラーになった箇所を赤く囲む
   def error_class(resource, attribute)
     resource.errors[attribute].present? ? "border-red-500" : ""
+  end
+
+  # Ransackで使うデフォルト検索項目
+  def review_search_field
+    :title_or_content_or_item_name_or_item_description_or_item_asin_or_item_manufacturer_or_releasable_items_name_cont
   end
 end
