@@ -11,7 +11,7 @@
     <!-- 中央：検索フォーム -->
     <div class="hidden md:flex flex-1 ml-8 h-16 items-center">
       <%= search_form_for @q, url: reviews_path, method: :get, html: { class: "flex md:w-[400px] items-center gap-2" } do |f| %>
-        <%= f.search_field :title_or_content_or_item_name_cont,
+        <%= f.search_field review_search_field,
               placeholder: "商品名・キーワード",
               class: "input input-bordered md:w-[300px] h-10 px-3 text-base placeholder-gray-400"%>
 
@@ -127,7 +127,7 @@
     <!-- 下段：検索フォーム -->
     <div class="mt-2 h-14 flex items-center">
       <%= search_form_for @q, url: reviews_path, method: :get, html: { class: "flex items-center gap-2 w-full" } do |f|%>
-        <%= f.search_field :title_or_content_or_item_name_cont,
+        <%= f.search_field review_search_field,
         placeholder: "商品名・キーワード", class: "input input-bordered w-full placeholder-gray-400 h-10 text-base px-3"%>
         <%= submit_tag "検索", class: "btn min-h-0 h-10 bg-customBlue text-white border-none px-4" %>
       <% end %>

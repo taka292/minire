@@ -5,10 +5,6 @@ class ReleasableItem < ApplicationRecord
   def self.ransackable_attributes(auth_object = nil)
     %w[
       name
-      description
-      asin
-      manufacturer
-      amazon_url
     ]
   end
 end
