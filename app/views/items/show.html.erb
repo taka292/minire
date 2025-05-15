@@ -52,25 +52,16 @@
           </div>
 
           <div class="bg-gray-50 border-l-4 border-blue-300 px-4 py-2 rounded">
+            <p class="text-sm text-gray-500 font-semibold">商品名</p>
+            <p class="text-base text-gray-800"><%= @item.name %></p>
+          </div>
+
+          <div class="bg-gray-50 border-l-4 border-blue-300 px-4 py-2 rounded">
             <p class="text-sm text-gray-500 font-semibold">商品説明</p>
             <p class="text-base text-gray-800 leading-relaxed">
               <%= @item.description.present? ? safe_join(@item.description.split("\n"), tag(:br)) : '情報がありません' %>
             </p>
           </div>
-
-          <!-- 価格を乗せる場合、取得日時等も合わせて乗せる必要があり、APIでデータ取得できるまでコメントアウト
-          <% if @item.price.present? %>
-            <div class="bg-gray-50 border-l-4 border-blue-300 px-4 py-2 rounded">
-              <p class="text-sm text-gray-500 font-semibold">価格</p>
-              <p class="text-lg font-bold text-gray-900">
-                <%= "¥#{number_to_currency(@item.price, unit: '', delimiter: ',')}" %>（<%= @item.updated_at.strftime('%Y年%m月%d日 %H:%M') %> 時点）
-              </p>
-              <small class="text-xs text-gray-500">
-                価格および発送可能時期は表示された日付/時刻の時点のものであり、変更される場合があります。本商品の購入においては、購入時点でAmazon.co.jpに表示されている情報が適用されます。
-              </small>
-            </div>
-          <% end %>
-           -->
         </div>
       </div>
     </div>
@@ -82,14 +73,16 @@
     <% if @reviews.any? %>
       <ul class="space-y-4 sm:space-y-6">
         <% @reviews.each do |review| %>
+          <%= link_to review_path(review), class: "block" do %>
           <li class="bg-gray-50 p-4 rounded-md shadow-md hover:shadow-lg transition-shadow">
             <h3 class="text-lg font-medium text-gray-800 mb-2">
-              <%= link_to review.title, review_path(review), class: "hover:text-blue-500" %>
+              <%= review.title %>
             </h3>
             <p class="text-sm text-gray-600 mb-2 sm:mb-4"><%= truncate(review.content, length: 100) %></p>
             <p class="text-xs text-gray-500">投稿者: <%= review.user.name %></p>
             <p class="text-xs text-gray-500">投稿日: <%= l(review.created_at, format: :long) %></p>
           </li>
+          <% end %>
         <% end %>
       </ul>
     <% else %>
