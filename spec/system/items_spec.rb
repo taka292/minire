@@ -22,7 +22,6 @@ RSpec.describe "商品詳細ページ", type: :system do
 
         expect(page).to have_content("ミニマル収納ボックス")
         expect(page).to have_content("ミニマル社")
-        # expect(page).to have_content("¥3,500")
         expect(page).to have_content("シンプルな収納ボックスです。")
         expect(page).to have_link("Amazon", href: "https://www.amazon.co.jp/dp/B012345678")
         expect(page).to have_css("img[src*='test_item.jpg']")
