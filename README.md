@@ -231,7 +231,7 @@ https://github.com/user-attachments/assets/6f87b749-668d-4b16-898b-d2f8877e5cb0
 | 開発環境 | Docker、GitHub Actions（CI）  |
 | 認証 | Devise |
 | API | Amazon Product Advertising API(PA-API） |
-| その他 | Rubocop（コード整形）、RSpec / FactoryBot（テスト）、kaminari（ページネーション）、ransack（検索）、ActiveStorage（画像アップロード）、letter_opener / letter_opener_web（開発環境でのメール確認）、gretel（パンくずリスト） |
+| その他 | stimulus-autocomplete（検索候補表示）、kaminari（ページネーション）、ransack（検索）、ActiveStorage（画像アップロード）、gretel（パンくずリスト）、Rubocop（コード整形）、RSpec / FactoryBot（テスト） |
 
 ## 技術選定理由
 
@@ -293,11 +293,12 @@ Dockerを導入することで、ローカル環境を手軽に構築できる�
 
 ### 【その他】
 
+- **stimulus-autocomplete** によって、入力候補を表示し、ユーザーのスムーズな投稿機能を実現しました。
 - **ransack** はキーワード検索や絞り込み検索を柔軟に実装できるため採用しました。レビュー検索の自由度を高める狙いがあります。
 - **kaminari** を使ってレビュー一覧にページネーションを導入することで、パフォーマンスとUXを両立させました。
 - **RSpec / FactoryBot** を用いて機能テスト・結合テストを作成し、ユーザー操作に対するバグを未然に防ぐ仕組みを整えています。
 - **gretel** により、パンくずリストを簡潔に実装でき、ナビゲーションのしやすさを向上させました。
-- **letter_opener / letter_opener_web** によって、開発中のメール送信機能をブラウザで確認し、メール内容のデバッグ効率を高めました。
+
 
 ### 画面遷移図
 [Figma](https://www.figma.com/design/rGVi89qGF02sY6Ht7tkSOW/minia%E7%94%BB%E9%9D%A2%E9%81%B7%E7%A7%BB%E5%9B%B3?node-id=0-1&t=dep5IccCoAIknCke-1)
