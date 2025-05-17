@@ -3,7 +3,7 @@
     <h1 class="text-2xl font-bold mb-6 text-center"><%= title %></h1>
   <% end %>
 
-  <!--filter_formがtrueの場合、絞り込み・並び替えフォームを表示する-->
+  <%# filter_formがtrueの場合、絞り込み・並び替えフォームを表示する %>
   <% if filter_form %>
     <form method="get" action="<%= path %>" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 max-w-screen-lg mx-auto">
 

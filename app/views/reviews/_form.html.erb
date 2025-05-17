@@ -1,8 +1,8 @@
 <!-- 商品名検索フォーム -->
 <div data-controller="search-toggle">
-  <!-- 検索方法の状態を伝える hidden フィールド -->
-  <!-- action_name が edit の場合は 'サイト内検索(見つからない場合はこちら)' をデフォルトに -->
-  <!-- それ以外は 'amazon検索' をデフォルトに -->
+  <%# 検索方法の状態を伝える hidden フィールド
+      action_name が edit の場合は 'サイト内検索(見つからない場合はこちら)' をデフォルトに
+      それ以外は 'amazon検索' をデフォルトに %>
   <%= hidden_field_tag :search_method, params[:search_method] || (action_name == 'edit' ? 'missing_on_amazon' : 'amazon'), id: "search_method" %>
 
   <!-- Amazon検索フォーム -->

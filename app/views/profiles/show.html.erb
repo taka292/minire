@@ -19,10 +19,10 @@
       <p class="ml-4 text-lg font-medium text-gray-800"><%= @user.name %></p>
     </div>
 
-    <!-- 投稿数・フォロワー数・フォロー数 -->
+    <%# 投稿数・フォロワー数・フォロー数 %>
     <div class="flex space-x-6 mb-4">
       <p>投稿数: <strong><%= @user.reviews.count %></strong></p>
-      <!-- フォロワー数・フォロー数はここに後で追加予定 -->
+      <%# フォロワー数・フォロー数はここに後で追加予定 %>
     </div>
     <!-- 自己紹介文 -->
     <div class="mb-4">
@@ -45,7 +45,7 @@
     <% end %>
   </div>
 
-  <!-- レビュー切り替え(いいね一覧への遷移先のため、id指定) -->
+  <%# レビュー切り替え(いいね一覧への遷移先のため、id指定) %>
   <div class="card bg-white shadow-lg rounded-lg p-6" id="likes">
     <div class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4 mb-4">
       <%= link_to "過去のレビュー", 

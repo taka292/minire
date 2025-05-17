@@ -4,7 +4,7 @@
 
   <% registered_items, unregistered_items = @items.partition { |item| item.amazon_url.present? && item.asin.present? } %>
 
-  <!-- 🔴 未登録セクション -->
+  <!-- 未登録セクション -->
   <% if unregistered_items.any? %>
     <div class="bg-red-50 border border-red-300 rounded-md p-4 mb-6 shadow">
       <h2 class="text-red-600 text-lg font-bold mb-2">Amazon情報が未登録の商品（<%= unregistered_items.count %>件）</h2>
@@ -33,7 +33,7 @@
     </div>
   <% end %>
 
-  <!-- ✅ 登録済みセクション -->
+  <!-- 登録済みセクション -->
   <div class="bg-white border border-gray-300 rounded-md shadow-sm">
     <h2 class="text-lg font-semibold text-gray-700 p-4 border-b">Amazon情報が登録されている商品（<%= registered_items.count %>件）</h2>
     <table class="table-auto w-full text-sm">
