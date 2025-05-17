@@ -1,7 +1,7 @@
   <%= turbo_frame_tag dom_id(comment) do %>
     <li class="flex items-start space-x-4 py-2">
       <!-- ユーザーのアバター -->
-      <!-- 通常のページ遷移をしようとすると、遷移先でturbo-frameを探してエラーになるため、通常のページ遷移（リロード）を行うよう明示 -->
+      <%# 通常のページ遷移をしようとすると、遷移先でturbo-frameを探してエラーになるため、通常のページ遷移（リロード）を行うよう明示 %>
       <%= link_to profile_path(comment.user), class: "flex-shrink-0", data: { turbo_frame: "_top" } do %>
         <% if comment.user.has_valid_avatar? %>
           <%= image_tag comment.user.avatar.variant(resize_to_fill: [40, 40]), class: "rounded-full w-10 h-10" %>

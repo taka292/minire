@@ -1,20 +1,20 @@
 <!-- レビュー詳細ページ -->
-<!-- タイトル・内容 -->
+<%# タイトル・内容 %>
 <%  "#{@review.title} | MiniRe (ミニレ)" %>
 <% content_for :meta_description, "#{@review.title} というテーマで、おすすめのアイテムや使い方についてレビューされています。'}" %>
-<!-- Xシェア用情報 -->
+<%# Xシェア用情報 %>
 <% content_for :og_title, @review.title %>
 <% content_for :og_description, truncate(@review.content, length: 100) %>
-<!-- OGP画像(Xでの表示用にリサイズ) -->
+<%# OGP画像(Xでの表示用にリサイズ) %>
 <% if @review.images.attached? %>
   <% x_ogp_image = @review.images.first.variant(resize_to_fill: [1200, 630]).processed %>
-  <!-- リサイズされた画像のURLを取得 -->
+  <%# リサイズされた画像のURLを取得 %>
   <% ogp_image_url = rails_representation_url(x_ogp_image, only_path: false) %>
   <% content_for :og_image, ogp_image_url %>
 <% else %>
   <% content_for :og_image, image_url("ogp.png") %>
 <% end %>
-<!--パンくずリスト-->
+<%#パンくずリスト %>
 <% breadcrumb :review, @review %>
 
 <div class="container mx-auto px-4 py-8">
