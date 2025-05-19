@@ -15,6 +15,12 @@
               placeholder: "レビュー・商品・手放せるもの",
               class: "input input-bordered md:w-[300px] h-10 px-3 text-base placeholder-gray-400"%>
 
+        <%# カテゴリ絞り込みの状態を保持 %>
+        <%= hidden_field_tag :filter_type, params[:filter_type] if params[:filter_type].present? %>
+
+        <%# 並び順の状態を保持 %>
+        <%= hidden_field_tag :sort, params[:sort] if params[:sort].present? %>
+
         <%= f.submit "検索", class: "btn h-10 min-h-0 bg-customBlue text-white border-none px-4" %>
       <% end %>
     </div>

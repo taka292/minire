@@ -8,8 +8,7 @@
     <form method="get" action="<%= path %>" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 max-w-screen-lg mx-auto">
 
       <%#  検索クエリを保持する hidden フィールド(ないと絞り込みフォームと合わせての検索ができない) %>
-      <%= hidden_field_tag "q[title_or_content_or_item_name_cont]", params.dig(:q, :title_or_content_or_item_name_cont) %>
-
+      <%= hidden_field_tag "q[#{review_search_field}]", params.dig(:q, review_search_field) %>
       <!-- 絞り込みフォーム -->
       <div class="flex flex-col md:flex-row  min-w-[300px]">
         <label for="filter_type" class="text-sm font-medium text-gray-600 whitespace-nowrap min-w-fit md:mr-2">絞り込み:</label>

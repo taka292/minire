@@ -296,6 +296,31 @@ RSpec.describe "レビュー投稿機能", type: :system do
       end
     end
 
+    let!(:category) { create(:category, name: "家電") }
+    let!(:other_category) { create(:category, name: "掃除機") }
+
+    let!(:item1) { create(:item, name: "スティック掃除機", category:) }
+    let!(:item2) { create(:item, name: "炊飯器", category:) }
+    let!(:item3) { create(:item, name: "掃除機", category: other_category) }
+
+    let!(:review1) { create(:review, title: "掃除機レビュー", content: "新しい掃除機です", item: item1) }
+    let!(:review2) { create(:review, title: "旧掃除機レビュー", content: "これは古い掃除機です", item: item1) }
+    let!(:review3) { create(:review, title: "炊飯器レビュー", content: "これは炊飯器です", item: item2) }
+    let!(:review4) { create(:review, title: "掃除機レビュー2", content: "新しい掃除機2です", item: item3) }
+
+    before do
+      create_list(:like, 3, review: review1)
+      create(:like, review: review2)
+    end
+
+    def select_filter(value)
+      select value, from: "filter_type"
+    end
+
+    def select_sort(value)
+      select value, from: "sort"
+    end
+
     def search_reviews_with(keyword)
       visit reviews_path
       find("input[name='q[title_or_content_or_item_name_or_item_description_or_item_asin_or_item_manufacturer_or_releasable_items_name_cont]']", match: :first).set(keyword)
@@ -363,26 +388,37 @@ RSpec.describe "レビュー投稿機能", type: :system do
     end
 
     it "検索後にカテゴリ絞り込みといいね順ソートができる" do
-      item = create(:item, name: "スティック掃除機", category: category)
-      review1 = create(:review, title: "掃除機レビュー", content: "新しい掃除機です", item:)
-      review2 = create(:review, title: "旧掃除機レビュー", content: "これは古い掃除機です", item:)
+      search_reviews_with("掃除機")
 
-      # いいね数を変えておく
-      create_list(:like, 3, review: review1)
-      create(:like, review: review2)
+      expect(page).to have_content("掃除機レビュー")
+      expect(page).to have_content("旧掃除機レビュー")
+      expect(page).to have_content("掃除機レビュー2")
+      expect(page).not_to have_content("炊飯器レビュー")
 
-      # ステップ①: キーワード検索
+      select_filter("カテゴリ: #{category.name}")
+      expect(page).to have_content("掃除機レビュー")
+      expect(page).to have_content("旧掃除機レビュー")
+      expect(page).not_to have_content("掃除機レビュー2")
+
+      select_sort("いいねが多い順")
+      expect(page.text.index("掃除機レビュー")).to be < page.text.index("旧掃除機レビュー")
+    end
+
+    it "カテゴリ絞り込みといいね順ソート後に検索ができる" do
       visit reviews_path
-      find("input[name='q[title_or_content_or_item_name_or_item_description_or_item_asin_or_item_manufacturer_or_releasable_items_name_cont]']", match: :first).set("掃除機")
-      find("input[type='submit'][value='検索']", match: :first).click
 
-      # ステップ②: カテゴリで絞り込み（セレクトボックス）
-      select "カテゴリ: #{category.name}", from: "filter_type"
+      select_filter("カテゴリ: #{category.name}")
+      expect(page).to have_content("掃除機レビュー")
+      expect(page).to have_content("旧掃除機レビュー")
+      expect(page).not_to have_content("掃除機レビュー2")
 
-      # ステップ③: 並び替えを「いいねが多い順」に変更
-      select "いいねが多い順", from: "sort"
+      select_sort("いいねが多い順")
+      expect(page.text.index("掃除機レビュー")).to be < page.text.index("旧掃除機レビュー")
 
-      # 確認：いいねが多いレビューが先に表示される
+      search_reviews_with("掃除機")
+      expect(page).to have_content("掃除機レビュー")
+      expect(page).to have_content("旧掃除機レビュー")
+      expect(page).not_to have_content("炊飯器レビュー")
       expect(page.text.index("掃除機レビュー")).to be < page.text.index("旧掃除機レビュー")
     end
   end
