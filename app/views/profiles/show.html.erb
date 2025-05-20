@@ -20,14 +20,57 @@
     </div>
 
     <%# 投稿数・フォロワー数・フォロー数 %>
-    <div class="flex space-x-6 mb-4">
+    <div class="flex space-x-6 mb-4 flex-wrap items-center">
       <p>投稿数: <strong><%= @user.reviews.count %></strong></p>
       <%# フォロワー数・フォロー数はここに後で追加予定 %>
+
     </div>
     <!-- 自己紹介文 -->
     <div class="mb-4">
       <p class="text-gray-700 break-words"><%= safe_join(@user.introduction.to_s.split("\n"), tag(:br)).presence || "よろしくお願いします！" %></p>
     </div>
+
+  <div class="flex flex-wrap gap-6 mb-4">
+    <%# Instagram %>
+    <% if @user.instagram_id.present? %>
+      <%= link_to "https://www.instagram.com/#{@user.instagram_id}", target: "_blank", rel: "noopener", class: "flex flex-col items-center hover:opacity-80" do %>
+        <div class="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center">
+          <i class="fa-brands fa-instagram text-xl text-gray-800"></i>
+        </div>
+        <span class="text-sm mt-2 text-gray-700">Instagram</span>
+      <% end %>
+    <% end %>
+
+    <%# X %>
+    <% if @user.x_id.present? %>
+      <%= link_to "https://x.com/#{@user.x_id}", target: "_blank", rel: "noopener", class: "flex flex-col items-center hover:opacity-80" do %>
+        <div class="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center">
+          <%= image_tag 'share-icon.png', alt: 'X', class: 'w-5 h-5 object-contain align-middle' %>
+        </div>
+        <span class="text-sm mt-2 text-gray-700">X</span>
+      <% end %>
+    <% end %>
+
+    <%# YouTube %>
+    <% if @user.youtube_id.present? %>
+      <%= link_to "https://www.youtube.com/@#{@user.youtube_id}", target: "_blank", rel: "noopener", class: "flex flex-col items-center hover:opacity-80" do %>
+        <div class="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center">
+          <i class="fa-brands fa-youtube text-xl text-gray-800"></i>
+        </div>
+        <span class="text-sm mt-2 text-gray-700">YouTube</span>
+      <% end %>
+    <% end %>
+
+    <%# note（小さいので中央余白を活用）%>
+    <% if @user.note_id.present? %>
+      <%= link_to "https://note.com/#{@user.note_id}", target: "_blank", rel: "noopener", class: "flex flex-col items-center hover:opacity-80" do %>
+        <div class="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center">
+          <%= image_tag 'note_icon.png', alt: 'note', class: 'w-6 h-6 object-contain align-middle' %>
+        </div>
+        <span class="text-sm mt-2 text-gray-700">note</span>
+      <% end %>
+    <% end %>
+  </div>
 
     <!-- プロフィール編集ボタン -->
     <% if current_user == @user %>

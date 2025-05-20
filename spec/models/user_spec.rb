@@ -117,4 +117,40 @@ RSpec.describe User, type: :model do
       end
     end
   end
+
+  describe 'SNSアカウントIDのバリデーション' do
+    it '正しい形式の各SNS IDが設定されていれば有効である' do
+      user.instagram_id = 'minimalist.life'
+      user.x_id = 'minimal_x'
+      user.youtube_id = 'mychannel-2025'
+      user.note_id = 'minimalistnote'
+      expect(user).to be_valid
+    end
+
+    it '3文字未満のIDは無効である（例: x_id）' do
+      user.x_id = 'ab'
+      expect(user).not_to be_valid
+      expect(user.errors[:x_id]).to include('半角英数字と記号（_ - . ·）を3文字以上30文字以内で入力してください')
+    end
+
+    it '31文字以上のIDは無効である（例: instagram_id）' do
+      user.instagram_id = 'a' * 31
+      expect(user).not_to be_valid
+      expect(user.errors[:instagram_id]).to include('半角英数字と記号（_ - . ·）を3文字以上30文字以内で入力してください')
+    end
+
+    it '不正な文字（日本語や記号など）が含まれると無効である（例: youtube_id）' do
+      user.youtube_id = '日本語テスト'
+      expect(user).not_to be_valid
+      expect(user.errors[:youtube_id]).to include('半角英数字と記号（_ - . ·）を3文字以上30文字以内で入力してください')
+    end
+
+    it 'すべてのSNS IDが空の場合でも有効である（任意入力）' do
+      user.instagram_id = nil
+      user.x_id = nil
+      user.youtube_id = nil
+      user.note_id = nil
+      expect(user).to be_valid
+    end
+  end
 end
