@@ -57,6 +57,41 @@
             <% end %>
           </div>
 
+          <!-- SNSアカウント入力欄 -->
+          <div class="form-control mt-6 space-y-4">
+            <div>
+              <%= f.label :instagram_id, "Instagram ID" %>
+              <%= f.text_field :instagram_id, placeholder: "instagram.com/以降のID", class: "input input-bordered w-full #{error_class(@user, :instagram_id)}" %>
+              <% if @user.errors[:instagram_id].present? %>
+                <p class="text-red-500 text-sm mt-1"><%= @user.errors[:instagram_id].first %></p>
+              <% end %>
+            </div>
+
+            <div>
+              <%= f.label :x_id, "X（旧Twitter）ID" %>
+              <%= f.text_field :x_id, placeholder: "x.com/以降のID", class: "input input-bordered w-full #{error_class(@user, :x_id)}" %>
+              <% if @user.errors[:x_id].present? %>
+                <p class="text-red-500 text-sm mt-1"><%= @user.errors[:x_id].first %></p>
+              <% end %>
+            </div>
+
+            <div>
+              <%= f.label :youtube_id, "YouTube ID" %>
+              <%= f.text_field :youtube_id, placeholder: "youtube.com/@以降のID", class: "input input-bordered w-full #{error_class(@user, :youtube_id)}" %>
+              <% if @user.errors[:youtube_id].present? %>
+                <p class="text-red-500 text-sm mt-1"><%= @user.errors[:youtube_id].first %></p>
+              <% end %>
+            </div>
+
+            <div>
+              <%= f.label :note_id, "note ID" %>
+              <%= f.text_field :note_id, placeholder: "note.com/以降のID", class: "input input-bordered w-full #{error_class(@user, :note_id)}" %>
+              <% if @user.errors[:note_id].present? %>
+                <p class="text-red-500 text-sm mt-1"><%= @user.errors[:note_id].first %></p>
+              <% end %>
+            </div>
+          </div>
+
           <%# SNSログインではなく、メールアドレスでのログインの場合のみ更新可能 %>
           <% unless @user.provider.present? %>
             <div class="form-control mt-4">

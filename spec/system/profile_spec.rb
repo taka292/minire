@@ -121,6 +121,37 @@ RSpec.describe "プロフィール機能", type: :system do
       expect(page).not_to have_link("メールアドレスの変更")
       expect(page).not_to have_link("パスワードの変更")
     end
+
+    it "SNS IDを正しく入力すれば保存され、プロフィールにリンクが表示される" do
+      visit edit_profile_path(user)
+
+      fill_in "Instagram ID", with: "minimalist.life"
+      fill_in "X（旧Twitter）ID", with: "minimal_x"
+      fill_in "YouTube ID", with: "mychannel-2025"
+      fill_in "note ID", with: "minimalistnote"
+
+      click_button "更新する"
+
+      expect(page).to have_current_path(profile_path(user), wait: 5)
+      expect(page).to have_link("Instagram", href: "https://www.instagram.com/minimalist.life")
+      expect(page).to have_link("X", href: "https://x.com/minimal_x")
+      expect(page).to have_link("YouTube", href: "https://www.youtube.com/@mychannel-2025")
+      expect(page).to have_link("note", href: "https://note.com/minimalistnote")
+    end
+
+    it "不正なSNS IDを入力するとバリデーションエラーが表示される" do
+      visit edit_profile_path(user)
+
+      fill_in "Instagram ID", with: "あ"  # 日本語
+      fill_in "X（旧Twitter）ID", with: "ab"  # 3文字未満
+      fill_in "YouTube ID", with: "a" * 31  # 31文字超
+      fill_in "note ID", with: "invalid@id"  # 記号含む
+
+      click_button "更新する"
+
+      expect(page).to have_current_path(edit_profile_path(user), wait: 5)
+      expect(page).to have_content("半角英数字と記号（_ - . ·）を3文字以上30文字以内で入力してください").exactly(4).times
+    end
   end
 
   describe "パスワード変更" do

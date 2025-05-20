@@ -68,7 +68,7 @@ class ProfilesController < ApplicationController
   end
 
   def profile_params
-    params.require(:user).permit(:name, :introduction, :avatar)
+    params.require(:user).permit(:name, :introduction, :avatar, :instagram_id, :x_id, :youtube_id, :note_id)
   end
 
   def email_update_params

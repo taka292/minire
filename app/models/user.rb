@@ -21,6 +21,13 @@ class User < ApplicationRecord
   validate :avatar_content_type
   validate :avatar_size
 
+  # SNS IDのバリデーション
+  SNS_ID_REGEX = /\A[a-zA-Z0-9_.\-·]{3,30}\z/
+  validates :instagram_id, :x_id, :youtube_id, :note_id,
+  format: { with: SNS_ID_REGEX, message: "半角英数字と記号（_ - . ·）を3文字以上30文字以内で入力してください" },
+  allow_blank: true
+
+
   # 新規登録時に自動で確認済みにする
   after_create :auto_confirm_account
 
