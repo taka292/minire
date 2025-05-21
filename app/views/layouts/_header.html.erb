@@ -34,6 +34,11 @@
         <% end %>
       <% end %>
 
+      <%= link_to new_review_path, class: "flex flex-col items-center justify-center text-gray-600" do %>
+          <span class="material-symbols-outlined text-3xl leading-none">rate_review</span>
+          <span class="mt-0.5">投稿</span>
+        <% end %>
+
       <%= link_to reviews_path, class: "flex flex-col items-center justify-center text-gray-600", title: "レビュー 一覧" do %>
         <span class="material-symbols-outlined text-3xl leading-none">quick_reference_all</span>
         <span class="mt-0.5">投稿一覧</span>

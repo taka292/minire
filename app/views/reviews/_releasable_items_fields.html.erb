@@ -1,7 +1,8 @@
 <!-- 手放せるものフォーム -->
-<div data-controller="releasable-items">
+<div data-controller="releasable-items" class="space-y-4">
+
   <%# タイトル：最初は hidden にしておく %>
-  <%= form.label :releasable_items, "手放せるもの（任意・最大3つまで）", class: "block text-lg font-medium text-gray-700 mb-2 hidden", data: { releasable_items_target: "title" } %>
+  <%= form.label :releasable_items, "手放せるもの（任意・最大3つまで）", class: "block text-lg font-semibold text-gray-800 hidden", data: { releasable_items_target: "title" } %>
 
   <% 3.times do |i| %>
     <% value_present = @review.releasable_items[i]&.name.present? %>
@@ -12,11 +13,11 @@
     </div>
   <% end %>
 
-  <div class="mt-4 text-right">
+  <div class="flex justify-center mt-2">
     <button type="button"
-            class="btn btn-outline btn-sm"
+            class="btn btn-outline btn-primary btn-sm px-6"
             data-action="click->releasable-items#add">
-      手放せるものを追加
+      ＋ 手放せるものを追加
     </button>
   </div>
 </div>
