@@ -305,4 +305,4 @@ Dockerを導入することで、ローカル環境を手軽に構築できる�
 
 ### ER図
 [dbdiagram.io](https://dbdiagram.io/d/MiniRe-6808e3d11ca52373f50bf743)
-![ER](https://github.com/user-attachments/assets/9ecc9764-ba71-4fb8-8919-d3600bf47b2f)
+![ER](https://github.com/user-attachments/assets/e7fa13f9-7f9d-42f9-b78e-0562314180dc)
