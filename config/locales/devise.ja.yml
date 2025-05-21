@@ -6,7 +6,7 @@ ja:
       signed_in: "ログインしました!"
       signed_out: "ログアウトしました。"
     registrations:
-      signed_up: "登録ありがとうございます！さっそくレビューを投稿してみませんか？"
+      signed_up: "登録ありがとうございます！まずは必要に応じてプロフィールを設定してみましょう!"
       failure: 'アカウントの登録に失敗しました。入力内容を確認してください。'
     passwords:
       send_instructions: "パスワード再設定のためのメールを送信しました。"

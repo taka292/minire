@@ -58,8 +58,8 @@ RSpec.describe "ユーザー認証", type: :system do
     fill_in "user[password_confirmation]", with: "newpassword"
     click_button "登録する"
 
-    expect(page).to have_current_path(root_path)
-    expect(page).to have_content("登録ありがとうございます！さっそくレビューを投稿してみませんか？")
+    expect(page).to have_current_path(edit_profile_path(User.last), wait: 5)
+    expect(page).to have_content("登録ありがとうございます！まずは必要に応じてプロフィールを設定してみましょう!")
   end
 
   it "メールアドレス未入力では登録できない" do

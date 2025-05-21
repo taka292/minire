@@ -10,15 +10,9 @@ class Users::RegistrationsController < Devise::RegistrationsController
   # end
 
   # POST /resource
-  def create
-    super do |resource|
-      if resource.persisted?
-        flash[:notice] = "登録ありがとうございます！さっそくレビューを投稿してみませんか？"
-      elsif resource.errors.any? # もしエラーがあれば
-        flash[:alert] = I18n.t("devise.registrations.failure") # カスタムメッセージを設定
-      end
-    end
-  end
+  # def edit
+  #   super
+  # end
 
   # GET /resource/edit
   # def edit
@@ -57,8 +51,9 @@ class Users::RegistrationsController < Devise::RegistrationsController
   end
 
   # The path used after sign up.
+  # ユーザー登録後のリダイレクト先でプロフィール編集画面を指定
   def after_sign_up_path_for(resource)
-    root_path
+    edit_profile_path(resource)
   end
 
   # The path used after sign up for inactive accounts.
