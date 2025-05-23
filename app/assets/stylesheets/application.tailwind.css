@@ -5,3 +5,10 @@
 body {
   @apply bg-[#F5F5F5] text-gray-900;
 }
+
+.lightbox .lb-image {
+  max-width: 80vw;
+  /* 画面の80%の幅に */
+  max-height: 80vh;
+  /* 画面の80%の高さに */
+}
