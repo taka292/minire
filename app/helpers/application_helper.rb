@@ -2,10 +2,10 @@ module ApplicationHelper
   def default_meta_tags
     {
       site: "MiniRe (ミニレ)",
-      title: "ミニマリスト向けレビューサイト",
       reverse: true,
       charset: "utf-8",
-      description: "探さない、迷わない。MiniReがあるから。MiniReは、ミニマリストやシンプルライフを目指す人向けのレビューサイトです。厳選されたアイテムのレビューを参考に、少ないモノで豊かに暮らすヒントを見つけましょう。",
+      title: content_for(:title) || "ミニマリスト向けレビューサイト",
+      description: content_for(:meta_description) || "探さない、迷わない。MiniReがあるから。MiniReは、ミニマリストやシンプルライフを目指す人向けのレビューサイトです。厳選されたアイテムのレビューを参考に、少ないモノで豊かに暮らすヒントを見つけましょう。",
       keywords: "ミニマリスト, シンプルライフ, 持たない暮らし, 愛用品, レビュー, アイテム, 最小限, MiniRe",
       canonical: request.original_url,
       separator: "|",
