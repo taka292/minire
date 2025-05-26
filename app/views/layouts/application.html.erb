@@ -38,6 +38,18 @@
     <!-- JavaScript -->
     <link rel="preload" href="/assets/application-33583849.js" as="script" crossorigin="anonymous">
     <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module", defer: true, crossorigin: "anonymous" %>
+
+    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js" defer></script>
+    <script>
+    lightbox.option({
+      'resizeDuration': 200,
+      'wrapAround': true
+    })
+    </script>
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
   </head>
   <body class="font-sans">
     <div class="bg-[#F5F5F5] border-b border-black shadow-md  sticky top-0 z-50">
@@ -64,7 +76,7 @@
     <%= render 'layouts/footer' %>
 
     <!-- レビュー投稿ボタン -->
-    <%= link_to new_review_path, class: "fixed flex flex-col items-center justify-center bottom-4 right-4 bg-white text-gray-800 border border-gray-300 w-16 h-16 rounded-full shadow-md hover:bg-gray-100 transition text-[10px] sm:text-xs", title: "レビュー投稿" do %>
+    <%= link_to new_review_path, class: "block md:hidden fixed flex flex-col items-center justify-center bottom-4 right-4 bg-white text-gray-800 border border-gray-300 w-16 h-16 rounded-full shadow-md hover:bg-gray-100 transition text-[10px] sm:text-xs", title: "レビュー投稿" do %>
       <span class="material-icons text-2xl leading-none" aria-hidden="true">rate_review</span>
       <span class="mt-0.5">投稿</span>
     <% end %>
@@ -79,6 +91,8 @@
         offset: 60
       });
     </script>
+
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
 
   </body>
 </html>
