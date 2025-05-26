@@ -38,17 +38,7 @@
     <!-- JavaScript -->
     <link rel="preload" href="/assets/application-33583849.js" as="script" crossorigin="anonymous">
     <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module", defer: true, crossorigin: "anonymous" %>
-
-    
     <link href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css" rel="stylesheet">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js" defer></script>
-    <script>
-    lightbox.option({
-      'resizeDuration': 200,
-      'wrapAround': true
-    })
-    </script>
     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
   </head>
   <body class="font-sans">
@@ -90,6 +80,16 @@
         once: true,
         offset: 60
       });
+    </script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js"></script>
+
+    <script>
+      lightbox.option({
+        'resizeDuration': 200,
+        'wrapAround': true
+      })
     </script>
 
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
