@@ -76,7 +76,7 @@
     <%= render 'layouts/footer' %>
 
     <!-- レビュー投稿ボタン -->
-    <%= link_to new_review_path, class: "block md:hidden fixed flex flex-col items-center justify-center bottom-4 right-4 bg-white text-gray-800 border border-gray-300 w-16 h-16 rounded-full shadow-md hover:bg-gray-100 transition text-[10px] sm:text-xs", title: "レビュー投稿" do %>
+    <%= link_to new_review_path, class: "block md:hidden fixed flex flex-col items-center justify-center bottom-4 right-4 bg-white text-gray-800 border border-gray-300 w-16 h-16 rounded-full shadow-md hover:bg-gray-100 transition text-[10px] sm:text-xs z-30", title: "レビュー投稿" do %>
       <span class="material-icons text-2xl leading-none" aria-hidden="true">rate_review</span>
       <span class="mt-0.5">投稿</span>
     <% end %>
