@@ -2,21 +2,19 @@
 import "@hotwired/turbo-rails"
 import "./controllers"
 
-// app/javascript/application.js
-// import Swiper from 'swiper/bundle'
-// import 'swiper/css/bundle'
-
 // SwiperをTurboに対応させて初期化
 document.addEventListener('turbo:load', () => {
-  const carousels = document.querySelectorAll('.swiper')
+  const containers = document.querySelectorAll('.swiper-container')
 
-  carousels.forEach((carousel) => {
-    new Swiper(carousel, {
+  containers.forEach((container) => {
+    const swiperEl = container.querySelector('.swiper')
+
+    new Swiper(swiperEl, {
       loop: false,
       slidesPerView: 1,
       spaceBetween: 16,
       pagination: {
-        el: carousel.querySelector('.swiper-pagination'),
+        el: container.querySelector('.swiper-pagination'),
         clickable: true,
       }
     })

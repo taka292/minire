@@ -1,0 +1,19 @@
+<!-- レビューの本文部分を表示するためのテンプレート -->
+<h1 class="text-2xl font-bold mt-8 mb-4 text-gray-800"><%= review.title %></h1>
+<div class="text-base text-gray-700 mb-6">
+  <%= simple_format(review.content) %>
+</div>
+
+<% if review.releasable_items.present? %>
+  <div class="p-4 bg-gray-100 rounded-md">
+    <h2 class="text-lg font-semibold mb-2">手放せるもの</h2>
+    <ul class="space-y-2">
+      <% review.releasable_items.each do |item| %>
+        <li class="flex items-center text-gray-700 text-lg">
+          <span class="material-symbols-outlined text-blue-500 mr-2">check_circle</span>
+          <%= item.name %>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>

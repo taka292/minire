@@ -1,7 +1,5 @@
 <!-- レビュー詳細ページ -->
-<%# タイトル・内容 %>
-<%  "#{@review.title} | MiniRe (ミニレ)" %>
-<% content_for :meta_description, "#{@review.title} というテーマで、おすすめのアイテムや使い方についてレビューされています。'}" %>
+<% content_for :meta_description, "#{@review.title} というテーマで、おすすめのアイテムや使い方についてレビューされています。" %>
 <%# Xシェア用情報 %>
 <% content_for :og_title, @review.title %>
 <% content_for :og_description, truncate(@review.content, length: 100) %>
@@ -28,126 +26,78 @@
                         class: "w-12 h-12 rounded-full object-cover",
                         alt: "User Avatar" %>
         <% else %>
-          <span class="material-symbols-outlined text-gray-600 text-3xl">account_circle</span>
+          <span class="material-symbols-outlined text-gray-600 flex items-center justify-center w-10 h-10" style="font-size: 40px;">account_circle</span>
         <% end %>
         <div class="ml-4 text-gray-800 font-medium">
-          <p class="text-sm">
+          <p class="ml-4 text-sm text-gray-800 font-medium">
             <%= @review.user.name %>
           </p>
         </div>
       <% end %>
     </div>
 
-    <div class="container mx-auto px-4 py-8">
-      <!-- 投稿画像 + 内容：スマホとPCで切り替え -->
-      <div>
-
-        <!-- スマホのみ表示 -->
-        <div class="block md:hidden">
-          <!-- Swiperカルーセル本体 -->
-          <div class="swiper w-full rounded-lg overflow-hidden mb-4">
-            <div class="swiper-wrapper">
-              <% @review.images.each do |image| %>
-                <div class="swiper-slide flex justify-center items-center bg-white">
-                  <%= link_to url_for(image), data: { lightbox: "review-images" } do %>
-                    <%= image_tag image.variant(resize_to_limit: [600, 600]),
-                                  class: "max-h-[300px] w-auto mx-auto object-contain" %>
-                  <% end %>
-                </div>
-              <% end %>
-            </div>
-            <!-- ドットを画像の外・下に表示 -->
-            <div class="swiper-pagination mt-4 flex justify-center">
-              <div class="swiper-button-prev"></div>
-              <div class="swiper-button-next"></div>
-            </div>
-          </div>
-
-          
-
-          <!-- 本文・タイトル・手放せるもの -->
-          <div class="mt-6 space-y-6">
-            <!-- タイトル -->
-            <h1 class="text-xl font-bold text-gray-800"><%= @review.title %></h1>
-
-            <!-- 本文 -->
-            <div class="text-base text-gray-700">
-              <%= simple_format(@review.content) %>
-            </div>
-
-            <!-- 手放せるもの -->
-            <% if @review.releasable_items.present? %>
-              <div class="p-4 bg-gray-100 rounded-md">
-                <h2 class="text-lg font-semibold mb-2">手放せるもの</h2>
-                <ul class="space-y-2">
-                  <% @review.releasable_items.each do |item| %>
-                    <li class="flex items-center text-gray-700 text-base">
-                      <span class="material-symbols-outlined text-blue-500 mr-2">check_circle</span>
-                      <%= item.name %>
-                    </li>
-                  <% end %>
-                </ul>
+    <!-- 投稿画像 + 内容：スマホとPCで切り替え -->
+    <!-- スマホのみ表示 -->
+    <div class="block md:hidden">
+      <% if @review.images.attached? %>
+      <div class="swiper-container">
+        <div class="swiper w-full rounded-lg overflow-hidden mb-4">
+          <div class="swiper-wrapper">
+            <% @review.images.each do |image| %>
+              <div class="swiper-slide flex justify-center items-center bg-white">
+                <%= link_to url_for(image), data: { lightbox: "review-images" } do %>
+                  <%= image_tag image.variant(resize_to_limit: [600, 600]), class: "max-h-[300px] w-auto mx-auto object-contain" %>
+                <% end %>
               </div>
             <% end %>
           </div>
         </div>
-
-
-        <!-- PC表示（画像＋サムネイル＋本文） -->
-        <div class="hidden md:flex flex-row gap-6" data-controller="image-gallery">
-          <!-- 左側：画像・サムネイル -->
-          <div class="w-1/2 flex flex-col items-start">
-            <% if @review.images.attached? %>
-              <!-- メイン画像 -->
-              <img data-image-gallery-target="main"
-                  src="<%= url_for(@review.images.first.variant(resize_to_limit: [600, 600])) %>"
-                  class="w-full max-h-[400px] object-contain rounded-md mb-4">
-
-              <!-- サムネイル -->
-              <div class="flex gap-2 overflow-x-auto">
-                <div class="flex gap-2 overflow-x-auto">
-                  <% @review.images.each_with_index do |image, index| %>
-                    <img src="<%= url_for(image.variant(resize_to_fill: [100, 100])) %>"
-                        data-image-gallery-target="thumbnail"
-                        data-action="click->image-gallery#change"
-                        data-large="<%= url_for(image.variant(resize_to_limit: [600, 600])) %>"
-                        data-index="<%= index %>"
-                        class="w-20 h-20 object-cover rounded-md cursor-pointer
-                                transition duration-150 ease-in-out">
-                  <% end %>
-                </div>
-              </div>
-            <% end %>
-          </div>
-
-          <!-- 右側：本文や手放せるもの -->
-          <div class="w-1/2">
-            <h1 class="text-2xl font-bold mb-4 text-gray-800"><%= @review.title %></h1>
-            <div class="text-base text-gray-700 mb-6">
-              <%= simple_format(@review.content) %>
-            </div>
-
-            <% if @review.releasable_items.present? %>
-              <div class="p-4 bg-gray-100 rounded-md">
-                <h2 class="text-lg font-semibold mb-2">手放せるもの</h2>
-                <ul class="space-y-2">
-                  <% @review.releasable_items.each do |item| %>
-                    <li class="flex items-center text-gray-700 text-lg">
-                      <span class="material-symbols-outlined text-blue-500 mr-2">check_circle</span>
-                      <%= item.name %>
-                    </li>
-                  <% end %>
-                </ul>
-              </div>
-            <% end %>
-          </div>
-        </div>
-
+        <div class="swiper-pagination"></div>
       </div>
+      <% end %>
+      <%= render "review_body", review: @review %>
     </div>
 
+    <!-- PCのみ表示 -->
+    <% if @review.images.attached? %>
+      <!-- PC表示：画像あり（2カラム） -->
+      <div class="hidden md:flex flex-row gap-6" data-controller="image-gallery">
+        <!-- 左側：画像・サムネイル -->
+        <div class="w-1/2 flex flex-col items-start">
+          <!-- メイン画像 -->
+          <img data-image-gallery-target="main"
+              src="<%= url_for(@review.images.first.variant(resize_to_limit: [600, 600])) %>"
+              class="w-full max-h-[400px] object-contain rounded-md mb-4">
 
+          <!-- サムネイル -->
+          <div class="flex gap-2 overflow-x-auto">
+            <div class="flex gap-2 overflow-x-auto">
+              <% @review.images.each_with_index do |image, index| %>
+                <img src="<%= url_for(image.variant(resize_to_fill: [100, 100])) %>"
+                    data-image-gallery-target="thumbnail"
+                    data-action="click->image-gallery#change"
+                    data-large="<%= url_for(image.variant(resize_to_limit: [600, 600])) %>"
+                    data-index="<%= index %>"
+                    class="w-20 h-20 object-cover rounded-md cursor-pointer
+                            transition duration-150 ease-in-out">
+              <% end %>
+            </div>
+          </div>
+        </div>
 
+        <!-- 右側：本文など -->
+        <div class="w-1/2">
+          <%= render "review_body", review: @review %>
+        </div>
+      </div>
+    <% else %>
+      <!-- PC表示：画像なし（左寄せ） -->
+      <div class="hidden md:block">
+        <div class="max-w-3xl ml-0">
+          <%= render "review_body", review: @review %>
+        </div>
+      </div>
+    <% end %>
 
     <!-- 編集・削除ボタン -->
     <% if current_user == @review.user %>
