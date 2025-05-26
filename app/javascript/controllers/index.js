@@ -4,23 +4,30 @@
 
 import { application } from "./application"
 
+// 商品名の自動補完（Amazon検索やサイト内検索に対応）
+import Autocomplete from "stimulus-autocomplete"
+application.register("autocomplete", Autocomplete)
+
+// テキストエリアのサイズを入力内容に応じて自動調整
 import AutosizeController from "./autosize_controller"
 application.register("autosize", AutosizeController)
 
-import FormToggleController from "./form_toggle_controller"
-application.register("form-toggle", FormToggleController)
-
+// 商品の画像ギャラリーを表示
 import ImageGalleryController from "./image_gallery_controller"
 application.register("image-gallery", ImageGalleryController)
 
+// 画像プレビューの表示
 import ImagePreviewController from "./image_preview_controller"
 application.register("image-preview", ImagePreviewController)
 
+// 手放せるものフォーム追加
 import ReleasableItemsController from "./releasable_items_controller"
 application.register("releasable-items", ReleasableItemsController)
 
+// 商品検索フォーム（Amazon / サイト内）の表示切り替え
 import SearchToggleController from "./search_toggle_controller"
 application.register("search-toggle", SearchToggleController)
 
+// レビュー内容にテンプレート文を挿入できるボタン操作を提供
 import TemplateController from "./template_controller"
 application.register("template", TemplateController)
