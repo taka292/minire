@@ -56,35 +56,52 @@
 <table> <tr> <td width="50%">
 レビューの閲覧
 
-https://github.com/user-attachments/assets/1f2f663c-557c-4860-869b-4b4254185737
+
+https://github.com/user-attachments/assets/4f0fa387-575f-40d6-a29e-1444c7f36a28
+
 
 </td> <td width="50%">
 商品情報の閲覧
 
 
-https://github.com/user-attachments/assets/0a2ddfcd-9c3d-4c07-a931-5aae46dae109
+
+https://github.com/user-attachments/assets/50d8c2f9-3b86-4d7c-baf8-0410835c4f97
+
+
 
 </td> </tr> </table>
 ユーザー登録後にできること
 <table> <tr> <td width="50%">
 レビューの投稿
 
-https://github.com/user-attachments/assets/9698943e-9396-47e1-944f-8f0b611a10ae
+
+
+https://github.com/user-attachments/assets/db392df8-2cfa-4449-a983-1ee6ae3a553f
+
+
 
 </td> <td width="50%">
 コメント投稿
 
-https://github.com/user-attachments/assets/600d2289-ff84-4942-b458-126afdf0f6a5
+
+https://github.com/user-attachments/assets/e54313fc-9fda-4c3f-84ec-ce2f1d3f4a33
+
 
 </td> </tr> <tr> <td width="50%">
 いいね機能
 
-https://github.com/user-attachments/assets/8024e9fa-8e75-4ba8-b422-64717d7b9cc0
+
+https://github.com/user-attachments/assets/c1fca3db-89dc-4c4e-a370-1a1c08dc24c7
+
 
 </td> <td width="50%">
 通知機能（コメント・いいね）
 
-https://github.com/user-attachments/assets/6f87b749-668d-4b16-898b-d2f8877e5cb0
+
+
+https://github.com/user-attachments/assets/3c3d9eff-25ef-41d9-95c7-b20eb2423f2d
+
+
 
 </td> </tr> </table>
 
