@@ -20,6 +20,10 @@ application.register("image-gallery", ImageGalleryController)
 import ImagePreviewController from "./image_preview_controller"
 application.register("image-preview", ImagePreviewController)
 
+// ローディング画面
+import LoadingController from "./loading_controller"
+application.register("loading", LoadingController)
+
 // 手放せるものフォーム追加
 import ReleasableItemsController from "./releasable_items_controller"
 application.register("releasable-items", ReleasableItemsController)
