@@ -41,58 +41,68 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
   </head>
-  <body class="font-sans">
-    <div class="bg-[#F5F5F5] border-b border-black shadow-md  sticky top-0 z-50">
-      <%= render 'layouts/header' %>
+
+  <body>
+    <div class="font-sans" data-controller="loading">
+      <!-- ローディングスピナー -->
+      <div data-loading-target="spinner" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40 hidden">
+        <div class="w-24 h-24 flex items-center justify-center">
+          <span class="loading loading-spinner text-default w-full h-full"></span>
+        </div>
+      </div>
+
+      <div class="bg-[#F5F5F5] border-b border-black shadow-md  sticky top-0 z-40">
+        <%= render 'layouts/header' %>
+      </div>
+
+      <% flash.each do |key, value| %>
+        <%= render 'layouts/flash_message', key: key, value: value %>
+      <% end %>
+
+      <% if defined?(@review) && @review.errors.any? %>
+        <%= render 'shared/error_messages', object: @review %>
+      <% end %>
+
+      <!-- パンくずリスト -->
+      <% if breadcrumbs.present? %>
+        <nav class="breadcrumbs text-sm p-3 rounded-lg">
+          <%= breadcrumbs wrapper_tag: :ul, separator: '<span class="text-gray-400"> &rsaquo; </span>'.html_safe %>
+        </nav>
+      <% end %>
+
+      <!-- メインコンテンツ -->
+      <%= yield %>
+
+      <%= render 'layouts/footer' %>
+
+      <!-- レビュー投稿ボタン -->
+      <%= link_to new_review_path, class: "block md:hidden fixed flex flex-col items-center justify-center bottom-4 right-4 bg-white text-gray-800 border border-gray-300 w-16 h-16 rounded-full shadow-md hover:bg-gray-100 transition text-[10px] sm:text-xs z-30", title: "レビュー投稿" do %>
+        <span class="material-icons text-2xl leading-none" aria-hidden="true">rate_review</span>
+        <span class="mt-0.5">投稿</span>
+      <% end %>
+
+
+      <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+      <script>
+        AOS.init({
+          duration: 900,
+          easing: 'ease-in-out',
+          once: true,
+          offset: 60
+        });
+      </script>
+
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js"></script>
+
+      <script>
+        lightbox.option({
+          'resizeDuration': 200,
+          'wrapAround': true
+        })
+      </script>
+
+      <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
     </div>
-    <% flash.each do |key, value| %>
-      <%= render 'layouts/flash_message', key: key, value: value %>
-    <% end %>
-
-    <% if defined?(@review) && @review.errors.any? %>
-      <%= render 'shared/error_messages', object: @review %>
-    <% end %>
-
-    <!-- パンくずリスト -->
-    <% if breadcrumbs.present? %>
-      <nav class="breadcrumbs text-sm p-3 rounded-lg">
-        <%= breadcrumbs wrapper_tag: :ul, separator: '<span class="text-gray-400"> &rsaquo; </span>'.html_safe %>
-      </nav>
-    <% end %>
-
-    <!-- メインコンテンツ -->
-    <%= yield %>
-
-    <%= render 'layouts/footer' %>
-
-    <!-- レビュー投稿ボタン -->
-    <%= link_to new_review_path, class: "block md:hidden fixed flex flex-col items-center justify-center bottom-4 right-4 bg-white text-gray-800 border border-gray-300 w-16 h-16 rounded-full shadow-md hover:bg-gray-100 transition text-[10px] sm:text-xs z-30", title: "レビュー投稿" do %>
-      <span class="material-icons text-2xl leading-none" aria-hidden="true">rate_review</span>
-      <span class="mt-0.5">投稿</span>
-    <% end %>
-
-
-    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
-    <script>
-      AOS.init({
-        duration: 900,
-        easing: 'ease-in-out',
-        once: true,
-        offset: 60
-      });
-    </script>
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js"></script>
-
-    <script>
-      lightbox.option({
-        'resizeDuration': 200,
-        'wrapAround': true
-      })
-    </script>
-
-    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
-
   </body>
 </html>
