@@ -8,4 +8,4 @@
   <%= render "comments_count", review: @review %>
 <% end %>
 
-<%= turbo_stream.append "comments", partial: "comments/comment", locals: { comment: @comment } %>
+<%= turbo_stream.prepend "comments", partial: "comments/comment", locals: { comment: @comment } %>

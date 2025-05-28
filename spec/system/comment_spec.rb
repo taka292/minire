@@ -11,14 +11,21 @@ RSpec.describe "コメント機能", type: :system do
 
   describe "非同期のコメント機能のテスト", js: true do
     # Turbo Frameの描画が不安定なため、CI環境ではスキップ
-    it "コメントフォームが正常に動作し、入力値が表示される" do
+    it "コメントが正常に投稿でき、新規順で表示される" do
       skip "CI環境ではTurbo描画の不安定性によりスキップ" if ENV["CI"]
 
-      fill_in "comment_content", with: "これはテストコメントです"
+      fill_in "comment_content", with: "1回目のコメント"
       click_button "コメント"
-      visit current_path
       expect(page).to have_selector("turbo-frame[id^='comment_']", wait: 10)
-      expect(page).to have_content("これはテストコメントです", wait: 5)
+      expect(page).to have_content("1回目のコメント", wait: 5)
+
+      fill_in "comment_content", with: "2回目のコメント"
+      click_button "コメント"
+      expect(page).to have_selector("turbo-frame[id^='comment_']", wait: 10)
+      expect(page).to have_content("2回目のコメント", wait: 5)
+
+      # コメントが最新のが上に表示されることを確認
+      expect(page.text.index("2回目のコメント")).to be < page.text.index("1回目のコメント")
     end
 
     it "自分のコメントを非同期で削除できる" do
