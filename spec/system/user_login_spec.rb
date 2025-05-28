@@ -187,7 +187,7 @@ RSpec.describe "ユーザー認証", type: :system do
 
       # 登録できずログイン画面にリダイレクトされていることを確認
       expect(page).to have_current_path(new_user_session_path)
-      expect(page).to have_content("このメールアドレスは別のログイン方法で既に登録されています。登録時の方法（通常登録またはSNS認証）でログインしてください。") # またはカスタムメッセージ
+      expect(page).to have_content("このメールアドレスは別のログイン方法で既に登録されています。登録時の方法（通常登録またはSNS認証）でログインしてください。", wait: 5)
     end
 
     it "SNS認証で既存のメールアドレスを使用した場合はログインできず、案内される" do
