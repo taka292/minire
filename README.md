@@ -203,6 +203,10 @@ https://github.com/user-attachments/assets/3c3d9eff-25ef-41d9-95c7-b20eb2423f2d
 ### いいね機能
 
 - レビューに対するいいね(TurboによるAjax対応)
+ 
+### 通知機能
+
+- レビュー・いいねに対する通知
 
 ### マイページ機能
 
