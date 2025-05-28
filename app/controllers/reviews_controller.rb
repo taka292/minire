@@ -30,8 +30,11 @@ class ReviewsController < ApplicationController
   end
 
   def show
+    # レビューの詳細情報取得
     @review = Review.find(params[:id])
-    @comments = @review.comments.includes(:user)
+    # レビューに紐づくコメントの読み込み
+    @comments = @review.comments.includes(:user).order(created_at: :desc)
+    # コメント新規作成フォーム用
     @comment = @review.comments.new
   end
 
