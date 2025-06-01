@@ -1,17 +1,25 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <%# タブのタイトル設定(設定がなければデフォルト表示) %>
     <title><%= content_for?(:title) ? yield(:title) : "MiniRe (ミニレ) | ミニマリスト向けのレビューサイト" %></title>
+
+    <%# モバイル対応（レスポンシブデザイン） %>
     <meta name="viewport" content="width=device-width,initial-scale=1">
+
+    <%# iOSのホーム画面追加時にWebアプリとして扱う設定 %>
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <!-- 	フォーム送信時のCSRF対策用トークン -->
+
+    <%# フォーム送信時のCSRF対策用トークン %>
     <%= csrf_meta_tags %>
-    <!-- 外部スクリプトの読み込みなどを制限し、不正なスクリプト実行（XSS）を防ぐためのセキュリティ用metaタグ -->
+
+    <%# 外部スクリプトの読み込みなどを制限し、不正なスクリプト実行（XSS）を防ぐためのセキュリティ用metaタグ %>
     <%= csp_meta_tag %>
-    <!-- OGP設定 -->
+
+    <%# OGP設定 %>
     <%= display_meta_tags(default_meta_tags) %>
 
-    <!-- Google Analytics (gtag.js) のタグ -->
+    <%# Google Analytics (gtag.js) のタグ %>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-ND1MZMEC14"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
@@ -21,30 +29,41 @@
       gtag('config', 'G-ND1MZMEC14');
     </script>
 
-    <%= yield :head %>
-
-    <!-- favicon(スマホ・PC・) -->
+    <%# favicon(スマホ・PC・) %>
     <%= favicon_link_tag '/favicon.ico' %>
     <%= favicon_link_tag '/apple-touch-icon.png', rel: 'apple-touch-icon', type: 'image/png' %>
     <%= favicon_link_tag '/android-chrome-192x192.png', rel: 'icon', type: 'image/png', sizes: '192x192' %>
     <%= favicon_link_tag '/android-chrome-512x512.png', rel: 'icon', type: 'image/png', sizes: '512x512' %>
 
-    <!-- Stylesheets -->
+    <%# アプリケーション全体のCSS（Tailwind含む） %>
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+
+    <%# Google Material Icons（アイコン表示用） %>
     <%= stylesheet_link_tag 'https://fonts.googleapis.com/icon?family=Material+Icons', media: 'all' %>
     <%= stylesheet_link_tag 'https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined', media: 'all' %>
-    <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+
+    <%# Font Awesome（アイコン表示用） %>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-    <!-- JavaScript -->
+
+    <%# AOS（スクロールアニメーション用ライブラリ）のCSS %>
+    <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+
+    <%# JavaScriptのプリロード（パフォーマンス向上） %>
     <link rel="preload" href="/assets/application-33583849.js" as="script" crossorigin="anonymous">
+
+    <%# アプリケーション全体のJS %>
     <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module", defer: true, crossorigin: "anonymous" %>
+
+    <%# Lightbox2（スマホ時の画像ギャラリー用ライブラリ）のCSS %>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css" rel="stylesheet">
+
+    <%# Swiper（スライダー用ライブラリ）のCSS %>
     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
   </head>
 
   <body>
     <div class="font-sans" data-controller="loading">
-      <!-- ローディングスピナー -->
+      <%# ローディングスピナー(レビュー時に表示) %>
       <div data-loading-target="spinner" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40 hidden">
         <div class="w-24 h-24 flex items-center justify-center">
           <span class="loading loading-spinner text-default w-full h-full"></span>
@@ -55,33 +74,35 @@
         <%= render 'layouts/header' %>
       </div>
 
+      <%# フラッシュメッセージの表示 %>
       <% flash.each do |key, value| %>
         <%= render 'layouts/flash_message', key: key, value: value %>
       <% end %>
 
+      <%# エラー時のメッセージ表示 %>
       <% if defined?(@review) && @review.errors.any? %>
         <%= render 'shared/error_messages', object: @review %>
       <% end %>
 
-      <!-- パンくずリスト -->
+      <%# パンくずリスト %>
       <% if breadcrumbs.present? %>
         <nav class="breadcrumbs text-sm p-3 rounded-lg">
           <%= breadcrumbs wrapper_tag: :ul, separator: '<span class="text-gray-400"> &rsaquo; </span>'.html_safe %>
         </nav>
       <% end %>
 
-      <!-- メインコンテンツ -->
+      <%# メインコンテンツ %>
       <%= yield %>
 
       <%= render 'layouts/footer' %>
 
-      <!-- レビュー投稿ボタン -->
+      <%# レビュー投稿ボタン %>
       <%= link_to new_review_path, class: "block md:hidden fixed flex flex-col items-center justify-center bottom-4 right-4 bg-white text-gray-800 border border-gray-300 w-16 h-16 rounded-full shadow-md hover:bg-gray-100 transition text-[10px] sm:text-xs z-30", title: "レビュー投稿" do %>
         <span class="material-icons text-2xl leading-none" aria-hidden="true">rate_review</span>
         <span class="mt-0.5">投稿</span>
       <% end %>
 
-
+      <%# AOS（スクロールアニメーション用ライブラリ）の読み込みと設定 %>
       <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
       <script>
         AOS.init({
@@ -92,9 +113,11 @@
         });
       </script>
 
+      <%# jQueryとLightbox2の読み込み（画像ギャラリー用） %>
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js"></script>
 
+      <%# Lightbox2の設定 %>
       <script>
         lightbox.option({
           'resizeDuration': 200,
@@ -102,6 +125,7 @@
         })
       </script>
 
+      <%# Swiper（スライダー用ライブラリ）の読み込み %>
       <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
     </div>
   </body>
