@@ -71,19 +71,19 @@
               class="w-full max-h-[400px] object-contain rounded-md mb-4">
 
           <!-- サムネイル -->
-          <div class="flex gap-2 overflow-x-auto">
+          <% if @review.images.size >= 2 %>
             <div class="flex gap-2 overflow-x-auto">
-              <% @review.images.each_with_index do |image, index| %>
-                <img src="<%= url_for(image.variant(resize_to_fill: [100, 100])) %>"
-                    data-image-gallery-target="thumbnail"
-                    data-action="click->image-gallery#change"
-                    data-large="<%= url_for(image.variant(resize_to_limit: [600, 600])) %>"
-                    data-index="<%= index %>"
-                    class="w-20 h-20 object-cover rounded-md cursor-pointer
-                            transition duration-150 ease-in-out">
-              <% end %>
+                <% @review.images.each_with_index do |image, index| %>
+                  <img src="<%= url_for(image.variant(resize_to_fill: [100, 100])) %>"
+                      data-image-gallery-target="thumbnail"
+                      data-action="click->image-gallery#change"
+                      data-large="<%= url_for(image.variant(resize_to_limit: [600, 600])) %>"
+                      data-index="<%= index %>"
+                      class="w-20 h-20 object-cover rounded-md cursor-pointer
+                              transition duration-150 ease-in-out">
+                <% end %>
             </div>
-          </div>
+          <% end %>
         </div>
 
         <!-- 右側：本文など -->

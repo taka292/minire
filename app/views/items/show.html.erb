@@ -33,21 +33,25 @@
         <!-- PC表示：タイル + メイン画像 -->
         <div class="hidden md:flex flex-col" data-controller="image-gallery">
           <% if @item.images.attached? %>
+            <!-- メイン画像 -->
             <img data-image-gallery-target="main"
                  src="<%= url_for(@item.images.first.variant(resize_to_limit: [600, 600])) %>"
                  class="w-full max-h-[400px] object-contain rounded-md mb-4">
 
-            <div class="flex gap-2 overflow-x-auto">
-              <% @item.images.each_with_index do |image, index| %>
-                <img src="<%= url_for(image.variant(resize_to_fill: [100, 100])) %>"
-                     data-image-gallery-target="thumbnail"
-                     data-action="click->image-gallery#change"
-                     data-large="<%= url_for(image.variant(resize_to_limit: [600, 600])) %>"
-                     data-index="<%= index %>"
-                     class="w-20 h-20 object-cover rounded-md cursor-pointer
-                            transition duration-150 ease-in-out">
-              <% end %>
-            </div>
+            <!-- サムネイル -->
+            <% if @item.images.size >= 2 %>
+              <div class="flex gap-2 overflow-x-auto">
+                <% @item.images.each_with_index do |image, index| %>
+                  <img src="<%= url_for(image.variant(resize_to_fill: [100, 100])) %>"
+                      data-image-gallery-target="thumbnail"
+                      data-action="click->image-gallery#change"
+                      data-large="<%= url_for(image.variant(resize_to_limit: [600, 600])) %>"
+                      data-index="<%= index %>"
+                      class="w-20 h-20 object-cover rounded-md cursor-pointer
+                              transition duration-150 ease-in-out">
+                <% end %>
+              </div>
+            <% end %>
           <% else %>
             <div class="w-full h-[250px] bg-gray-200 flex items-center justify-center rounded-md text-gray-500">画像未登録</div>
           <% end %>
