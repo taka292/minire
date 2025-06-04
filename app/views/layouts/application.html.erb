@@ -74,13 +74,13 @@
         <%= render 'layouts/header' %>
       </div>
 
-      <%# フラッシュメッセージの表示 %>
+      <%# フラッシュメッセージの表示 (例: レビューを投稿しました) %>
       <% flash.each do |key, value| %>
         <%= render 'layouts/flash_message', key: key, value: value %>
       <% end %>
 
-      <%# エラー時のメッセージ表示 %>
-      <% if defined?(@review) && @review.errors.any? %>
+      <%# レビューエラー時のメッセージ表示 (例: タイトルに誤りがあります) %>
+      <% if controller_name == 'reviews' && ['new', 'create', 'edit', 'update'].include?(action_name) && @review&.errors&.any? %>
         <%= render 'shared/error_messages', object: @review %>
       <% end %>
 
