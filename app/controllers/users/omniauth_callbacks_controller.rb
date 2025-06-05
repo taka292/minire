@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
+  # deviseのログイン保持機能を読み込み
+  include Devise::Controllers::Rememberable
+
   # callback for google
   def google_oauth2
     callback_for(:google)
@@ -10,7 +13,9 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
     auth = request.env["omniauth.auth"]
     @user = User.from_omniauth(auth)
 
+    # SNSログインに成功した場合、ログイン保持状態をON
     if @user.persisted?
+      remember_me(@user)
       flash[:notice] = "Google認証成功しました！さっそくレビューを投稿してみませんか？" unless @user.has_reviews?
       sign_in_and_redirect @user, event: :authentication
     else
