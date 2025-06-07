@@ -30,7 +30,7 @@
             <label class="label">
               <span class="label-text text-base font-medium">メールアドレス</span>
             </label>
-            <!--フォーム入力でエラーがあれば赤枠で囲む-->
+            <%# フォーム入力でエラーがあれば赤枠で囲む %>
             <%= f.email_field :email, autofocus: true, autocomplete: "email", placeholder: "メールアドレスを入力してください", class: "input input-bordered w-full h-14 text-base placeholder:text-sm #{'border-red-500' if flash[:alert].present?}" %>
           </div>
           <div class="form-control mb-4">
@@ -40,11 +40,12 @@
             <%= f.password_field :password, autocomplete: "current-password", placeholder: "パスワードを入力してください", class: "input input-bordered w-full h-14 text-base placeholder:text-sm #{'border-red-500' if flash[:alert].present?}" %>
           </div>
 
+          <%# ログイン状態を保持するチェックボックス(デフォルトでログイン状態保持) %>
           <% if devise_mapping.rememberable? %>
             <div class="form-control mb-4">
-              <label class="label cursor-pointer flex items-center">
-                <%= f.check_box :remember_me, class: "checkbox mr-2" %>
-                <span class="label-text text-base font-medium">ログイン状態を保持する</span>
+              <label class="cursor-pointer flex">
+                <%= f.check_box :remember_me, class: "checkbox", checked: true %>
+                <span class="label-text text-base font-medium ml-4">ログイン状態を保持する</span>
               </label>
             </div>
           <% end %>
