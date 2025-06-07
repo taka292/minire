@@ -90,6 +90,8 @@ RSpec.describe "コメント機能", type: :system do
     it "ログアウト状態ではコメント一覧が表示されない" do
       review.comments.create!(content: "表示されないはずのコメント", user: user)
       logout
+      # テストだとcookieが残ってしまうので、意図的に削除
+      page.driver.browser.manage.delete_all_cookies
       visit review_path(review)
 
       expect(page).not_to have_content("表示されないはずのコメント")

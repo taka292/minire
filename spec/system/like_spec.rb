@@ -37,6 +37,8 @@ RSpec.describe "いいね機能", type: :system do
 
     it "ログアウト状態ではいいねできない" do
       logout
+      # テストだとcookieが残ってしまうので、意図的に削除
+      page.driver.browser.manage.delete_all_cookies
       visit review_path(review)
 
       within("#like_button_#{review.id}") do
