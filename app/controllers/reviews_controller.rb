@@ -39,13 +39,11 @@ class ReviewsController < ApplicationController
   end
 
   def index
-    @reviews = Review.all
-
-    # ソート
+    # 良いね順かそれ以外でレビューを取得
     if params[:sort] == "most_liked"
-      @reviews = @reviews.with_likes_count
+      @reviews = Review.with_likes_count
     else
-      @reviews = @reviews.includes(:user, :item, :comments, images_attachments: :blob)
+      @reviews = Review.includes_for_index
     end
 
     # 絞り込み
