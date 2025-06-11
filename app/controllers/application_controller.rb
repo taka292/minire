@@ -12,10 +12,11 @@ class ApplicationController < ActionController::Base
     devise_parameter_sanitizer.permit(:account_update, keys: [ :name, :introduction, :avatar ])
   end
 
+  # 未読通知を取得
   def set_unchecked_notifications
     return unless user_signed_in?
 
-    @unchecked_notifications = current_user.passive_notifications.where(checked: false).order(created_at: :desc)
+    @unchecked_notifications = current_user.passive_notifications.includes_for_notification.where(checked: false).order(created_at: :desc)
   end
 
   # 全ページで使用するransackの初期化(無いとエラーになる)

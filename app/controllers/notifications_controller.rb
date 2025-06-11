@@ -2,8 +2,8 @@ class NotificationsController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    # 未読通知を取得
-    @checked_notifications = current_user.passive_notifications.where(checked: true).order(created_at: :desc).limit(20)
+    # 既読通知を取得
+    @checked_notifications = current_user.passive_notifications.includes_for_notification.where(checked: true).order(created_at: :desc).limit(20)
 
     # 通知一覧ページをレンダリング
     render "notifications/index"
