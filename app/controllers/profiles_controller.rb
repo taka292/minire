@@ -4,7 +4,12 @@ class ProfilesController < ApplicationController
   before_action :reject_sns_user, only: [ :edit_email, :edit_password ]
 
   def show
-    @reviews = @user.reviews.includes(:user, images_attachments: :blob).order(created_at: :desc)
+    @reviews = @user.reviews.includes(
+      :comments,
+      :likes,
+      { images_attachments: :blob },
+      { item: { images_attachments: :blob } }
+    ).order(created_at: :desc)
     @active_tab = "reviews"
   end
 
@@ -53,10 +58,11 @@ class ProfilesController < ApplicationController
   def likes
     # @userがいいねしたレビューをいいねした日時の降順で取得
     # includesメソッドを使用して、関連するユーザーと画像を事前に読み込む
-    @liked_reviews = @user.likes
-                      .includes(review: [ :user, { images_attachments: :blob } ])
-                      .order(created_at: :desc)
-                      .map(&:review)
+    @liked_reviews = Review
+      .includes_for_index
+      .joins(:likes)
+      .where(likes: { user_id: @user.id })
+      .order("likes.created_at DESC")
     @active_tab = "likes"
     render :show
   end

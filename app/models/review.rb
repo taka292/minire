@@ -38,11 +38,23 @@ class Review < ApplicationRecord
   scope :sort_by_oldest, -> { order(created_at: :asc) }
   scope :with_likes_count, -> {
     left_joins(:likes)
+      .includes_for_index
       .select("reviews.*, COUNT(likes.id) AS likes_count")
       .group("reviews.id")
   }
   scope :sort_by_most_liked, -> {
-    with_likes_count.order(Arel.sql("likes_count DESC NULLS LAST"))
+    with_likes_count.order("likes_count DESC NULLS LAST")
+  }
+
+  # 一覧表示用のincludes
+  scope :includes_for_index, -> {
+    includes(
+      :comments,
+      :likes,
+      { images_attachments: :blob },
+      { item: { images_attachments: :blob } },
+      { user: { avatar_attachment: :blob } }
+    )
   }
 
   # ソートパラメータを適用するクラスメソッド
