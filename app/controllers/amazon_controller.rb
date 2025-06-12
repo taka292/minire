@@ -1,8 +1,9 @@
 class AmazonController < ApplicationController
   # Amazonの商品検索結果を返す
   def index
-    # 5文字未満 or 空白の場合は検索しない(リクエストを無駄にしないため)
-    return render plain: "", status: :ok if params[:q].blank? || params[:q].strip.size < 6
+    # 5文字未満 or 201文字以上 or 空白の場合は検索しない(リクエストを無駄にしないため)
+    query = params[:q].to_s.strip
+    return render plain: "", status: :ok if query.blank? || query.size < 6 || query.size > 200
 
     # Amazon APIを使って商品検索
     amazon = AmazonApiClient.new
