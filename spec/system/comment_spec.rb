@@ -51,7 +51,7 @@ RSpec.describe "コメント機能", type: :system do
       # 編集フォームのTurbo Frame内で内容を書き換えて投稿
       within("#comment_#{comment.id}_form") do
         fill_in "comment_content", with: "編集後のコメント"
-        click_button "コメント"
+        click_button "更新する"
       end
 
       # 編集後の内容が表示され、古い内容は消えていることを確認
