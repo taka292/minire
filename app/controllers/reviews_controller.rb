@@ -33,7 +33,7 @@ class ReviewsController < ApplicationController
     # レビューの詳細情報取得
     @review = Review.find(params[:id])
     # レビューに紐づくコメントの読み込み
-    @comments = @review.comments.includes(:user).order(created_at: :desc)
+    @comments = @review.comments.includes(user: { avatar_attachment: :blob }).order(created_at: :desc)
     # コメント新規作成フォーム用
     @comment = @review.comments.new
   end
