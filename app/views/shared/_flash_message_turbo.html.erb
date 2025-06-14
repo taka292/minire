@@ -1,5 +1,6 @@
-<div id="flash_message" class="<%= flash[:comment_notice] || flash[:comment_alert] ? '' : 'hidden' %>">
-  <% if flash[:comment_notice] || flash[:comment_alert] %>
+<% has_comment_flash = flash[:comment_notice] || flash[:comment_alert] %>
+<div id="flash_message" class="<%= has_comment_flash ? '' : 'hidden' %>">
+  <% if has_comment_flash %>
     <% { comment_notice: "blue", comment_alert: "red" }.each do |key, color| %>
       <% if flash[key] %>
         <div class="bg-<%= color %>-100 border-l-4 border-<%= color %>-500 text-<%= color %>-700 flex items-center p-4 rounded-md">
