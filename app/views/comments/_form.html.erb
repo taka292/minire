@@ -4,10 +4,10 @@
       <div class="form-control mb-2 mt-2">
         <%= form.text_area :content, 
           class: "textarea textarea-bordered w-full text-lg placeholder:text-sm", 
-          placeholder: "コメントする" %>
+          placeholder: comment.persisted? ? "コメントを編集する" : "コメントする" %>
       </div>
       <div class="text-right mt-2">
-        <%= form.submit "コメント", class: "btn bg-customBlue text-white border-0 hover:bg-blue-500 btn-sm inline-block align-middle"%>
+        <%= form.submit comment.persisted? ? "更新する" : "コメントする", class: "btn bg-customBlue text-white border-0 hover:bg-blue-500 btn-sm inline-block align-middle"%>
       </div>
     <% end %>
   <% end %>
