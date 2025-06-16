@@ -9,16 +9,17 @@
 
       <%#  検索クエリを保持する hidden フィールド(ないと絞り込みフォームと合わせての検索ができない) %>
       <%= hidden_field_tag "q[#{review_search_field}]", params.dig(:q, review_search_field) %>
+
       <!-- 絞り込みフォーム -->
-      <div class="flex flex-col md:flex-row  min-w-[300px]">
+      <div class="flex flex-col md:flex-row min-w-[300px]">
         <label for="filter_type" class="text-sm font-medium text-gray-600 whitespace-nowrap min-w-fit md:mr-2">絞り込み:</label>
         <select name="filter_type" id="filter_type"
                 class="min-w-[250px] max-w-full h-12 text-base pl-4 pr-4 bg-gray-50 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition duration-200 flex-grow"
                 onchange="this.form.submit()">
-          <option value="" <%= "selected='selected'" if params[:filter_type].blank? %>>すべてのレビュー</option>
-          <option value="releasable" <%= "selected='selected'" if params[:filter_type] == 'releasable' %>>手放せるものがあるレビュー</option>
+          <option value="" <%= 'selected' if params[:filter_type].blank? %>>すべてのレビュー</option>
+          <option value="releasable" <%= 'selected' if params[:filter_type] == 'releasable' %>>手放せるものがあるレビュー</option>
           <% @categories.each do |category| %>
-            <option value="category_<%= category.id %>" <%= "selected='selected'" if params[:filter_type] == "category_#{category.id}" %>>
+            <option value="category_<%= category.id %>" <%= 'selected' if params[:filter_type] == "category_#{category.id}" %>>
               カテゴリ: <%= category.name %>
             </option>
           <% end %>
@@ -31,9 +32,9 @@
         <select name="sort" id="sort"
                 class="min-w-[150px] max-w-full h-12 text-base pl-4 pr-4 bg-gray-50 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition duration-200 flex-grow"
                 onchange="this.form.submit()">
-          <option value="newest" <%= "selected='selected'" if params[:sort] == 'newest' %>>新着順</option>
-          <option value="oldest" <%= "selected='selected'" if params[:sort] == 'oldest' %>>古い順</option>
-          <option value="most_liked" <%= "selected='selected'" if params[:sort] == 'most_liked' %>>いいねが多い順</option>
+          <option value="newest" <%= 'selected' if params[:sort] == 'newest' %>>新着順</option>
+          <option value="oldest" <%= 'selected' if params[:sort] == 'oldest' %>>古い順</option>
+          <option value="most_liked" <%= 'selected' if params[:sort] == 'most_liked' %>>いいねが多い順</option>
         </select>
       </div>
 
