@@ -16,6 +16,8 @@
 <%#パンくずリスト %>
 <% breadcrumb :review, @review %>
 
+<% has_images = @review.images.attached? %>
+
 <div class="container mx-auto px-4 py-8">
   <!-- 投稿詳細カード -->
   <div class="card bg-white shadow-lg rounded-lg p-6">
@@ -40,7 +42,7 @@
     <!-- 投稿画像 + 内容：スマホとPCで切り替え -->
     <!-- スマホのみ表示 -->
     <div class="block md:hidden">
-      <% if @review.images.attached? %>
+      <% if has_images %>
       <div class="swiper-container">
         <div class="swiper w-full rounded-lg overflow-hidden mb-4">
           <div class="swiper-wrapper">
@@ -60,7 +62,7 @@
     </div>
 
     <!-- PCのみ表示 -->
-    <% if @review.images.attached? %>
+    <% if has_images %>
       <!-- PC表示：画像あり（2カラム） -->
       <div class="hidden md:flex flex-row gap-6" data-controller="image-gallery">
         <!-- 左側：画像・サムネイル -->
