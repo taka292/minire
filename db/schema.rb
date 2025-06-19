@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_05_20_054929) do
+ActiveRecord::Schema[7.2].define(version: 2025_06_19_070409) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
   enable_extension "plpgsql"
@@ -120,6 +120,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_05_20_054929) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "item_id"
+    t.integer "status", default: 0, null: false
     t.index ["content"], name: "index_reviews_on_content_trgm", opclass: :gin_trgm_ops, using: :gin
     t.index ["created_at"], name: "index_reviews_on_created_at"
     t.index ["item_id"], name: "index_reviews_on_item_id"
