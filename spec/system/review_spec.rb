@@ -641,4 +641,67 @@ RSpec.describe "レビュー投稿機能", type: :system do
       expect(page).to have_content("レビューを更新しました！")
     end
   end
+
+  describe "レビューの下書き保存" do
+    it "サイト内検索でレビューを下書き保存できる" do
+      visit new_review_path
+
+      click_button "見つからない場合"
+      fill_in "item_name", with: "下書き用アイテム"
+      fill_in "review[title]", with: "下書きタイトル"
+      fill_in "review[content]", with: "これは下書きのレビューです"
+
+      click_button "下書き保存"
+
+      review = Review.find_by(title: "下書きタイトル")
+      expect(page).to have_current_path(edit_review_path(review), wait: 5)
+      expect(page).to have_content("レビューを下書き保存しました！")
+
+      expect(review.status).to eq("draft")
+      expect(review.title).to eq("下書きタイトル")
+    end
+
+    it "Amazon検索でレビューを下書き保存できる" do
+      visit new_review_path
+
+      page.execute_script("document.querySelector(\"input[name='amazon_item_name']\").value = 'Amazon下書き商品'")
+      page.execute_script("document.querySelector(\"input[name='asin']\").value = 'B000000000'")
+
+      fill_in "review[title]", with: "Amazon下書きタイトル"
+      fill_in "review[content]", with: "Amazon商品の下書き"
+
+      click_button "下書き保存"
+      review = Review.find_by(title: "Amazon下書きタイトル")
+      expect(page).to have_current_path(edit_review_path(review), wait: 5)
+      expect(page).to have_content("レビューを下書き保存しました！")
+
+      expect(review.status).to eq("draft")
+      expect(review.item.asin).to eq("B000000000")
+    end
+
+    it "プロフィールページから下書きモーダル経由で編集に遷移できる" do
+      draft_review = create(:review, user:, status: :draft, title: "モーダル下書き", content: "モーダルから編集")
+
+      visit new_review_path
+      click_button "下書きから作成"
+
+      within("#draftModal") do
+        expect(page).to have_content("モーダル下書き")
+        click_link "モーダル下書き"
+      end
+
+      expect(page).to have_current_path(edit_review_path(draft_review), wait: 5)
+      expect(find_field("review[title]").value).to eq("モーダル下書き")
+    end
+
+    it "下書きレビューは本人以外には表示されない" do
+      other_user = create(:user)
+      draft_review = create(:review, user: other_user, status: :draft, title: "他人の下書き")
+
+      visit review_path(draft_review)
+
+      expect(current_path).to eq(reviews_path)
+      expect(page).to have_content("このレビューにはアクセスできません。")
+    end
+  end
 end
