@@ -24,6 +24,7 @@ module Minire
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
     config.i18n.default_locale = :ja
+    config.time_zone = "Asia/Tokyo"
     config.active_storage.variant_processor = :vips
     config.hosts << "minire.onrender.com"
 
