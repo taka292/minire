@@ -16,6 +16,13 @@ class ReviewsController < ApplicationController
         raise ActiveRecord::Rollback
       end
 
+      # レビューの状態をもとに
+      if params[:draft].present?
+        @review.status = :draft
+      else
+        @review.status = :published
+      end
+
       unless @review.save
         raise ActiveRecord::Rollback
       end
@@ -23,7 +30,11 @@ class ReviewsController < ApplicationController
       # レビューに関連付けられた商品に画像(1枚目)を添付する
       attach_image_to_item_if_needed
 
-      redirect_to reviews_path, notice: "レビューを投稿しました！"
+      if params[:draft].present?
+        redirect_to edit_review_path(@review), notice: "レビューを下書き保存しました！"
+      else
+        redirect_to reviews_path, notice: "レビューを投稿しました！"
+      end
     end
 
     render :new, status: :unprocessable_entity unless result
@@ -32,6 +43,13 @@ class ReviewsController < ApplicationController
   def show
     # レビューの詳細情報取得
     @review = Review.find(params[:id])
+
+    # レビューが下書きで、現在のユーザーがレビューの作成者でない場合はアクセスを制限
+    if @review.draft? && @review.user != current_user
+      redirect_to reviews_path, alert: "このレビューにはアクセスできません。"
+      return
+    end
+
     # レビューに紐づくコメントの読み込み
     @comments = @review.comments.includes(user: { avatar_attachment: :blob }).order(created_at: :desc)
     # コメント新規作成フォーム用
@@ -54,7 +72,7 @@ class ReviewsController < ApplicationController
     @reviews = @search.result(distinct: true)
 
     # 並び替え + ページネーション
-    @reviews = @reviews.apply_sort(params[:sort]).order(created_at: :desc).page(params[:page])
+    @reviews = @reviews.published.apply_sort(params[:sort]).order(created_at: :desc).page(params[:page])
 
     @categories = Category.ordered
   end
@@ -73,10 +91,22 @@ class ReviewsController < ApplicationController
       handle_image_removal
       @review.images.attach(params[:review][:images]) if params[:review][:images].present?
 
+      # レビューの状態をもとに
+      if params[:draft].present?
+        @review.status = :draft
+      else
+        @review.status = :published
+      end
+
       # レビュー更新 (item_id はservice側で設定済みのため、paramsに含まれる空文字で上書きされるのを防ぐ)
       raise ActiveRecord::Rollback unless @review.update(review_params.except(:images, :item_id))
       # attach_image_to_item_if_needed # 画像をitemに添付処理はリファクタリングとは別で対応
-      redirect_to @review, notice: "レビューを更新しました！"
+
+      if params[:draft].present?
+        redirect_to edit_review_path(@review), notice: "レビューを下書き保存しました！"
+      else
+        redirect_to @review, notice: "レビューを更新しました！"
+      end
     end
 
     render :edit, status: :unprocessable_entity unless result

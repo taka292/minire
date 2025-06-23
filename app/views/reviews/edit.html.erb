@@ -1,10 +1,13 @@
-<% content_for :title, "レビュー編集 | MiniRe (ミニレ)" %>
+<% content_for :title, "#{@review.draft? ? '下書きから投稿' : 'レビュー編集'} | MiniRe (ミニレ)" %>
 <% breadcrumb :edit_review, @review %>
 <div class="bg-gray-100 min-h-screen py-8 px-4">
   <div class="max-w-4xl mx-auto">
-    <h2 class="text-2xl font-semibold text-gray-800 mb-6 text-center">レビュー編集</h2>
+    <h2 class="text-2xl font-semibold text-gray-800 mb-6 text-center">
+      <%= @review.draft? ? "下書きから投稿" : "レビュー編集" %>
+    </h2>
     <%= form_with model: @review, local: true do |f| %>
-      <%= render "reviews/form", form: f, button_label: "更新する" %>
+      <% button_label = @review.draft? ? "投稿する" : "更新する" %>
+      <%= render "reviews/form", form: f, button_label: button_label %>
     <% end %>
   </div>
 </div>

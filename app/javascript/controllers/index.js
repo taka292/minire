@@ -12,6 +12,10 @@ application.register("autocomplete", Autocomplete)
 import AutosizeController from "./autosize_controller"
 application.register("autosize", AutosizeController)
 
+// 下書きのモーダル表示の制御
+import DraftsController from "./drafts_controller"
+application.register("drafts", DraftsController)
+
 // 商品の画像ギャラリーを表示
 import ImageGalleryController from "./image_gallery_controller"
 application.register("image-gallery", ImageGalleryController)

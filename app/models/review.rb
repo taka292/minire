@@ -57,6 +57,9 @@ class Review < ApplicationRecord
     )
   }
 
+  # レビューの下書き・公開状態
+  enum :status, { published: 0, draft: 1 }
+
   # ソートパラメータを適用するクラスメソッド
   def self.apply_sort(sort_param)
     case sort_param
