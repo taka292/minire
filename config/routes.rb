@@ -10,6 +10,10 @@ Rails.application.routes.draw do
   resources :reviews do
     resources :comments, only: [ :create, :destroy, :edit, :update ]
     resources :likes, only: [ :create, :destroy ]
+    member do
+      patch :hide
+      patch :unhide
+    end
   end
 
   resources :profiles, only: [ :show, :edit, :update ] do
