@@ -1,6 +1,7 @@
 class ReviewsController < ApplicationController
   before_action :authenticate_user!, except: [ :index, :show ]
-  before_action :set_review, only: %i[edit update destroy]
+  before_action :set_review, only: %i[edit update destroy hide unhide]
+  before_action :authenticate_admin!, only: [ :hide, :unhide ]
 
   def new
     @review = Review.new
@@ -44,8 +45,9 @@ class ReviewsController < ApplicationController
     # レビューの詳細情報取得
     @review = Review.find(params[:id])
 
-    # レビューが下書きで、現在のユーザーがレビューの作成者でない場合はアクセスを制限
-    if @review.draft? && @review.user != current_user
+    # レビューが下書きまたは非表示で、現在のユーザーがレビューの作成者でない場合はアクセスを制限
+    # 管理者の場合は下書き・非表示レビューもアクセス可能
+    if (@review.draft? || @review.hidden?) && @review.user != current_user && !current_user&.admin?
       redirect_to reviews_path, alert: "このレビューにはアクセスできません。"
       return
     end
@@ -57,11 +59,18 @@ class ReviewsController < ApplicationController
   end
 
   def index
+    # 管理者の場合は非表示レビューも含める、一般ユーザーは公開のみ
+    base_reviews = if current_user&.admin?
+      Review.includes_for_index
+    else
+      Review.includes_for_index.published
+    end
+
     # 良いね順かそれ以外でレビューを取得
     if params[:sort] == "most_liked"
-      @reviews = Review.with_likes_count
+      @reviews = base_reviews.with_likes_count
     else
-      @reviews = Review.includes_for_index
+      @reviews = base_reviews
     end
 
     # 絞り込み
@@ -71,8 +80,12 @@ class ReviewsController < ApplicationController
     @search = @reviews.ransack(params[:q])
     @reviews = @search.result(distinct: true)
 
-    # 並び替え + ページネーション
-    @reviews = @reviews.published.apply_sort(params[:sort]).order(created_at: :desc).page(params[:page])
+    # 並び替え + ページネーション（管理者の場合はpublishedスコープを適用しない）
+    if current_user&.admin?
+      @reviews = @reviews.apply_sort(params[:sort]).order(created_at: :desc).page(params[:page])
+    else
+      @reviews = @reviews.published.apply_sort(params[:sort]).order(created_at: :desc).page(params[:page])
+    end
 
     @categories = Category.ordered
   end
@@ -120,6 +133,16 @@ class ReviewsController < ApplicationController
     end
   end
 
+  def hide
+    @review.update!(status: :hidden)
+    redirect_to reviews_path, notice: "レビューを非表示にしました。"
+  end
+
+  def unhide
+    @review.update!(status: :published)
+    redirect_to reviews_path, notice: "レビューの非表示を解除しました。"
+  end
+
   private
   # accepts_nested_attributes_forで削除するものを_destroyで追加
   def review_params
@@ -127,9 +150,21 @@ class ReviewsController < ApplicationController
   end
 
   def set_review
-    @review = current_user.reviews.find_by(id: params[:id])
+    # 管理者の場合は他のユーザーのレビューにもアクセス可能
+    if current_user&.admin?
+      @review = Review.find_by(id: params[:id])
+    else
+      @review = current_user.reviews.find_by(id: params[:id])
+    end
+
     unless @review
       redirect_to reviews_path, alert: "他のユーザーのレビューは編集・削除できません。"
+    end
+  end
+
+  def authenticate_admin!
+    unless current_user&.admin?
+      redirect_to root_path, alert: "管理者権限が必要です。"
     end
   end
 
