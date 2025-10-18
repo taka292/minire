@@ -48,7 +48,7 @@
           <div class="swiper-wrapper">
             <% @review.images.each do |image| %>
               <div class="swiper-slide flex justify-center items-center bg-white">
-                <%= link_to url_for(image), data: { lightbox: "review-images" } do %>
+                <%= link_to url_for(image.variant(resize_to_limit: [1200, 1200])), data: { lightbox: "review-images" } do %>
                   <%= image_tag image.variant(resize_to_limit: [600, 600]), class: "max-h-[300px] w-auto mx-auto object-contain" %>
                 <% end %>
               </div>

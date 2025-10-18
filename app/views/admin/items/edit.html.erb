@@ -42,7 +42,7 @@
       <div class="flex flex-wrap gap-4 mt-2">
         <% @item.images.each_with_index do |image, index| %>
           <div class="relative">
-            <img src="<%= url_for(image) %>" alt="画像<%= index + 1 %>" class="h-32 w-32 object-cover rounded">
+            <img src="<%= url_for(image.variant(resize_to_fill: [200, 200])) %>" alt="画像<%= index + 1 %>" class="h-32 w-32 object-cover rounded">
             <div class="absolute top-1 right-1">
               <!-- 削除チェックボックス -->
               <%= check_box_tag "item[remove_images][]", image.blob.id, false, id: "remove_image_#{index}" %>
