@@ -1,5 +1,7 @@
 class ItemsController < ApplicationController
   def index
+    return redirect_to root_path unless params[:q].present?
+    
     @items = Item.where("name LIKE ?", "%#{params[:q]}%")
     render layout: false
   end
